@@ -1,3 +1,5 @@
 flask==0.10
 sqlalchemy==0.7.9
 flask-sqlalchemy==0.16
+mysql-python==1.2.5
+
