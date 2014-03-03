@@ -33,7 +33,8 @@ function setRandomColors() {
 window.onload = setRandomColors();
 
 var addButton = document.querySelector('#addStuff');
-addButton.onclick = function() {
+addButton.onclick = function(event) {
+    event.preventDefault();
     var elem = document.createElement('div'),
         randomNum = Math.floor(Math.random() * 15),
         randomText = chance.sentence({words: randomNum}),
