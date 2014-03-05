@@ -46,8 +46,8 @@ addButton.onclick = function(event) {
     // Set height/width depending on sentence length
     elem.className = "post " + heights[randomHeight] + " " + widths[randomWidth];
     setRandomColor(elem);
-    container.appendChild(elem);
-    msnry.appended(elem);
+    container.insertBefore(elem, container[0]);
+    msnry.prepended(elem);
     msnry.layout();
-    document.focus(elem);
+    container.focus(elem);
 }
