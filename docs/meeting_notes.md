@@ -16,7 +16,7 @@ Requirements for the minimum project spec:
 
 ## Additional Requirements discussed with the client.
 1. What type of information will be posted?
-    * Twitter style content(short text and links) sorted by college. UMBC
+    * Twitter style content(short text and links) sorted by college. UMBC 
       is the initial target. Content can be sorted by class, location,
       major, etc. Content is tagged with 'hashes', similar to Twitter.
     * **Stretch Goal**: Allow users to post multimedia content, like

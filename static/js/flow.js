@@ -38,13 +38,11 @@ addButton.onclick = function(event) {
     var elem = document.createElement('div'),
         randomNum = Math.floor(Math.random() * 15),
         randomText = chance.sentence({words: randomNum}),
-        randomHeight = Math.floor(Math.random() * 3),
-        randomWidth = Math.floor(Math.random() * 3),
-        heights = ['h1', 'h2', 'h3'],
-        widths = ['w1', 'w2', 'w3'];
+        randomSize = Math.floor(Math.random() * 3),
+        size = ['small', 'medium', 'large'];
     elem.innerHTML = '<p>' + randomText + '</p>';
     // Set height/width depending on sentence length
-    elem.className = "post " + heights[randomHeight] + " " + widths[randomWidth];
+    elem.className = "post " + size[randomSize];
     setRandomColor(elem);
     container.insertBefore(elem, container[0]);
     msnry.prepended(elem);

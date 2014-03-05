@@ -30,13 +30,12 @@ input {
     font-size: 16px;
 }
 
-.post.w1 { width: 120px; }
-.post.w2 { width: 240px; }
-.post.w3 { width: 360px; }
-
-.post.h1 { height: 120px; }
-.post.h2 { height: 240px; }
-.post.h3 { height: 360px; }
+.post.small { width: 160px; height: 240px;}
+.post.medium { width: 200px; height: 300px;}
+.post.large {
+  width: 240px;
+  height: 360px;
+}
 
 .clear {
     clear: both;
