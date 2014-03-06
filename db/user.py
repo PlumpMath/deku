@@ -1,35 +1,26 @@
 #!/usr/bin/env python
 
-
-#just testing out sqlalchemy
-
-import datetime
-from sqlalchemy import create_engine, ForeignKey, Column, Integer, String, DateTime
+#running this script directly will:
+#  - drop user database table
+#  - recreate user database table with:
+#        -- a single user   username: team  pwd: six
+from config import engine
+from datetime import datetime
+from sqlalchemy import ForeignKey, Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from flask.ext.sqlalchemy import SQLAlchemy
-#from sqlalchemy import exc
-
-# mysql db info
-dbhost='localhost'
-dbuser='root'
-dbpass='pass'
-dbname='db'
-DB_URI = 'mysql://' + dbuser + ':' + dbpass + '@' + dbhost + '/' + dbname
-
 class User(declarative_base()):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True, nullable=False)
     username = Column(String(50), unique=True, nullable=False)
     email = Column(String(50), unique=True, nullable=False)
     password = Column(String(100), nullable=False)
-    admin = Column(Integer, default=0)
+    created = Column(DateTime)
 
-    def __init__(self, username, password, email, admin):
-        self.admin = admin
+    def __init__(self, username='', password='', email=''):
         self.username = username
         self.email = email
         self.password = self.set_password(password)
@@ -42,42 +33,33 @@ class User(declarative_base()):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    def login(self, username, password):
+        dbsession = sessionmaker(bind=engine)()
+        self = dbsession.query(User).filter(User.username == username).first()
+        return self.check_password(password)
+
     def __repr__(self):
         return "<User(name='%s', fullname='%s', password='%s')>" % (self.username, self.email, self.password)
 
-#class profile(Base):
-#    __tablename__ = 'user2'
-#
-#    id = Column(Integer, primary_key=True)
-#    user_id = Column(Integer, ForeignKey('users.id'))
-#    profile = Column(String(50))
-
-def wtfff():
-    return 'wtf'
-
-
-#create engine
-engine = create_engine(DB_URI)
-
-#create tables
-#Base.metadata.create_all(engine)
-#User().metadata.create_all(engine)
-#create user
-#user = User(username='username', email='email', password='password')
-
 #create sessionmaker
-Session = sessionmaker(bind=engine)
+if __name__ == "__main__":
+    dbsession = sessionmaker(bind=engine)()
+    user = User(username='team', email='team@six.com',password='six')
+    user.metadata.drop_all(engine)
+    user.metadata.create_all(engine)
+    dbsession.add(user)
+    dbsession.commit()
+    print user
+    print user.check_password('six')
+    print user.check_password('6')
+    print engine
 
 
-dbsession = Session()
-user = User(username='team', email='team@six.com',password='six', admin=1)
-user.metadata.create_all(engine)
-dbsession.add(user)
-dbsession.commit()
-print user
-print user.check_password('six')
-print user.check_password('6')
-print engine
+#print "__________\n"
+#user = User()
+#print user.login('team','six')
+#print user.login('team','seven')
+#user2 = User('team','seven')
 
 #user2 = User(username='to', email='two', password='too')
 #user3 = User(username='tree', email='three', password = 'three')
