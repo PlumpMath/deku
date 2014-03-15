@@ -11,6 +11,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
+#maybe update to pkdb2f later
 class User(declarative_base()):
     __tablename__ = 'user'
 
@@ -25,7 +27,6 @@ class User(declarative_base()):
         self.email = email
         self.password = self.set_password(password)
 	self.created = datetime.utcnow()
-	self.last_activity = self.created
 
     def set_password(self, password):
         return  generate_password_hash(password)
@@ -35,24 +36,44 @@ class User(declarative_base()):
 
     def login(self, username, password):
         dbsession = sessionmaker(bind=engine)()
-        self = dbsession.query(User).filter(User.username == username).first()
+        tmp = dbsession.query(User).filter(User.username == username).first()
+        self.username = tmp.username
+        self.email = tmp.email
+        self.id = tmp.id
+        self.password = tmp.password
+        self.created = tmp.created
         return self.check_password(password)
 
     def __repr__(self):
-        return "<User(name='%s', fullname='%s', password='%s')>" % (self.username, self.email, self.password)
+        return "<User(name='%s', fullname='%s')>" % (self.username, self.email)
+
+    def stringme(self):
+        return "name=%s, email=%s"  % (self.username, self.email)
 
 #create sessionmaker
 if __name__ == "__main__":
+    #create dbsession
     dbsession = sessionmaker(bind=engine)()
-    user = User(username='team', email='team@six.com',password='six')
-    user.metadata.drop_all(engine)
-    user.metadata.create_all(engine)
-    dbsession.add(user)
-    dbsession.commit()
-    print user
-    print user.check_password('six')
-    print user.check_password('6')
     print engine
+    #create a sample user to throw into the database
+    user = User(username='team', email='team@six.com',password='six')
+
+    #drops the user table if it already exists in the database
+    user.metadata.drop_all(engine)
+
+    #(re)creates the user table
+    user.metadata.create_all(engine)
+
+    #adds the default user to the database.  user: team   email: team@six.com   password: six
+    dbsession.add(user)
+
+    #Actually save all pending changes.
+    dbsession.commit()
+
+#    print user
+#    print user.check_password('six')
+#    print user.check_password('6')
+#    print engine
 
 
 #print "__________\n"
