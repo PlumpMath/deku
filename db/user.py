@@ -45,16 +45,15 @@ class User(declarative_base()):
         return self.check_password(password)
 
     def __repr__(self):
-        return "<User(name='%s', fullname='%s')>" % (self.username, self.email)
+        return "<User(id='%s',name='%s', fullname='%s')>" % (self.id, self.username, self.email)
 
     def stringme(self):
-        return "name=%s, email=%s"  % (self.username, self.email)
+        return "id=%s, name=%s, email=%s"  % (self.id, self.username, self.email)
 
 #create sessionmaker
 if __name__ == "__main__":
     #create dbsession
     dbsession = sessionmaker(bind=engine)()
-    print engine
     #create a sample user to throw into the database
     user = User(username='team', email='team@six.com',password='six')
 

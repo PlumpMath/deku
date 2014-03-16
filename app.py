@@ -16,7 +16,7 @@ def index():
 @app.route('/fail')
 def fail():
     client = app.test_client()
-    return client.post('/login', data=dict(username='team', password='password'))
+    return client.post('/login', data=dict(username='team', password='Six'))
 #imitate a succesful login post request
 @app.route('/success')
 def success():
@@ -26,7 +26,7 @@ def success():
 
 #accepts a post request with 'username' and 'password'.  returns.... whatever??? right now just the user name that was logged in + string version of the username and email
 #email can also be used as username in the post request (login function in user.py does it)
-#will set the session['user'] variable to the user that was logged in.
+#will set the session['user'] variable to the user that was logged in. and redirects back to url that sent it
 #I don't think another random server generated user verification is necessary, since flask's session does this already.... not sure if that protects against cookie stealing
 #maybe we can add a time based server generated random key to add inside the encrypted cookies if we finish early enough.
 @app.route('/login', methods = ['POST'])
