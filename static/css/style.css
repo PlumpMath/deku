@@ -49,6 +49,7 @@ input {
 #collapsed-list {
 	float: left;
 	padding: 20px;
+	margin-bottom: 40px;
 }
 
 #collapsed-list ul, li {
