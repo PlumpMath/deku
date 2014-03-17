@@ -1,15 +1,17 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>dek&#363; Mockup</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/slidebars.min.css') }}">
 </head>
 <body>
-  <header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	
+	<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -26,21 +28,79 @@
       info instead. -->
       <form class="navbar-form navbar-right" role="form" action="#">
         <div class="form-group">
-          <input type="text" placeholder="Username"
-          class="form-control">
+          <input type="text" placeholder="Username" class="form-control">
         </div>
         <div class="form-group">
           <input type="password" placeholder="Password" class="form-control">
         </div>
         <button type="submit" class="btn btn-success">Login</button>
-        <button id="addStuff" class="btn">Add new posts</button>
+				<button id="menu" class="btn sb-toggle-right">Menu</button>
       </form>
     </div>
   </header>
-  <div id="container" class="container">
-  </div>
+
+	<!-- This is the region that holds the cards. Main content shown here -->
+	<div id="sb-site">
+	  <div id="container" class="container">
+		</div>
+	</div>
   <!-- this needs to infinite scroll, so having a footer is stupid. Looking at
        you, Tumblr! -->
+
+	<!-- Location of the right slidebar. Overlayed for clean look, no pushing -->
+	<div class="sb-slidebar sb-right sb-style-overlay" data-sb-width="8%">
+		<!-- This is a collapsable menu that contains all the options a user can do -->
+		<div id="menu">
+      <ul id="collapsed-list">
+        <li>Create Card
+          <ul>
+						<div id="card">
+							<form class="card-form" role="form" action="#">
+								<textarea id="card-textarea" name="card" rows="5" cols="30"></textarea>
+       					<button id="addStuff" class="btn">Add new posts</button>
+							</form>
+						</div>
+          </ul>
+        </li>
+        <li>Search
+          <ul>
+						<div id="search">
+							<p>Ability to search</p>
+						</div>
+          </ul>
+        </li>
+        <li>Messages
+          <ul>
+						<div id="messages">
+							<p>Ability to message people</p>
+						</div>
+          </ul>
+        </li>
+				<li>Notifications
+					<ul>
+						<div id="notifications">
+							<p>Ability to receive notifications</p>
+						</div>
+					</ul>
+				</li>
+				<li>My Account
+					<ul>
+						<div id="my-account">
+							<p>Ability to see and update account</p>
+						</div>
+					</ul>
+				</li>
+				<li>My Preferences
+					<ul>
+						<div id="my-preferences">
+							<p>Ability to see and change preferences</p>
+						</div>
+					</ul>
+				</li>
+	    </ul>
+		</div>
+
+	</div>
 
   <!-- Script declarations at base of page so everything else loads first. -->
   <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
@@ -48,5 +108,18 @@
   <script src="{{ url_for('static', filename='js/masonry.pkgd.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/chance.js') }}"></script>
   <script src="{{ url_for('static', filename='js/flow.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/slidebars.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+	<!-- These jQuery calls will activate the slidebars and the collapsable menu -->
+	<script>
+		(function($) {
+		 $(document).ready(function() {
+			 $.slidebars();
+			 collapse();
+			 });
+		 }) (jQuery);
+	</script>
+
   </body>
 </html>
