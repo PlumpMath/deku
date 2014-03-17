@@ -48,15 +48,29 @@
        you, Tumblr! -->
 
 	<!-- Location of the right slidebar. Overlayed for clean look, no pushing -->
-	<div class="sb-slidebar sb-right sb-style-overlay" data-sb-width="8%">
+	<div class="sb-slidebar sb-right sb-style-overlay">
 		<!-- This is a collapsable menu that contains all the options a user can do -->
 		<div id="menu">
       <ul id="collapsed-list">
-        <li>Create Card
+        <li id="default">Create Card
           <ul>
 						<div id="card">
 							<form class="card-form" role="form" action="#">
-								<textarea id="card-textarea" name="card" rows="5" cols="30"></textarea>
+								<div class="form-group">
+									<input list="category" class="form-control" placeholder="Select a category">
+									<datalist id="category">
+										<option value="Administrative">
+										<option value="Club">
+										<option value="School Event">
+										<option value="other">
+									</datalist>
+								</div>
+								<div class="form-group">
+									<input type="text" name="tags" placeholder="Enter tags">
+								</div>
+								<div class="form-group">
+									<textarea id="card-textarea" name="card" rows="5" cols="30" placeholder="Share with your university"></textarea>
+								</div>
        					<button id="addStuff" class="btn">Add new posts</button>
 							</form>
 						</div>
@@ -65,7 +79,13 @@
         <li>Search
           <ul>
 						<div id="search">
-							<p>Ability to search</p>
+							<form class="search-form" role="form" action="#">
+								<div class="form-group">
+									<input type="text" name="search-tags" placeholder="Search by tags">
+								</div>
+								<div class="form-group">
+									<input type="text" name="search-author" placeholder="Search by author">
+								</div>
 						</div>
           </ul>
         </li>
@@ -99,7 +119,6 @@
 				</li>
 	    </ul>
 		</div>
-
 	</div>
 
   <!-- Script declarations at base of page so everything else loads first. -->
@@ -117,6 +136,8 @@
 		 $(document).ready(function() {
 			 $.slidebars();
 			 collapse();
+			 $("#default").toggleClass("expanded");
+			 $("#default").children('ul').toggle('medium');
 			 });
 		 }) (jQuery);
 	</script>
