@@ -17,6 +17,14 @@ function collapse() {
     .children('ul').hide();
 };
 
+var app = new CreateView();
+
+var loginButton = document.querySelector("#login-button");
+loginButton.onclick = function(event) {
+	event.preventDefault();
+	new LoginView();
+};
+
 function closeAll() {
 	$('.collapsed').removeClass('expanded');
 	$('.collapsed').children().hide('medium');

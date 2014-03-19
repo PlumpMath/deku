@@ -25,7 +25,7 @@
       <!-- Have login form in the header. If user is logged in, show some account
       info instead. -->
       <form class="navbar-form navbar-right" role="form" action="#" id="header-login">
-				<span id="existing">Already have an account?</span>
+				<span class="info">Already have an account?</span>
 				<!-- This button sends the user straight to the login screen -->
         <button id="login-button" class="btn btn-success">Login</button>
       </form>
@@ -107,7 +107,7 @@
 	<!-- This will let the user login. This is defaulted after the account is created -->
 	<script type="text/template" id="login-form">
 		<h1>Login</h1>
-		<form role="form" action="login" method='post' id="login">
+		<form role="form" action="{{ url_for('login') }}" method="post" id="login">
 			<div class="form-group">
 				<label for="lemail">E-mail</label>
 				<input type="text" name='username' id="lemail" class="form-control">
@@ -117,7 +117,7 @@
 				<input type="password" name='password' id="lpassword" class="form-control">
 			</div>
 			<!-- this button should send the username/password to the server for authentication -->
-			<button type="submit" class="btn btn-success">Login</button>
+			<button type="submit" class="btn btn-success" id="login-button">Login</button>
 
 			<!-- This lets the user reset their password -->
 			<button type="reset" class="btn btn-success" id="reset-pass">Forgot your password?</button>

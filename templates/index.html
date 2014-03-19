@@ -27,23 +27,9 @@
       <!-- Have login form in the header. If user is logged in, show some account
       info instead. -->
       <form class="navbar-form navbar-right" role="form" method="post" action="login">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/logout">logged in as {{session['user_name']}} click to logout</a>
-        </div>
-				<!--
-        {% if g.result != None %}
-          <a class="navbar-brand">{{ g.result }}</a>
-        {% endif %}
-        <div class="form-group">
-          <input name="username" type="text" placeholder="Username" class="form-control">
-        </div>
-        <div class="form-group">
-          <input name="password" type="password" placeholder="Password" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-success">Login</button>
-      {% endif %}
-				-->
-      <button id="menu" class="btn sb-toggle-right navbar-right">Menu</button>
+				<span class="info">{{session['user_name']}}</span>
+				<span class="info"><a id="logout" href="/logout">Logout</a></span>
+      	<button id="menu" class="btn sb-toggle-right">Menu</button>
       </form>
     </div>
   </header>

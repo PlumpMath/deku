@@ -46,6 +46,16 @@ input {
     padding-top: 50px;
 }
 
+#logout {
+	text-decoration: none;
+}
+
+.info {
+	color: #999;
+	size: 16pt;
+	margin-right: 10px;
+}
+
 #collapsed-list {
 	width:100%;
 	float: left;
