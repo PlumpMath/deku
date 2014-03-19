@@ -27,11 +27,10 @@
       <!-- Have login form in the header. If user is logged in, show some account
       info instead. -->
       <form class="navbar-form navbar-right" role="form" method="post" action="login">
-      {% if session['logged_in'] %}
         <div class="navbar-header">
           <a class="navbar-brand" href="/logout">logged in as {{session['user_name']}} click to logout</a>
         </div>
-      {% else %}
+				<!--
         {% if g.result != None %}
           <a class="navbar-brand">{{ g.result }}</a>
         {% endif %}
@@ -43,6 +42,7 @@
         </div>
         <button type="submit" class="btn btn-success">Login</button>
       {% endif %}
+				-->
       <button id="menu" class="btn sb-toggle-right navbar-right">Menu</button>
       </form>
     </div>

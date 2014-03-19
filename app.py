@@ -10,6 +10,8 @@ app.secret_key="AAAAAAAHHHHHH!!!!!!"
 @app.route('/index')
 def index():
     g.result = session.pop('result', None)
+    if not session.get('logged_in'):
+        return render_template('login.html')
     return render_template('index.html')
 
 #accepts a post request with 'username' and 'password'.
