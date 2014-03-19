@@ -9,6 +9,7 @@ app.secret_key="AAAAAAAHHHHHH!!!!!!"
 @app.route('/')
 @app.route('/index')
 def index():
+    g.result = session.pop('result', None)
     return render_template('index.html')
 
 #accepts a post request with 'username' and 'password'.
@@ -20,11 +21,19 @@ def login():
     result = user.login(username = request.form['username'],password =request.form['password'])
     if result != True:
         session.clear()
-        return result
+        session['result'] = result
+        #return result
     else:
         session['user_name'] = user.username
         session['user_id'] = user.id
-        return session['user_name']+": "+user.stringme()
+        session['logged_in'] = True
+        #return session['user_name']+": "+user.stringme()
+    return redirect('/')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
 
 @app.route('/register', methods = ['POST'])
 def register():
