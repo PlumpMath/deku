@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-from flask import Flask, render_template, session, request, redirect,jsonify
+from flask import Flask, render_template, session, request, redirect,jsonify, g
+from db.config import DBSession
 import db.user
 
 app = Flask(__name__)
@@ -10,38 +11,86 @@ app.secret_key="AAAAAAAHHHHHH!!!!!!"
 def index():
     return render_template('index.html')
 
-
-
-#imitate a failed login post request
-@app.route('/fail')
-def fail():
-    client = app.test_client()
-    return client.post('/login', data=dict(username='team', password='Six'))
-#imitate a succesful login post request
-@app.route('/success')
-def success():
-    client = app.test_client()
-    return client.post('/login', data=dict(username='team', password='six'))
-
-
-#accepts a post request with 'username' and 'password'.  returns.... whatever??? right now just the user name that was logged in + string version of the username and email
-#email can also be used as username in the post request (login function in user.py does it)
-#will set the session['user'] variable to the user that was logged in. and redirects back to url that sent it
-#I don't think another random server generated user verification is necessary, since flask's session does this already.... not sure if that protects against cookie stealing
-#maybe we can add a time based server generated random key to add inside the encrypted cookies if we finish early enough.
+#accepts a post request with 'username' and 'password'.
+#precondition: none
+#postcondition: session['user_name'] and session['user_id'] will be set to their correct values, or the session will be cleared
 @app.route('/login', methods = ['POST'])
 def login():
     user = db.user.User()
-    if user.login(username = request.form['username'],password =request.form['password']):
-        print success
+    result = user.login(username = request.form['username'],password =request.form['password'])
+    if result != True:
+        session.clear()
+        #session['user_name'] = None
+        #session['user_id'] = None
+        #session['user_name'] = None
+        #session['user_id'] = None
+        #session.pop('user_name',None)
+        #session.pop('user_id',None)
+        return result
+    else:
         session['user_name'] = user.username
         session['user_id'] = user.id
         return session['user_name']+": "+user.stringme()
+
+@app.route('/register', methods = ['POST'])
+def register():
+    user = db.user.User()
+    un = request.form['username']
+    pw = request.form['password']
+    em = request.form['email']
+    print un
+    print pw
+    print em
+    result = user.register(username = request.form['username'], password=request.form['password'], email=request.form['email'])
+    
+    if result is True:
+        print '--------stored-------'
+        return 'stored'
     else:
-        print fail
-        session.pop("user_name",None)
-        session.pop("user_id",None)
-    return "FAILED TO LOGON"
+        print '-------error---------'
+        print result
+        return ''
+
+#test register
+@app.route('/test/register')
+def testRegister():
+    c = app.test_client()
+    print c.post('/register', data=dict(username='a',password='a', email='a'), follow_redirects=True).data
+    #asdf = dict(username='teambd',password='sixbd')
+    #asdf=dict([('username','teaMb'), ('password','sixb'),  ('email','sixb@umbc.edu')])
+    #print asdf
+    #print dict(username='teaMbd', password='sixbd')
+    #qwer=dict(username='teaMbd', password='sixbd')
+    #print client.post('/register', data=asdf)
+    #print client.post('/register', data=dict(username='teamb',password='sixb',email='teamb@umbc.edu')).data
+    #print client.post('/login', data=qwer).data
+    #print client.get('/test/login/status')
+    return ""
+
+
+#test login
+@app.route('/test/login')
+def testLogin():
+    client = app.test_client()
+    print client.post('/login', data=dict(username='team', password='six')).data
+    print "OK" +client.get('/test/login/status').data
+    print client.post('/login', data=dict(username='teaM', password='six')).data
+    print "OK" +client.get('/test/login/status').data
+    print client.post('/login', data=dict(username='team', password='SiX')).data
+    print "NONE" +client.get('/test/login/status').data
+    print client.post('/login', data=dict(username='TEAM', password='six')).data
+    print "OK"+client.get('/test/login/status').data
+    print client.post('/login', data=dict(username='teaaaaaam', password='six')).data
+    print "NONE"+client.get('/test/login/status').data
+    return ""
+
+@app.route('/test/login/status')
+def testLoginStatus():
+    if 'user_name' in session and 'user_id' in session:
+        return 'Username: '+session['user_name'] + '  id: '+str(session['user_id'])
+    else:
+        return 'None'
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
