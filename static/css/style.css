@@ -46,6 +46,43 @@ input {
     padding-top: 50px;
 }
 
+#collapsed-list {
+	width:100%;
+	float: left;
+	padding: 0px;
+}
+
+#collapsed-list ul, li {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	cursor: pointer;
+	font-size: 12pt;
+	color: #000;
+}
+
+#collapsed-list li {
+	padding: 0px;
+	padding-top: 10px;
+	padding-bottom:10px;
+	padding-left: 10px;
+	font-size: 14pt;
+	color: #fff;
+	margin-top: 0px;
+	border-top: 2px solid;
+	border-color: #333;
+}
+
+#collapsed-list .collapsed {
+
+}
+
+#collapsed-list .expanded {
+
+}
+
 @media screen and (max-width: 719px) {
     .post.w1 { width: 60px; }
     .post.w2 { width: 120px; }
