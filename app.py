@@ -20,12 +20,6 @@ def login():
     result = user.login(username = request.form['username'],password =request.form['password'])
     if result != True:
         session.clear()
-        #session['user_name'] = None
-        #session['user_id'] = None
-        #session['user_name'] = None
-        #session['user_id'] = None
-        #session.pop('user_name',None)
-        #session.pop('user_id',None)
         return result
     else:
         session['user_name'] = user.username
@@ -50,22 +44,6 @@ def register():
         print '-------error---------'
         print result
         return ''
-
-#test register
-@app.route('/test/register')
-def testRegister():
-    c = app.test_client()
-    print c.post('/register', data=dict(username='a',password='a', email='a'), follow_redirects=True).data
-    #asdf = dict(username='teambd',password='sixbd')
-    #asdf=dict([('username','teaMb'), ('password','sixb'),  ('email','sixb@umbc.edu')])
-    #print asdf
-    #print dict(username='teaMbd', password='sixbd')
-    #qwer=dict(username='teaMbd', password='sixbd')
-    #print client.post('/register', data=asdf)
-    #print client.post('/register', data=dict(username='teamb',password='sixb',email='teamb@umbc.edu')).data
-    #print client.post('/login', data=qwer).data
-    #print client.get('/test/login/status')
-    return ""
 
 
 #test login

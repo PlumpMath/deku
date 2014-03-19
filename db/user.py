@@ -63,6 +63,7 @@ class User(declarative_base()):
     #returns: true
     #         OR  invalid_validation_results:
     #                dict(invalid=True, msgs=[])
+    #                msgs are a list of the validation failures
     #         OR  sqlalchemyerror(error->msg) )
     def register(self, username, password, email):
         self.__init__(username, password, email)
