@@ -20,10 +20,4 @@ var InfoView = Backbone.View.extend({
 		this.$el.fadeOut(350);
     setTimeout(function() {new LoginView();}, 350);
   }
-/*
-	getLogin: function(event) {
-		event.preventDefault();
-		new LoginView();
-	}
-*/
 });
