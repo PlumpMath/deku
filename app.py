@@ -28,19 +28,21 @@ def login():
         session['logged_in'] = True
         return redirect(url_for('index'), code=304)
     else:
-        print 'asdfljawlifjaiwjf'
         dbsession = DBSession()
+        email = '|'+request.form['email']+'|'
+        password = '|'+request.form['password']+'|'
         result = db.user.login(dbsession, email = request.form['email'],password =request.form['password'])
         print result
         if isinstance(result,db.user.User):
             session['user_name'] = result.name
             session['user_id'] = result.id
             session['logged_in'] = True
-            
+            return redirect(url_for('index'), code=304)
         else:
             session.clear()
             session['result'] = result
-    return redirect('/')
+            return redirect('/')
+
 
 @app.route('/logout')
 def logout():
