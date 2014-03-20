@@ -1,10 +1,12 @@
 #!/usr/bin/env python
+import os
+
 from flask import Flask, render_template, url_for, session, request, redirect,jsonify, g
 from db.config import DBSession
 import db.user
 
 app = Flask(__name__)
-app.secret_key="AAAAAAAHHHHHH!!!!!!"
+app.secret_key=os.urandom(777)
 
 @app.route('/')
 @app.route('/index')
@@ -15,27 +17,29 @@ def index():
 
 #accepts a post request with 'username' and 'password'.
 #precondition: none
-#postcondition: session['user_name'] and session['user_id'] will be set to their correct values, or the session will be cleared
+#postcondition: session['user_name'] and session['u    ser_id'] will be set to their correct values, or the session will be cleared
 @app.route('/login', methods = ['POST'])
 def login():
-    user = db.user.User()
+    #user = db.user.User()
     print 'login'
-    if (request.form['username'] == 'admin@deku.com' and request.form['password'] == 'password'):
+    if (request.form['email'] == 'admin@deku.com' and request.form['password'] == 'password'):
         print 'LOGIN THE ADMIN USER'
         session['user_name'] = "Administrator"
         session['logged_in'] = True
         return redirect(url_for('index'), code=304)
     else:
-        result = user.login(username = request.form['username'],password =request.form['password'])
-        if result != True:
+        print 'asdfljawlifjaiwjf'
+        dbsession = DBSession()
+        result = db.user.login(dbsession, email = request.form['email'],password =request.form['password'])
+        print result
+        if isinstance(result,db.user.User):
+            session['user_name'] = result.name
+            session['user_id'] = result.id
+            session['logged_in'] = True
+            
+        else:
             session.clear()
             session['result'] = result
-            #return result
-        else:
-            session['user_name'] = user.username
-            session['user_id'] = user.id
-            session['logged_in'] = True
-            #return session['user_name']+": "+user.stringme()
     return redirect('/')
 
 @app.route('/logout')
@@ -45,47 +49,49 @@ def logout():
 
 @app.route('/register', methods = ['POST'])
 def register():
-    user = db.user.User()
-    un = request.form['username']
-    pw = request.form['password']
-    em = request.form['email']
-    print un
-    print pw
-    print em
-    result = user.register(username = request.form['username'], password=request.form['password'], email=request.form['email'])
+    #register function works
+    name = request.form['name']
+    email = request.form['email']
+    password = request.form['password']
+    university = request.form['university']
+    print db.user.register(name, email, password, university)
+    return 'done registering'
+
+@app.route('/editprofile', methods = ['POST'])
+def editprofile():
+    dbsession = DBSession()
+    fields = dict()
+    for key in db.user.profile_cols:
+        if key in request.form:
+            value = request.form[key]
+            fields[key] = value
+            
+    user = dbsession.query(db.user.User).filter_by(id = session['user_id']).first()
+    db.user.updateProfile(user, fields)
     
-    if result is True:
-        print '--------stored-------'
-        return 'stored'
+    if user is None:
+        raise Exception("user must be logged in")
+        return 'user must be logged in'
     else:
-        print '-------error---------'
-        print result
-        return ''
-
-
-#test login
-@app.route('/test/login')
-def testLogin():
-    client = app.test_client()
-    print client.post('/login', data=dict(username='team', password='six')).data
-    print "OK" +client.get('/test/login/status').data
-    print client.post('/login', data=dict(username='teaM', password='six')).data
-    print "OK" +client.get('/test/login/status').data
-    print client.post('/login', data=dict(username='team', password='SiX')).data
-    print "NONE" +client.get('/test/login/status').data
-    print client.post('/login', data=dict(username='TEAM', password='six')).data
-    print "OK"+client.get('/test/login/status').data
-    print client.post('/login', data=dict(username='teaaaaaam', password='six')).data
-    print "NONE"+client.get('/test/login/status').data
-    return ""
+        try:
+            dbsession.commit()
+            print 'commit'
+        except:
+            return 'some kind of sql error' 
+        finally:
+            dbsession.close()
+        return 'profile updated'
+    
 
 @app.route('/test/login/status')
 def testLoginStatus():
     if 'user_name' in session and 'user_id' in session:
-        return 'Username: '+session['user_name'] + '  id: '+str(session['user_id'])
+        return session['user_name']
+        #return 'Username: '+session['user_name'] + ' id: '+str(session['user_id'])
     else:
-        return 'None'
+        return 'False'
 
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
+
