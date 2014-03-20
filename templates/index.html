@@ -222,6 +222,12 @@
 		</form>
 	</script>
 
+  <script type="text/template" id="card-template">
+    <div class="card">
+      <p><%= content %> 
+    </div>
+  </script>
+
 	<!-- This view handles the hand view -->
 
 	<script type="text/template" id="hand-view">
@@ -240,14 +246,16 @@
   <script src="{{ url_for('static', filename='js/underscore-min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/masonry.pkgd.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/chance.js') }}"></script>
   <script src="{{ url_for('static', filename='js/flow.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/slidebars.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/views/create_view.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/views/info_view.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/views/login_view.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/views/password_reset_view.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/views/hand_view.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/views/hand_view.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/models/card.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/collections/deck.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/views/card_view.js')}}"></script>
 	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
 	<!-- These jQuery calls will activate the slidebars and the collapsable menu -->

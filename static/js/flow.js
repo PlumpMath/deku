@@ -42,6 +42,7 @@ function setRandomColors() {
 
 //window.onload = setRandomColors();
 
+/**
 var addButton = document.querySelector('#addStuff');
 addButton.onclick = function(event) {
 	//takes the text in the card-textarea
@@ -75,3 +76,4 @@ addButton.onclick = function(event) {
 		text.value = "";
 	}
 }
+*/

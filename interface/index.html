@@ -1,12 +1,15 @@
 <!doctype html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,
+  minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Dek&#363</title>
   <link rel="stylesheet" href="js/lib/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="js/lib/bootstrap/dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet"
+  href="js/lib/bootstrap/dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="./js/lib/Slidebars/slidebars/0.9/slidebars.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -34,38 +37,45 @@
   <div id="container" class="container">
   
   </div>
+
   <!-- this needs to infinite scroll, so having a footer is stupid. Looking at
        you, Tumblr! -->
 
   <!-- Templates -->
   <script type="text/template" id="create-form">
-    <h1>Create account</h1>
-    <form role="form" action="" id="create">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="text" id="email" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="university">University</label>
-        <input list="university" class="form-control">
-        <datalist id="university">
-          <option value="UMBC">
-        </datalist>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" class="form-control">
-      </div>
-      <button type="submit" class="btn btn-success">Sign up for Dek&#363</button>
-    </form>
+    <div class="col-sm-6">
+      <img src="assets/img/welcome.jpg" alt="Some sweet image about our rad
+      service." class="img-responsive center-block">
+    </div>
+    <div class="col-sm-6">
+      <h1>Create account</h1>
+      <form role="form" action="" id="create">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" id="email" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="university">University</label>
+          <input list="university" class="form-control">
+          <datalist id="university">
+            <option value="UMBC">
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success">Sign up for Dek&#363</button>
+      </form>
+    </div>
   </script>
 
   <script type="text/template" id="info-form">
-    <h1>Complete yor Profile</h1>
+    <h1>Complete your Profile</h1>
     <form role="form" id="info">
     <div class="form-group">
       <label for="year">Graduation Year</label>
