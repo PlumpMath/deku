@@ -12,12 +12,13 @@ var InfoView = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template);
+    this.$el.html(this.template).fadeIn(350);
   },
 
   getLogin: function(event) {
     event.preventDefault();
-    new LoginView();
+		this.$el.fadeOut(350);
+    setTimeout(function() {new LoginView();}, 350);
   }
 /*
 	getLogin: function(event) {

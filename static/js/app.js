@@ -33,7 +33,8 @@ if ($("#login-button").is(":visible")) {
 
 loginButton.onclick = function(event) {
 	event.preventDefault();
-	new LoginView();
+	$("#container").fadeOut(350);
+	setTimeout(function() {new LoginView();}, 350);
 };
 
 function closeAll() {

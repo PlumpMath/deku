@@ -17,7 +17,8 @@ var CreateView = Backbone.View.extend({
 
   getInfo: function(event) {
     event.preventDefault();
-    new InfoView();
+		this.$el.fadeOut(350);
+    setTimeout(function() {new InfoView();}, 350);
   }
 
 });

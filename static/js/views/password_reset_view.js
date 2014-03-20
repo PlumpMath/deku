@@ -13,7 +13,7 @@ var PassResetView = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.$el.html(this.template);
+		this.$el.html(this.template).fadeIn(350);
 	},
 
 	//This function should handle the event a user resets their password

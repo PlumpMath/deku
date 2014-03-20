@@ -14,7 +14,7 @@ var LoginView = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.$el.html(this.template);
+		this.$el.html(this.template).fadeIn(350);
 	},
 
 	sendLogin: function(event) {
@@ -27,7 +27,7 @@ var LoginView = Backbone.View.extend({
 
 		//this is the data that is sent
 		var loginValues = {
-			username: $("#lemail").val(),
+			email: $("#lemail").val(),
 			password: $("#lpassword").val()
 		};
 
@@ -40,7 +40,7 @@ var LoginView = Backbone.View.extend({
 			success: function(data) {
 				console.log(["Login request details: ", data]);
 				//console.log("GO TO INDEX: AJAX");
-				window.location.replace("");
+				window.location.replace('');
 			}
 		});
 	},
@@ -48,7 +48,8 @@ var LoginView = Backbone.View.extend({
 	//This will open the reset password view
 	resetPassword: function(event) {
 		event.preventDefault();
-		new PassResetView(); 
+		this.$el.fadeOut(350);
+		setTimeout(function() {new PassResetView();}, 350);
 	}
 
 });
