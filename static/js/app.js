@@ -11,8 +11,10 @@ function collapse() {
      	   $(this).children('ul').toggle('medium');
      	 }
 		 } else {
-			 $(this).toggleClass('expanded');
-			 $(this).children().hide('medium');
+			 if ($(event.target).is("li")) {
+				 $(this).toggleClass('expanded');
+				 $(this).children().hide('medium');
+			 }
 		 }
      return false;
     })
