@@ -33,7 +33,7 @@ if ($("#login-button").is(":visible")) {
 	app = new CreateView();
 } else {
 	console.log("Load hand");
-	app = new HandView();
+	new app.HandView();
 }
 
 loginButton.onclick = function(event) {
