@@ -10,6 +10,9 @@ function collapse() {
      	   $(this).toggleClass('expanded');
      	   $(this).children('ul').toggle('medium');
      	 }
+		 } else {
+			 $(this).toggleClass('expanded');
+			 $(this).children().hide('medium');
 		 }
      return false;
     })

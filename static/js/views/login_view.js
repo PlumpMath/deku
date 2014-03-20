@@ -41,8 +41,17 @@ var LoginView = Backbone.View.extend({
 				console.log(["Login request details: ", data]);
 				//console.log("GO TO INDEX: AJAX");
 				window.location.replace('');
+			},
+
+			error: function() {
+				console.log("Login failed");
+				alert("Your email or password did not match");
+				$("#lemail").val('');
+				$("#lpassword").val('');
+				$("#lemail").focus();
 			}
 		});
+
 	},
 
 	//This will open the reset password view
