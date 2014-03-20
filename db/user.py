@@ -20,7 +20,7 @@ class User(declarative_base()):
     id = Column(Integer, primary_key=True, nullable=False)
     username = Column(String(50), unique=True, nullable=False)
     email = Column(String(50), unique=True, nullable=False)
-    password = Column(String(100), nullable=False)
+    password = Column(String(100,collation='utf8_bin'), nullable=False)
     created = Column(DateTime, default=datetime.utcnow)
 
     def __init__(self, username='', password='', email=''):
