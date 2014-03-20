@@ -26,7 +26,7 @@ def login():
         print 'LOGIN THE ADMIN USER'
         session['user_name'] = "Administrator"
         session['logged_in'] = True
-        return redirect(url_for('index'), code=304)
+        return redirect(url_for('/index', code=304))
     else:
         dbsession = DBSession()
         email = '|'+request.form['email']+'|'
@@ -37,11 +37,11 @@ def login():
             session['user_name'] = result.name
             session['user_id'] = result.id
             session['logged_in'] = True
-            return redirect(url_for('index'), code=304)
+            return redirect('/', code=304)
         else:
             session.clear()
             session['result'] = result
-            return redirect('/')
+            return redirect('/', code=304)
 
 
 @app.route('/logout')
