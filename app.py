@@ -37,11 +37,11 @@ def login():
             session['user_name'] = result.name
             session['user_id'] = result.id
             session['logged_in'] = True
-            return redirect('/', code=304)
+            return redirect('/index', code=304)
         else:
             session.clear()
             session['result'] = result
-            return redirect('/', code=304)
+            return redirect('/index', code=304)
 
 
 @app.route('/logout')
