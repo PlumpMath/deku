@@ -17,9 +17,20 @@ function collapse() {
     .children('ul').hide();
 };
 
-var app = new CreateView();
 
 var loginButton = document.querySelector("#login-button");
+
+var app = app || {};
+
+if ($("#login-button").is(":visible")) {
+	//app = new HandView();
+	console.log("load create");
+	app = new CreateView();
+} else {
+	console.log("Load hand");
+	app = new HandView();
+}
+
 loginButton.onclick = function(event) {
 	event.preventDefault();
 	new LoginView();

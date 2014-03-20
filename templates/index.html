@@ -27,9 +27,15 @@
       <!-- Have login form in the header. If user is logged in, show some account
       info instead. -->
       <form class="navbar-form navbar-right" role="form" method="post" action="login">
-				<span class="info">{{session['user_name']}}</span>
-				<span class="info"><a id="logout" href="/logout">Logout</a></span>
-      	<button id="menu" class="btn sb-toggle-right">Menu</button>
+				{% if session['logged_in'] %}
+					<span class="info">{{session['user_name']}}</span>
+					<span class="info"><a id="logout" href="/logout">Logout</a></span>
+      		<button id="menu" class="btn sb-toggle-right">Menu</button>
+				{% else %}
+					<span class="info">Already have an account?</span>
+					<!-- This button sends the user straight to the login screen -->
+       		<button id="login-button" class="btn btn-success">Login</button>
+				{% endif %}
       </form>
     </div>
   </header>
@@ -116,13 +122,132 @@
 		</div>
 	</div>
 
+  <!-- Templates -->
+
+	<!-- This template handles the first stage of creating and account -->
+  <script type="text/template" id="create-form">
+    <h1>Create account</h1>
+    <form role="form" action="" id="create">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="university">University</label>
+        <input list="university" class="form-control">
+        <datalist id="university">
+          <option value="UMBC">
+        </datalist>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-success">Sign up for Dek&#363</button>
+    </form>
+  </script>
+
+	<!-- This next view gets more specific user account information -->
+  <script type="text/template" id="info-form">
+    <h1>Complete your Profile</h1>
+    <form role="form" action="" id="info">
+    <div class="form-group">
+      <label for="year">Graduation Year</label>
+      <input list="year" class="form-control">
+      <datalist id="year">
+        <option value="2014">
+        <option value="2015">
+        <option value="2016">
+      </datalist>
+    </div>
+
+    <div class="form-group">
+      <label for="major">Major</label>
+      <input list="major" class="form-control">
+      <datalist id="major">
+        <option value="Computer Science">
+        <option value="Computer Engineering">
+        <option value="Economics">
+        <option value="Mathematics">
+      </datalist>
+    </div>
+
+    <div class="form-group">
+      <label for="classes">Classes</label>
+      <input type="text" id="classes" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="bio">Biography</label>
+      <textarea id="bio" class="form-control"></textarea>
+    </div>
+	
+		<!-- At this point the user's profile would be sent to the server and saved -->
+    <button id="submit" class="btn btn-success">Done</button>
+  </script>
+
+	<!-- This will let the user login. This is defaulted after the account is created -->
+	<script type="text/template" id="login-form">
+		<h1>Login</h1>
+		<form role="form" action="{{ url_for('login') }}" method="post" id="login">
+			<div class="form-group">
+				<label for="lemail">E-mail</label>
+				<input type="text" name='username' id="lemail" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="lpassword">Password</label>
+				<input type="password" name='password' id="lpassword" class="form-control">
+			</div>
+			<!-- this button should send the username/password to the server for authentication -->
+			<button type="submit" class="btn btn-success" id="login-button">Login</button>
+
+			<!-- This lets the user reset their password -->
+			<button type="reset" class="btn btn-success" id="reset-pass">Forgot your password?</button>
+		</form>
+	</script>
+
+	<!-- this view handles password reseting -->
+	<script type="text/template" id="password-reset-form">
+		<h1>Reset my password</h1>
+		<form role="form" action="" id="password-reset">
+			<div class="form-group">
+				<label for="remail">Enter your e-mail</label>
+				<input type="text" id="remail" class="form-control">
+			</div>
+			<button type="submit" class="btn btn-success">Send me my new password</button>
+		</form>
+	</script>
+
+	<!-- This view handles the hand view -->
+
+	<script type="text/template" id="hand-view">
+	</script>
+
+	<!-- This vew handles viewing another user's profile -->
+
+
+
+	<!-- This view handles inspecting a card -->
+
+
   <!-- Script declarations at base of page so everything else loads first. -->
   <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/masonry.pkgd.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/underscore-min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/masonry.pkgd.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/chance.js') }}"></script>
   <script src="{{ url_for('static', filename='js/flow.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/slidebars.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/views/create_view.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/views/info_view.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/views/login_view.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/views/password_reset_view.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/views/hand_view.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
 	<!-- These jQuery calls will activate the slidebars and the collapsable menu -->
