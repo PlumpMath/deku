@@ -10,6 +10,11 @@ function collapse() {
      	   $(this).toggleClass('expanded');
      	   $(this).children('ul').toggle('medium');
      	 }
+		 } else {
+			 if ($(event.target).is("li")) {
+				 $(this).toggleClass('expanded');
+				 $(this).children().hide('medium');
+			 }
 		 }
      return false;
     })
