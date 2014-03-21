@@ -1,4 +1,4 @@
 *.swp
 .venv
-.pyc
+*.pyc
 interface/js/lib

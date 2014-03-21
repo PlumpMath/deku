@@ -11,6 +11,7 @@ var LoginView = Backbone.View.extend({
 
 	initialize: function() {
 		this.render();
+		$("#lemail").focus();
 	},
 
 	render: function() {
