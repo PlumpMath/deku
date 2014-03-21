@@ -48,15 +48,19 @@ def logout():
     return redirect('/')
 
 
-#register and update profile
+#accepts post request with
+#required:
+#    name, email, password, university
+#optional:
+#    graduation_year, major, classes, biography
 @app.route('/register')#, methods = ['POST'])
 def register():
     ####################DUMMYTESTDATA
     name='f'
-    email='farpar@fafrp.farpfao'
+    email='asdf@fjaiwfaewji.aw'
     password='ffffff'
     university='f'
-    fields=dict(classes="are",major="pain",innn="the",biography="face")
+    fields=dict(classes="are",major="pain",innn="the",biography="face",graduation_year="1973")
     #DUMMYTESTDATA###################
     ####################REALDATAA?#
     #name = request.form['name']
@@ -71,7 +75,6 @@ def register():
     dbsession = DBSession()    
     result = db.user.register(dbsession, name, email, password, university)
     if isinstance(result, db.user.User):#register success
-        #get profile fields from post
         #pass in user(attached to dbsession) and profile fields to update
         db.user.updateProfile(result, fields)
         print 'registered' + result.name + 'now let\'s update profile...'
