@@ -70,7 +70,8 @@ class Tag(Base):
     tag = Column(String(37), nullable=False, index=True)
 
     def __repr__(self):
-        return "[TAG][id=%s][parent=%s][tag=%s]"%(self.id, self.parent_id, self.tag)
+        #return "[TAG][id=%s][parent=%s][tag=%s]"%(self.id, self.parent_id, self.tag)
+        return "[TAG][id=%s][tag=%s]"%(self.id, self.tag)
 
 def DropCreateTable():
     #drops and (re)creates the user table if it already exists in the database

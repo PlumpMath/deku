@@ -6,41 +6,27 @@ import tempfile
 class FlaskrTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.app = app.app.test_client()
+        pass
 
     def tearDown(self):
         pass
-
-    def test_login(self):
+    
+    def test_stuff(self):
         client = app.app.test_client()
-        client.post('/login', data=dict(email='test@test.test', password='password')).data
-        print client.get('/test/login/status').data
-        client.post('/login', data=dict(email='TEST@TEST.TEST', password='password')).data
-        print client.get('/test/login/status').data
-        client.post('/login', data=dict(email='team', password='SiX')).data
-        print client.get('/test/login/status').data
+        email = 'a@b.cd'
+        password = 'password'
+        fields=dict(name="REGIS2", email=email, password=password, university='umbc1',classes="are",major="pain",innn="the",biography="face",graduation_year="1973")
+        #register a new user
+        print client.post('/register', data=fields).data
+        #login with newly registered user
+        print client.post('/login',data=dict(email=email, password=password))
+        #check status of login
+        print client.get('/test/login/status',data=dict(email=email, password=password)).data
+        #modify profile information
+        print client.post('/editprofile', data=dict(classes="allyour",major="bases",innn="are",biography="arebelong",graduation_year="toUs")).data
+        #add a card with 3 tags
+        print client.post('/addcard', data=dict(category='cat', content='content', tags=['tagone','tagtwo','tagthree3']))
         
-    def test_register(self):
-        client = app.app.test_client()
-        print client.post('/register', data=dict(name="REGIS", email='regis@ter.ifng', password='password', university='umbc')).data
-        print client.get('/test/login/status').data
-        client.post('/editprofile', data=dict(major='regis', do='tur', graduation_year='ing')).data
-        client.post('/login', data=dict(email='regis@ter.ifng', password='password')).data
-        
-        
-        #import db.user
-        #db.user.DropCreateTable()
-        
-        #client = app.app.test_client()
-        #client.post()
-        #print "\n\n\n\n\n\n\n"
-        #assert 'stored'==client.post('/register', data=dict(username='q',password='b',email='q')).data
-        #assert ''==client.post('/register', data=dict(username='q',password='b',email='q')).data
-        
-    def test_profile(self):
-        client = app.app.test_client()
-        client.post('/login', data=dict(username='test@test.test', password='password')).data
-        client.post('/editprofile', data=dict(major='mmmajorrr', do='nothing', graduation_year='gggrad')).data
 
 if __name__ == '__main__':
     unittest.main()

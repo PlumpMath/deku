@@ -2,7 +2,7 @@
 from sqlalchemy import exc
 
 #from config import *
-from config import User, DBSession, DropCreateTable
+from config import User, DBSession, DropCreateTable, Tag, Card
 import re
 
 profile_cols = ['graduation_year','major','classes','biography']
@@ -11,22 +11,20 @@ register_cols = ['name', 'email', 'password', 'university']
 #post: registered
 def register(dbsession, name, email, password, university):
     validate_results = registerValidate(name, email, password, university)
-
-    if len(validate_results) > 0:
-        print 'validationfail'
-        return validate_results
-    else:
-        #try to commit to add commit to database
-        user = User(name, email, password, university)
-        try:
-            dbsession.add(user)
-            dbsession.commit()
-        except exc.SQLAlchemyError:
-            #most likely an error with uniqueness of email.... since we already handled nullable in registerValidate()
-            validate_results.append('registration fail: Duplicate email')
+    
+    #check if exists
+    user = dbsession.query(User).filter(User.email == email).first()
+    
+    if user is None:
+        if len(validate_results) > 0:
+            print 'validationfail'
             return validate_results
-    print user
-    return user
+        else:
+            user = User(name, email, password, university)
+        return user
+    else:
+        validate_results.append('registration fail: Duplicate email')
+        return validate_results 
 
 #discuss validation criteria
 #will return: problems with validations or None
@@ -53,11 +51,10 @@ def updateProfileByUser(user, fields):
 #user that's from a dbsession must be sent in
 def updateProfile(dbsession, user_id, fields):
     print user_id
-    user = dbsession.query(User).filter(User.id == user_id).first()
-    if user is None:
-        return 'user not found in database'
-    elif not isinstance(fields,dict):
-        return 'fields is not a dict'
+    user = getUser(dbsession, user_id)
+    
+    if not isinstance(fields,dict):
+        raise Exception('fields is not a dict')
     else:
         for (key,value) in fields.items():
             if key in profile_cols:
@@ -67,22 +64,37 @@ def updateProfile(dbsession, user_id, fields):
 #check login and grab fields
 #if successful returns True or a message saying why login failed
 def login(dbsession, email, password):
-    try:
-        user = dbsession.query(User).filter(User.email == email).first()        
-    except exc.SQLAlchemyError as e:
-        print e
-        return 'Invalid email'
+    user = dbsession.query(User).filter(User.email == email).first()        
 
     if user is None:
-        return email + " not registered"
+        return 'user not registered'
     
     if not user.checkPassword(password):
         return "Invalid password"
     else:
         return user
 
-def addCard(user, category, content, tags):
-    pass
+def addCard(dbsession, user_id, category, content, tags):
+    #user = getUser(dbsession, user_id)
+    card = Card(user_id=user_id, category=category, content = content)
+    for it in tags:
+        card.tags.append(Tag(tag=it))
+    print card.tags
+    user = getUser(dbsession, user_id)
+    user.cards.append(card)
+    print user.cards
+    #card = Card(user_id=user_id, category=category, content=content)
+    #for it in tags:
+        #card.tags.append(Tag(tag=it))
+        #print card.tags
+    #user.cards.append(Card(category=category, content=content))
+    #return user
+    
+def getUser(dbsession, user_id):
+    user = dbsession.query(User).filter(User.id == user_id).first()
+    if user is None:
+        raise Exception('user not found in database')
+    return user
     
 #DROP and re-CREATE user table and add the single admin
 if __name__ == "__main__":
