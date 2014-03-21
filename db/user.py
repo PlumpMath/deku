@@ -6,7 +6,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from config import DBSession
 import re
 
-profile_cols =['graduation_year','major','classes','biography']
+profile_cols = ['graduation_year','major','classes','biography']
+register_cols = ['name', 'email', 'password', 'university']
 
 Base = declarative_base()
 
@@ -43,27 +44,24 @@ class User(Base):
 
 #pre: name, password, university must be sent in.  email must not be registered yet
 #post: registered
-def register(name, email, password, university):
+def register(dbsession, name, email, password, university):
     validate_results = registerValidate(name, email, password, university)
 
     if len(validate_results) > 0:
         print 'validationfail'
-        return dict(invalid=True, msgs=validate_results)
+        return validate_results
     else:
         #try to commit to add commit to database
-        dbsession = DBSession()
         user = User(name, email, password, university)
         try:
             dbsession.add(user)
             dbsession.commit()
         except exc.SQLAlchemyError:
             #most likely an error with uniqueness of email.... since we already handled nullable in registerValidate()
-            return 'registration fail: Duplicate email' #probably
-
-        finally:
-            dbsession.close()
-        
-    return 'registration success'
+            validate_results.append('registration fail: Duplicate email')
+            return validate_results
+    print user
+    return user
 
 #discuss validation criteria
 #will return: problems with validations or None
@@ -80,13 +78,13 @@ def registerValidate(name, email, password, university):
         errors.append('no university')
     return errors
 
-
+#user that's from a dbsession must be sent in
 def updateProfile(user, profile):
     if isinstance(profile,dict) and isinstance(user,User):
         for (key,value) in profile.items():
             if key in profile_cols:
                 setattr(user, key, value)
-
+    print 'what'
 
 #check login and grab fields
 #if successful returns True or a message saying why login failed
@@ -119,20 +117,17 @@ if __name__ == "__main__":
     dbsession = DBSession()
 
     #register(dbsession, name, email, password, university) 
-    print register('Test', 'test@test.test', 'password', 'UMBC')
-    print register('Test', 'tes2test.test', 'pas', '')
-    print register('Test', 'test@test.test', 'password', 'UMBC')
-    user = login(dbsession, 'ADMIN@deku.com', 'passworD')
-    user = login(dbsession, 'test@test.test', 'passworD')
-    user = login(dbsession, 'test@test.test', 'password')
-
+    #print register('Test', 'test@test.test', 'password', 'UMBC')
+    #print register('Test', 'tes2test.test', 'pas', '')
+    user =  register(dbsession, 'Test', 'test@test.test', 'password', 'UMBC')
     print user
     #available profile columns are graduation_year, major, classes, graduation_year
     updateProfile(user,dict(biography='wtf',whatever='wta', major='whattttt', graduation_year='2004'))
     
     print user
-    
+        
     print 'not yet committed / flushed'
+    
     print 'attempting to commit...'
     try:
         result = True
@@ -144,4 +139,4 @@ if __name__ == "__main__":
         if not result:
             print 'FAILED TO UPDATE PROFILE'
         else:
-            print 'committed probably'
+            print 'committed'

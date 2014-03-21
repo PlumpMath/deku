@@ -29,8 +29,6 @@ def login():
         return redirect(url_for('index'), code=304)
     else:
         dbsession = DBSession()
-        email = '|'+request.form['email']+'|'
-        password = '|'+request.form['password']+'|'
         result = db.user.login(dbsession, email = request.form['email'],password =request.form['password'])
         print result
         if isinstance(result,db.user.User):
@@ -49,16 +47,46 @@ def logout():
     session.clear()
     return redirect('/')
 
-@app.route('/register', methods = ['POST'])
-def register():
-    #register function works
-    name = request.form['name']
-    email = request.form['email']
-    password = request.form['password']
-    university = request.form['university']
-    print db.user.register(name, email, password, university)
-    return 'done registering'
 
+#register and update profile
+@app.route('/register')#, methods = ['POST'])
+def register():
+    ####################DUMMYTESTDATA
+    name='f'
+    email='farpar@fafrp.farpfao'
+    password='ffffff'
+    university='f'
+    fields=dict(classes="are",major="pain",innn="the",biography="face")
+    #DUMMYTESTDATA###################
+    ####################REALDATAA?#
+    #name = request.form['name']
+    #email = request.form['email']
+    #password = request.form['password']
+    #university = request.form['university']
+    #get all fields to send into profile, profile will ignore unneeded fields
+    #fields = request.form
+    #REALDATAA?####################
+    print fields
+
+    dbsession = DBSession()    
+    result = db.user.register(dbsession, name, email, password, university)
+    if isinstance(result, db.user.User):#register success
+        #get profile fields from post
+        #pass in user(attached to dbsession) and profile fields to update
+        db.user.updateProfile(result, fields)
+        print 'registered' + result.name + 'now let\'s update profile...'
+        try:
+            dbsession.commit()
+        except:
+            print 'ion'
+        print 'profile updated'
+        return 'something'
+    else:#register fail
+        return name + ' NOT CREATED: ' + str(result)
+
+
+
+#maybe
 @app.route('/editprofile', methods = ['POST'])
 def editprofile():
     dbsession = DBSession()
