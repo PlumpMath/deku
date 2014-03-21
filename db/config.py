@@ -60,6 +60,15 @@ class Card(Base):
     content = Column(String(34567), nullable=False)
     created = Column(DateTime, default=datetime.utcnow)
     tags = relationship('Tag', cascade="all,delete", backref="card")
+    
+    def toDict(self):
+        card = dict(id=self.id,user_id=self.user_id,category=self.category,content=self.content,created=self.created)
+        tags=[]
+        for tag in self.tags:
+            tags.append(tag.toDict())
+        card['tags'] = tags
+        return card
+    
     def __repr__(self):
         return "[CARD][id=%s][category=%s][content=%s][tags=%s]"%(self.id, self.category, self.content, self.tags)
 
@@ -68,6 +77,10 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
     card_id = Column(Integer, ForeignKey('card.id'), nullable=False)
     tag = Column(String(37), nullable=False, index=True)
+    
+    def toDict(self):
+        tag = dict(id=self.id,card_id=self.card_id,tag=self.tag)
+        return tag
 
     def __repr__(self):
         #return "[TAG][id=%s][parent=%s][tag=%s]"%(self.id, self.parent_id, self.tag)

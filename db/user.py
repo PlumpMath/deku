@@ -73,22 +73,6 @@ def login(dbsession, email, password):
         return "Invalid password"
     else:
         return user
-
-def addCard(dbsession, user_id, category, content, tags):
-    #user = getUser(dbsession, user_id)
-    card = Card(user_id=user_id, category=category, content = content)
-    for it in tags:
-        card.tags.append(Tag(tag=it))
-    print card.tags
-    user = getUser(dbsession, user_id)
-    user.cards.append(card)
-    print user.cards
-    #card = Card(user_id=user_id, category=category, content=content)
-    #for it in tags:
-        #card.tags.append(Tag(tag=it))
-        #print card.tags
-    #user.cards.append(Card(category=category, content=content))
-    #return user
     
 def getUser(dbsession, user_id):
     user = dbsession.query(User).filter(User.id == user_id).first()

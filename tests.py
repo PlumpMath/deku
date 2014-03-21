@@ -26,6 +26,9 @@ class FlaskrTestCase(unittest.TestCase):
         print client.post('/editprofile', data=dict(classes="allyour",major="bases",innn="are",biography="arebelong",graduation_year="toUs")).data
         #add a card with 3 tags
         print client.post('/addcard', data=dict(category='cat', content='content', tags=['tagone','tagtwo','tagthree3']))
+        #get last 2 cards posted in json form
+        #currently returns a "python list" of cards...   [ {id:}{user_id:}{tags:[1,2,...]}{created:}{content} , card2 , card3 ]
+        print vars(client.get('/getCards?numCards=2'))
         
 
 if __name__ == '__main__':

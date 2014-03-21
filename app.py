@@ -5,6 +5,7 @@ from flask import Flask, render_template, url_for, session, request, redirect,js
 from db.config import DBSession
 import db.user
 import db.config
+import db.card
 
 app = Flask(__name__)
 app.secret_key=os.urandom(777)
@@ -118,7 +119,7 @@ def addcard():
     print 'adding post...'
     
     dbsession = DBSession()
-    result = db.user.addCard(dbsession, user_id, category, content, tags)
+    result = db.card.addCard(dbsession, user_id, category, content, tags)
     try:
         dbsession.commit()
     except:
@@ -126,6 +127,12 @@ def addcard():
     print result
     return ''
 
+@app.route('/getCards')
+def getCards():
+    number = request.args.get('numCards')
+    dbsession = DBSession()
+    print db.card.getLastCards(dbsession, number)
+    return ''
 
 @app.route('/test/login/status')
 def testLoginStatus():
