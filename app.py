@@ -72,40 +72,71 @@ def register():
     #REALDATAA?####################
     print fields
 
-    dbsession = DBSession()    
+    dbsession = DBSession()
+    #register user    
     result = db.user.register(dbsession, name, email, password, university)
-    if isinstance(result, db.user.User):#register success
-        #pass in user(attached to dbsession) and profile fields to update
-        db.user.updateProfile(result, fields)
+    
+    #update profile if registering successful
+    if isinstance(result, db.user.User):  #result is a User so let's update that profile
+        #pass in user and profile fields to update
+        db.user.updateProfileByUser(result, fields)
         print 'registered' + result.name + 'now let\'s update profile...'
         try:
+            #commit update
             dbsession.commit()
         except:
             print 'ion'
         print 'profile updated'
         return 'something'
-    else:#register fail
+    else:#register() returned an error
         return name + ' NOT CREATED: ' + str(result)
 
-
-
-#maybe
-@app.route('/editprofile', methods = ['POST'])
+@app.route('/editprofile')#, methods = ['POST'])
 def editprofile():
+    #if 'user_id' not in session:
+        #raise Exception("user must be logged in")
+    #fields=request.form()
+    #user_id = session['user_id']
+    user_id='2'
+    fields=dict(classes="allour",major="bases",innn="bases",biography="arebelong",graduation_year="2us")
+    
     dbsession = DBSession()
-    fields = dict()
-    for key in db.user.profile_cols:
-        if key in request.form:
-            value = request.form[key]
-            fields[key] = value
-            
-    user = dbsession.query(db.user.User).filter_by(id = session['user_id']).first()
-    db.user.updateProfile(user, fields)
+
+    #call function, pass in dbsession, user_id and fields in profile to update
+    result = db.user.updateProfile(dbsession, user_id, fields)
+    print result
+    if not result:
+        raise Exception(result)
+    try:
+        dbsession.commit()
+    except:
+        raise Exception('some sql error')
+    return result.name + ': classes[' + result.classes + '] major[' + result.major + '] biography[' + result.biography + '] graduation[' + result.graduation_year+']' 
+
+@app.route('/addcard')#, methods=['POST'])
+def addcard():
+    ####################DUMMYTESTDATA
+    category='f'
+    content='asdf@fjaiwfaewji.aw'
+    tags=list('ffffff','gggg','hhhh')
+    #DUMMYTESTDATA###################
+    ####################REALDATAA?#
+    #category = request.form['category']
+    #content = request.form['content']
+    #tags = request.form['tags']
+    #REALDATAA?####################
+    print 'adding post...'
+    
+    dbsession = DBSession()
+    #get user by session['user_id']
+    #result = db.user.addCard(dbsession, user_id, category, )
+    user = dbsession.query(db.user.User).filter_by(id == session['user_id']).first()
     
     if user is None:
-        raise Exception("user must be logged in")
-        return 'user must be logged in'
+        print 'Nothing done, user must be logged in'
+        return 'Nothing done, user must be logged in'
     else:
+        #addCard(user, category, content, tags)
         try:
             dbsession.commit()
             print 'commit'
@@ -115,6 +146,9 @@ def editprofile():
             dbsession.close()
         return 'profile updated'
     
+        
+    return 'some stuff'
+
 
 @app.route('/test/login/status')
 def testLoginStatus():
