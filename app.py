@@ -4,6 +4,8 @@ import os
 from flask import Flask, render_template, url_for, session, request, redirect,jsonify, g
 from db.config import DBSession
 import db.user
+import db.config
+import db.card
 
 app = Flask(__name__)
 app.secret_key=os.urandom(777)
@@ -29,66 +31,113 @@ def login():
         return redirect(url_for('index'), code=304)
     else:
         dbsession = DBSession()
-        email = '|'+request.form['email']+'|'
-        password = '|'+request.form['password']+'|'
         result = db.user.login(dbsession, email = request.form['email'],password =request.form['password'])
         print result
         if isinstance(result,db.user.User):
             session['user_name'] = result.name
             session['user_id'] = result.id
             session['logged_in'] = True
-            return redirect(url_for('index'), code=304)
+            return ''#redirect(url_for('index'), code=304)
         else:
             session.clear()
             session['result'] = result
-            return redirect(url_for('index'))
-
+            return ''#redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/')
 
-@app.route('/register', methods = ['POST'])
+#accepts post request with
+#required:
+#    name, email, password, university
+#optional:
+#    graduation_year, major, classes, biography
+@app.route('/register',methods = ['POST'])
 def register():
-    #register function works
+    print 'REGISTER'
+    ####################REALDATAA?#
     name = request.form['name']
     email = request.form['email']
     password = request.form['password']
     university = request.form['university']
-    print db.user.register(name, email, password, university)
-    return 'done registering'
+    #get all fields to send into profile, profile will ignore unneeded fields
+    fields = request.form
+    #REALDATAA?####################
+
+    dbsession = DBSession()
+    #register user    
+    result = db.user.register(dbsession, name, email, password, university)
+    
+    #update profile if registering successful
+    if isinstance(result, db.user.User):  #result is a User so let's update that profile
+        #pass in user and profile fields to update
+        db.user.updateProfileByUser(result, fields)
+        #'registered' , 'now let\'s update profile...'
+        dbsession.add(result)
+        dbsession.commit()
+        #print 'profile updated'
+        return 'REGISTERED'
+    else:#register() returned an error
+        return name + ' NOT CREATED: ' + str(result)
 
 @app.route('/editprofile', methods = ['POST'])
 def editprofile():
-    dbsession = DBSession()
-    fields = dict()
-    for key in db.user.profile_cols:
-        if key in request.form:
-            value = request.form[key]
-            fields[key] = value
-            
-    user = dbsession.query(db.user.User).filter_by(id = session['user_id']).first()
-    db.user.updateProfile(user, fields)
-    
-    if user is None:
+    if 'user_id' not in session:
         raise Exception("user must be logged in")
-        return 'user must be logged in'
-    else:
-        try:
-            dbsession.commit()
-            print 'commit'
-        except:
-            return 'some kind of sql error' 
-        finally:
-            dbsession.close()
-        return 'profile updated'
+    fields=request.form
+    user_id = session['user_id']
     
+    dbsession = DBSession()
+    #call function, pass in dbsession, user_id and fields in profile to update
+    result = db.user.updateProfile(dbsession, user_id, fields)
+    if not isinstance(result, db.config.User):
+        raise Exception(result)
+    try:
+        dbsession.commit()
+    except:
+        raise Exception('some sql error')
+    return result.name + ': classes[' + result.classes + '] major[' + result.major + '] biography[' + result.biography + '] graduation[' + result.graduation_year+']' 
+
+@app.route('/addcard', methods=['POST'])
+def addcard():
+    print 'ADDCARD'
+    if 'user_id' not in session:
+        return "User must be logged in" 
+    ####################DUMMYTESTDATA
+    #category='f'
+    #content='asdf@fjaiwfaewji.aw'
+    #tags=['ffffff','gggg','hhhh']
+    #user_id='1'
+    #DUMMYTESTDATA###################
+    ####################REALDATAA?#
+    category = request.form['category']
+    content = request.form['content']
+    tags = request.form['tags']
+    user_id = session['user_id']
+    #REALDATAA?####################
+    print 'adding post...'
+    
+    dbsession = DBSession()
+    result = db.card.addCard(dbsession, user_id, category, content, tags)
+    try:
+        dbsession.commit()
+    except:
+        raise Exception('some kind of sql error')
+    print result
+    return ''
+
+@app.route('/getCards')
+def getCards():
+    number = request.args.get('numCards')
+    dbsession = DBSession()
+    print db.card.getLastCards(dbsession, number)
+    return ''
 
 @app.route('/test/login/status')
 def testLoginStatus():
     if 'user_name' in session and 'user_id' in session:
-        return session['user_name']
+        return 'LOGGED IN AS: ' + session['user_name']
         #return 'Username: '+session['user_name'] + ' id: '+str(session['user_id'])
     else:
         return 'False'

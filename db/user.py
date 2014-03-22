@@ -1,69 +1,30 @@
 #!/usr/bin/env python
-from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, exc
-from sqlalchemy.ext.declarative import declarative_base
-from werkzeug.security import generate_password_hash, check_password_hash
-from config import DBSession
+from sqlalchemy import exc
+
+#from config import *
+from config import User, DBSession, DropCreateTable, Tag, Card
 import re
 
-profile_cols =['graduation_year','major','classes','biography']
-
-Base = declarative_base()
-
-#user stuff
-class User(Base):
-    __tablename__ = 'user'
-
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String(50), nullable=False)
-    email = Column(String(50), unique=True, nullable=False)
-    password = Column(String(100,collation='utf8_bin'), nullable=False)
-    university = Column(String(100), nullable=False)
-    created = Column(DateTime, default=datetime.utcnow)
-    graduation_year = Column(String(10))
-    major = Column(String(50))
-    classes = Column(String(100))
-    biography = Column(String(37777))
-
-    def __init__(self, name='', email='', password='', university =''):
-        self.name = name
-        self.email = email
-        self.password = self.setPassword(password)
-        self.university = university
-
-    def setPassword(self, password):
-        return  generate_password_hash(password)
-
-    def checkPassword(self, password):
-        return check_password_hash(self.password, password)
-    
-    def __repr__(self):
-        return "<User(id='%s',name='%s', email='%s', university='%s', graduation='%s', major='%s', classes='%s', biography='%s')>" % (self.id, self.name, self.email,self.university, self.graduation_year, self.major, self.classes, self.biography)
-
-
+profile_cols = ['graduation_year','major','classes','biography']
+register_cols = ['name', 'email', 'password', 'university']
 #pre: name, password, university must be sent in.  email must not be registered yet
 #post: registered
-def register(name, email, password, university):
+def register(dbsession, name, email, password, university):
     validate_results = registerValidate(name, email, password, university)
-
-    if len(validate_results) > 0:
-        print 'validationfail'
-        return dict(invalid=True, msgs=validate_results)
+    
+    #check if exists
+    user = dbsession.query(User).filter(User.email == email).first()
+    
+    if user is None:
+        if len(validate_results) > 0:
+            print 'validationfail'
+            return validate_results
+        else:
+            user = User(name, email, password, university)
+        return user
     else:
-        #try to commit to add commit to database
-        dbsession = DBSession()
-        user = User(name, email, password, university)
-        try:
-            dbsession.add(user)
-            dbsession.commit()
-        except exc.SQLAlchemyError:
-            #most likely an error with uniqueness of email.... since we already handled nullable in registerValidate()
-            return 'registration fail: Duplicate email' #probably
-
-        finally:
-            dbsession.close()
-        
-    return 'registration success'
+        validate_results.append('registration fail: Duplicate email')
+        return validate_results 
 
 #discuss validation criteria
 #will return: problems with validations or None
@@ -80,38 +41,45 @@ def registerValidate(name, email, password, university):
         errors.append('no university')
     return errors
 
-
-def updateProfile(user, profile):
-    if isinstance(profile,dict) and isinstance(user,User):
-        for (key,value) in profile.items():
+#user that's from a dbsession must be sent in
+def updateProfileByUser(user, fields):
+    if isinstance(fields,dict) and isinstance(user,User):
+        for (key,value) in fields.items():
             if key in profile_cols:
                 setattr(user, key, value)
 
+#user that's from a dbsession must be sent in
+def updateProfile(dbsession, user_id, fields):
+    print user_id
+    user = getUser(dbsession, user_id)
+    
+    if not isinstance(fields,dict):
+        raise Exception('fields is not a dict')
+    else:
+        for (key,value) in fields.items():
+            if key in profile_cols:
+                setattr(user, key, value)
+    return user
 
 #check login and grab fields
 #if successful returns True or a message saying why login failed
 def login(dbsession, email, password):
-    try:
-        user = dbsession.query(User).filter(User.email == email).first()        
-    except exc.SQLAlchemyError as e:
-        print e
-        return 'Invalid email'
+    user = dbsession.query(User).filter(User.email == email).first()        
 
     if user is None:
-        return email + " not registered"
+        return 'user not registered'
     
     if not user.checkPassword(password):
         return "Invalid password"
     else:
         return user
     
-def DropCreateTable():
-    #drops and (re)creates the user table if it already exists in the database
-    from config import engine
-    Base.metadata.drop_all(engine)
-    Base.metadata.create_all(engine)
-
-
+def getUser(dbsession, user_id):
+    user = dbsession.query(User).filter(User.id == user_id).first()
+    if user is None:
+        raise Exception('user not found in database')
+    return user
+    
 #DROP and re-CREATE user table and add the single admin
 if __name__ == "__main__":
     DropCreateTable()
@@ -119,20 +87,17 @@ if __name__ == "__main__":
     dbsession = DBSession()
 
     #register(dbsession, name, email, password, university) 
-    print register('Test', 'test@test.test', 'password', 'UMBC')
-    print register('Test', 'tes2test.test', 'pas', '')
-    print register('Test', 'test@test.test', 'password', 'UMBC')
-    user = login(dbsession, 'ADMIN@deku.com', 'passworD')
-    user = login(dbsession, 'test@test.test', 'passworD')
-    user = login(dbsession, 'test@test.test', 'password')
-
+    #print register('Test', 'test@test.test', 'password', 'UMBC')
+    #print register('Test', 'tes2test.test', 'pas', '')
+    user =  register(dbsession, 'Test', 'test@test.test', 'password', 'UMBC')
     print user
     #available profile columns are graduation_year, major, classes, graduation_year
-    updateProfile(user,dict(biography='wtf',whatever='wta', major='whattttt', graduation_year='2004'))
+    updateProfileByUser(user,dict(biography='wtf',whatever='wta', major='whattttt', graduation_year='2004'))
     
     print user
-    
+        
     print 'not yet committed / flushed'
+    
     print 'attempting to commit...'
     try:
         result = True
@@ -144,4 +109,4 @@ if __name__ == "__main__":
         if not result:
             print 'FAILED TO UPDATE PROFILE'
         else:
-            print 'committed probably'
+            print 'committed'
