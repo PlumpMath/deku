@@ -14,6 +14,7 @@ body {
 
 header {
     clear: both;
+	margin-bottom: 0px;
 }
 
 input {
@@ -37,6 +38,26 @@ input {
 #container {
     margin-top: 50px;
     padding-top: 50px;
+}
+
+#tab-container {
+	right: 0px;
+	position: fixed;
+	float: right;
+	top: 51px;
+}
+
+#menu-tab {
+	border-top-left-radius: 6px;
+	border-bottom-left-radius: 6px;
+	width: 30px;
+	height: 90px;
+	background: #222;
+	color: #666;
+	text-align: center;
+	vertical-align: middle;
+	display: table-cell;
+	font-size: 16pt;
 }
 
 #logout {

@@ -58,8 +58,7 @@ var LoginView = Backbone.View.extend({
 	//This will open the reset password view
 	resetPassword: function(event) {
 		event.preventDefault();
-		this.$el.fadeOut(350);
-		setTimeout(function() {new PassResetView();}, 350);
+		this.$el.fadeOut(350, function() {new PassResetView();});
 	}
 
 });

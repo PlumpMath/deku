@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>dek&#363; Mockup</title>
+  <title>dek&#363;</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/slidebars.min.css') }}">
@@ -29,12 +29,11 @@
       <form class="navbar-form navbar-right" role="form" method="post" action="login">
 				{% if session['logged_in'] %}
 					<span class="info">{{session['user_name']}}</span>
-					<span class="info"><a id="logout" href="/logout">Logout</a></span>
-      		<button id="menu" class="btn sb-toggle-right">Menu</button>
+					<span class="info"><a id="logout" class="btn btn-success" href="/logout">Logout</a></span>
 				{% else %}
 					<span class="info">Already have an account?</span>
 					<!-- This button sends the user straight to the login screen -->
-       		<button id="login-button" class="btn btn-success">Login</button>
+					<span class="info"><button id="login-button" class="btn btn-success">Login</button></span>
 				{% endif %}
       </form>
     </div>
@@ -44,12 +43,15 @@
 	<div id="sb-site">
 	  <div id="container" class="container">
 		</div>
+		<div id="tab-container">
+			<div id="menu-tab" class="sb-slide sb-toggle-right">&#9664;</div>
+		</div>
 	</div>
   <!-- this needs to infinite scroll, so having a footer is stupid. Looking at
        you, Tumblr! -->
 
 	<!-- Location of the right slidebar. Overlayed for clean look, no pushing -->
-	<div class="sb-slidebar sb-right sb-style-overlay">
+	<div id="slidebar-right" class="sb-slidebar sb-right sb-style-overlay">
 		<!-- This is a collapsable menu that contains all the options a user can do -->
 		<div id="menu">
       <ul id="collapsed-list">
@@ -293,10 +295,10 @@
 	<script>
 		(function($) {
 		 $(document).ready(function() {
-			 $.slidebars();
+			 //$.slidebars();
 			 collapse();
-			 $("#default").toggleClass("expanded");
-			 $("#default").children('ul').toggle('medium');
+			 $("#default").toggleClass("expanded")
+			 .children('ul').toggle('medium');
 			 });
 		 }) (jQuery);
 	</script>

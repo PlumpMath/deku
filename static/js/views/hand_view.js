@@ -1,5 +1,7 @@
 var app = app || {};
 
+var tab = $('#tab-container');
+
 app.HandView = Backbone.View.extend({
 
 	el: "#container",
@@ -17,7 +19,7 @@ app.HandView = Backbone.View.extend({
 
 	render: function() {
 		this.$el.html(this.template);
-		console.log("Render the create card view");
+		tab.show();
 		new app.CreateCardView();
 		new app.SearchView();
 		new app.MessageView();
