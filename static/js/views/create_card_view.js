@@ -41,7 +41,7 @@ app.CreateCardView = Backbone.View.extend({
       		size = ['small', 'medium', 'large'];
     	elem.innerHTML = '<p>' + text.value + '</p>';
     	// Set height/width depending on sentence length
-    	elem.className = "post " + size[randomSize];
+    	elem.className = "card post " + size[randomSize];
     	//setRandomColor(elem);
 			//cards default to white background
 			elem.style.backgroundColor = "#fff";
