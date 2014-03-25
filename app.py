@@ -37,12 +37,11 @@ def login():
             session['user_name'] = result.name
             session['user_id'] = result.id
             session['logged_in'] = True
-            return jsonify(dict(login='true'))#return redirect(url_for('index'), code=304)
+            return jsonify(dict(login='true'))
         else:
             session.clear()
             session['result'] = result
             return jsonify(dict(login='failed'))
-            #return redirect(url_for('index'))
 @app.route('/logout')
 def logout():
     session.clear()
