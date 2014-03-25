@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 
-from flask import Flask, render_template, url_for, session, request, redirect,jsonify, g
+from flask import Flask, render_template, url_for, session, request, redirect,jsonify, g, json
 from db.config import DBSession
 import db.user
 import db.config
@@ -37,12 +37,12 @@ def login():
             session['user_name'] = result.name
             session['user_id'] = result.id
             session['logged_in'] = True
-            return ''#redirect(url_for('index'), code=304)
+            return jsonify(dict(login='true'))#return redirect(url_for('index'), code=304)
         else:
             session.clear()
             session['result'] = result
-            return ''#redirect(url_for('index'))
-
+            return jsonify(dict(login='failed'))
+            #return redirect(url_for('index'))
 @app.route('/logout')
 def logout():
     session.clear()
@@ -56,14 +56,13 @@ def logout():
 @app.route('/register',methods = ['POST'])
 def register():
     print 'REGISTER'
-    ####################REALDATAA?#
     name = request.form['name']
     email = request.form['email']
     password = request.form['password']
     university = request.form['university']
     #get all fields to send into profile, profile will ignore unneeded fields
+    
     fields = request.form
-    #REALDATAA?####################
 
     dbsession = DBSession()
     #register user    
@@ -81,6 +80,7 @@ def register():
     else:#register() returned an error
         return name + ' NOT CREATED: ' + str(result)
 
+#allows a user to edit his own profile
 @app.route('/editprofile', methods = ['POST'])
 def editprofile():
     if 'user_id' not in session:
@@ -116,8 +116,7 @@ def addcard():
     tags = request.form['tags']
     user_id = session['user_id']
     #REALDATAA?####################
-    print 'adding post...'
-    
+    tags = json.loads(tags)
     dbsession = DBSession()
     result = db.card.addCard(dbsession, user_id, category, content, tags)
     try:
@@ -131,7 +130,15 @@ def addcard():
 def getCards():
     number = request.args.get('numCards')
     dbsession = DBSession()
-    print db.card.getLastCards(dbsession, number)
+    deck =  db.card.getLastCards(dbsession, number)
+    print "Faq"
+    print deck
+    print "Faq"
+    print "----------------"
+    for card in deck:
+        print card
+        print "\n\n"
+    print "------------------"
     return ''
 
 @app.route('/test/login/status')
