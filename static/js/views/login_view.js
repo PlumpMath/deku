@@ -1,4 +1,6 @@
-var LoginView = Backbone.View.extend({
+var app = app || {};
+
+app.LoginView = Backbone.View.extend({
 
 	el: "#container",
 
@@ -11,7 +13,9 @@ var LoginView = Backbone.View.extend({
 
 	initialize: function() {
 		this.render();
-		$("#lemail").focus();
+    this.$emailInput = this.$('#lemail');
+    this.$passwordInput = this.$('#lpassword');
+		this.$emailInput.focus();
 	},
 
 	render: function() {
@@ -28,8 +32,8 @@ var LoginView = Backbone.View.extend({
 
 		//this is the data that is sent
 		var loginValues = {
-			email: $("#lemail").val(),
-			password: $("#lpassword").val()
+			email: this.$emailInput.val(),
+			password: this.$passwordInput.val()
 		};
 
 		//this is the ajax post request
@@ -47,9 +51,9 @@ var LoginView = Backbone.View.extend({
 			error: function() {
 				console.log("Login failed");
 				alert("Your email or password did not match");
-				$("#lemail").val('');
-				$("#lpassword").val('');
-				$("#lemail").focus();
+				this.$emailInput.val('');
+				this.$passwordInput.val('');
+				this.$emailInput.focus();
 			}
 		});
 

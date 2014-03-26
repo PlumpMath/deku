@@ -13,7 +13,6 @@ app.HandView = Backbone.View.extend({
   },
 
 	initialize: function() { 
-    this.listenTo(app.Deck, 'change', this.render);
     this.render();
 	},
 
@@ -26,11 +25,6 @@ app.HandView = Backbone.View.extend({
 		new app.NotificationView();
 		new app.AccountView();
 		new app.PreferencesView();
-	},
+	}
 
-  addCard: function() {
-    console.log("Making a card.");
-    var content = $('card-textarea').val();
-    app.Deck.add(new Card(content));
-  }
 });
