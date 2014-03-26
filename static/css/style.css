@@ -120,6 +120,23 @@ input {
 	margin-right: 10px;
 }
 
+.navbar {
+  width: 100%;
+}
+
+.navbar .sb-toggle-right {
+  width: 58px;
+  padding: 14px;
+}
+
+.navicon-line {
+  width: 24px;
+  height: 4px;
+  border-radius: 1px;
+  margin-bottom: 3px;
+  background-color: #fff;
+}
+
 #collapsed-list {
 	width:100%;
 	float: left;

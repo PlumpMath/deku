@@ -20,7 +20,6 @@ app.PassResetView = Backbone.View.extend({
 
 	//This function should handle the event a user resets their password
 	reset: function(event) {
-		console.log("RESET");
 		event.preventDefault();
 	}
 

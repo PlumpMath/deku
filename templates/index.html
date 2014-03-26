@@ -10,90 +10,87 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/slidebars.min.css') }}">
 </head>
 <body>
-	
-	<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse"
-        data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">dek&#363;</a>
+  <div id="main">
+    <header class="navbar navbar-inverse navbar-fixed-top sb-slide" role="navigation">
+        <div class="sb-toggle-right navbar-right">
+          <div class="navicon-line"></div>
+          <div class="navicon-line"></div>
+          <div class="navicon-line"></div>
+        </div>
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">dek&#363;</a>
+          </div>
+          <div class="navbar-right">
+            <!-- Have login form in the header. If user is logged in, show some account
+            info instead. -->
+            <form class="navbar-form navbar-right" role="form" method="post" action="login">
+              {% if session['logged_in'] %}
+                <span class="info">{{session['user_name']}}</span>
+                <span class="info"><a id="logout" class="btn btn-success" href="/logout">Logout</a></span>
+              {% else %}
+                <span class="info">Already have an account?</span>
+                <!-- This button sends the user straight to the login screen -->
+                <span class="info"><button id="login-button" class="btn btn-success">Login</button></span>
+              {% endif %}
+            </form>
+          </div>
       </div>
-      <div class="collapse navbar-collapse navbar-right">
-      <!-- Have login form in the header. If user is logged in, show some account
-      info instead. -->
-      <form class="navbar-form navbar-right" role="form" method="post" action="login">
-				{% if session['logged_in'] %}
-					<span class="info">{{session['user_name']}}</span>
-					<span class="info"><a id="logout" class="btn btn-success" href="/logout">Logout</a></span>
-				{% else %}
-					<span class="info">Already have an account?</span>
-					<!-- This button sends the user straight to the login screen -->
-					<span class="info"><button id="login-button" class="btn btn-success">Login</button></span>
-				{% endif %}
-      </form>
+    </header>
+
+    <!-- This is the region that holds the cards. Main content shown here -->
+    <div id="sb-site">
+      <div id="container" class="container">
+      </div>
     </div>
-  </header>
+    <!-- this needs to infinite scroll, so having a footer is stupid. Looking at
+    you, Tumblr! -->
 
-	<!-- This is the region that holds the cards. Main content shown here -->
-	<div id="sb-site">
-	  <div id="container" class="container">
-		</div>
-		<div id="tab-container">
-			<div id="menu-tab" class="sb-slide sb-toggle-right">&#9664;</div>
-		</div>
-	</div>
-  <!-- this needs to infinite scroll, so having a footer is stupid. Looking at
-       you, Tumblr! -->
-
-	<!-- Location of the right slidebar. Overlayed for clean look, no pushing -->
-	<div id="slidebar-right" class="sb-slidebar sb-right sb-style-overlay">
-		<!-- This is a collapsable menu that contains all the options a user can do -->
-		<div id="menu">
-      <ul id="collapsed-list">
-        <li id="default">Create Card
-          <ul>
-						<div id="card">
-						</div>
-          </ul>
-        </li>
-        <li>Search
-          <ul>
-						<div id="search">
-						</div>
-          </ul>
-        </li>
-        <li>Messages
-          <ul>
-						<div id="messages">
-						</div>
-          </ul>
-        </li>
-				<li>Notifications
-					<ul>
-						<div id="notifications">
-						</div>
-					</ul>
-				</li>
-				<li>My Account
-					<ul>
-						<div id="my-account">
-						</div>
-					</ul>
-				</li>
-				<li>My Preferences
-					<ul>
-						<div id="my-preferences">
-						</div>
-					</ul>
-				</li>
-	    </ul>
-		</div>
-	</div>
+    <!-- Location of the right slidebar. Overlayed for clean look, no pushing -->
+    <div id="slidebar-right" class="sb-slidebar sb-right sb-style-overlay">
+      <!-- This is a collapsable menu that contains all the options a user can do -->
+      <div id="menu">
+        <ul id="collapsed-list">
+          <li id="default">Create Card
+            <ul>
+              <div id="card">
+              </div>
+            </ul>
+          </li>
+          <li>Search
+            <ul>
+              <div id="search">
+              </div>
+            </ul>
+          </li>
+          <li>Messages
+            <ul>
+              <div id="messages">
+              </div>
+            </ul>
+          </li>
+          <li>Notifications
+            <ul>
+              <div id="notifications">
+              </div>
+            </ul>
+          </li>
+          <li>My Account
+            <ul>
+              <div id="my-account">
+              </div>
+            </ul>
+          </li>
+          <li>My Preferences
+            <ul>
+              <div id="my-preferences">
+              </div>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <!-- Templates -->
 
@@ -269,12 +266,12 @@
 	</script>
 
   <!-- Script declarations at base of page so everything else loads first. -->
-  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/underscore-min.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/masonry.pkgd.min.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/slidebars.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/lib/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/lib/underscore-min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/lib/backbone-min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/lib/masonry.pkgd.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/lib/slidebars.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/views/create_view.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/views/info_view.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/views/login_view.js') }}"></script>
@@ -285,7 +282,8 @@
 	<script src="{{ url_for('static', filename='js/views/message_view.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/views/notification_view.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/views/account_view.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/views/preferences_view.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/views/preferences_view.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/views/app.js') }}"></script>
   <script src="{{ url_for('static', filename='js/models/card.js')}}"></script>
   <script src="{{ url_for('static', filename='js/collections/deck.js')}}"></script>
   <script src="{{ url_for('static', filename='js/views/card_view.js')}}"></script>
