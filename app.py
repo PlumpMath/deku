@@ -6,6 +6,7 @@ from db.config import DBSession
 import db.user
 import db.config
 import db.card
+import re
 
 app = Flask(__name__)
 app.secret_key=os.urandom(777)
@@ -59,31 +60,42 @@ def register():
     email = request.form['email']
     password = request.form['password']
     university = request.form['university']
-    #get all fields to send into profile, profile will ignore unneeded fields
     
-    fields = request.form
-
+    #validate
+    errors = []
+    if name == '':
+        errors.append('no name')
+    if len(password) < 6:
+        errors.append('Password must be at least 6 characters')
+    if not re.match("[^@]+@[^@]+\.[^@]+", email):
+        errors.append('Invalid e-mail')
+    if university == '':
+        errors.append('no university')
+    #if there are errors, return them
+    if len(errors) > 0:
+        return jsonify(dict(errors=errors))
+    
+    #create dbsession
     dbsession = DBSession()
-    #register user    
-    result = db.user.register(dbsession, name, email, password, university)
+    #grab user if registered
+    user = dbsession.query(db.config.User).filter(db.config.User.email == email).first()
+    #if already registered, return
+    if isinstance(user, db.user.User):
+        return jsonify(dict(errors="Already registered"))
     
-    #update profile if registering successful
-    if isinstance(result, db.user.User):  #result is a User so let's update that profile
-        #pass in user and profile fields to update
-        db.user.updateProfileByUser(result, fields)
-        #'registered' , 'now let\'s update profile...'
-        dbsession.add(result)
-        dbsession.commit()
-        #print 'profile updated'
-        return 'REGISTERED'
-    else:#register() returned an error
-        return name + ' NOT CREATED: ' + str(result)
+    #register user
+    user = db.config.User(name, email, password, university)
+    dbsession.add(user)
+    dbsession.commit()
+    session['user_id'] = user.id
+    return jsonify(dict())
 
 #allows a user to edit his own profile
 @app.route('/editprofile', methods = ['POST'])
 def editprofile():
     if 'user_id' not in session:
-        raise Exception("user must be logged in")
+        return dict("not logged in/registering")
+    profile_cols = ['graduation_year','major','classes','biography']
     fields=request.form
     user_id = session['user_id']
     
