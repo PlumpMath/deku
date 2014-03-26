@@ -1,6 +1,8 @@
 var tag = $("#tab-container");
 
-var CreateView = Backbone.View.extend({
+var app = app || {};
+
+app.CreateView = Backbone.View.extend({
   el: '#container',
 
   events: {
@@ -20,7 +22,7 @@ var CreateView = Backbone.View.extend({
 
   getInfo: function(event) {
     event.preventDefault();
-		this.$el.fadeOut(350, function() {new InfoView();});
+		this.$el.fadeOut(350, function() {new app.InfoView();});
   }
 
 });

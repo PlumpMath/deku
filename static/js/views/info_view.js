@@ -1,4 +1,6 @@
-var InfoView = Backbone.View.extend({
+var app = app || {};
+
+app.InfoView = Backbone.View.extend({
   el: '#container',
 
   template: _.template( $('#info-form').html() ),
@@ -17,6 +19,6 @@ var InfoView = Backbone.View.extend({
 
   getLogin: function(event) {
     event.preventDefault();
-		this.$el.fadeOut(350, function() {new LoginView();});
+		this.$el.fadeOut(350, function() {new app.LoginView();});
   }
 });

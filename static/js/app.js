@@ -28,16 +28,9 @@ var loginButton = document.querySelector("#login-button");
 var app = app || {};
 
 if ($("#login-button").is(":visible")) {
-	//app = new HandView();
-	console.log("load create");
-	app = new CreateView();
-	console.log($("#tab-container"));
-	console.log($("#box"));
+	new app.CreateView();
 } else {
-	console.log("Load hand");
-	console.log($("#tab-container"));
-	console.log($("#box"));
-	new app.HandView();
+	new app.HandView({vent: vent});
 }
 
 /*
@@ -77,7 +70,6 @@ var open = false;
 tabButton.onclick = function(event) {
 	//$.slidebars();
 	//Slidebars.toggle('right');
-	console.log("TOGGLE THE SLIDEBARS");
 	var offset = parseInt($('#slidebar-right').css('width'), 10);
 	if (!open) {
 		Slidebars.open('right');
@@ -86,15 +78,12 @@ tabButton.onclick = function(event) {
 		Slidebars.close('right');
 		closeTab();
 	}
-	console.log(Slidebars.active('right'));
 };
 
 /*
  * This opens the slidebar and moves the tab with it.
  */
 function openTab(offset) {
-	console.log("Opening sidebar");
-	console.log("set new arrow right");
 	$("#tab-container").animate({
 		marginRight: offset+'px'
 	},
@@ -107,8 +96,6 @@ function openTab(offset) {
  * This closes the menu and returns the tab to the proper place
  */
 function closeTab() {
-	console.log("Closing sidebar");
-	console.log("set new arrow left");
 	$("#tab-container").animate({
 		marginRight: '0px'
 	},
@@ -119,7 +106,6 @@ function closeTab() {
 
 loginButton.onclick = function(event) {
 	event.preventDefault();
-	console.log("Move to login view");
 	$("#container").fadeOut(350);
-	setTimeout(function() {new LoginView();}, 350);
+	setTimeout(function() {new app.LoginView();}, 350);
 };

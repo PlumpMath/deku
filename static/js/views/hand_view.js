@@ -1,26 +1,32 @@
-var app = app || {};
-
 var tab = $('#tab-container');
+var container = document.querySelector('#container');
+var msnry = new Masonry( container, {
+    // Masonry options
+    columnWidth: 60,
+    itemSelector: '.post',
+    gutter: 10
+});
+
+var app = app || {};
 
 app.HandView = Backbone.View.extend({
 
 	el: "#container",
 
-	template: _.template($("#hand-view").html()),
-
-  events: {
-    "click #addStuff": "addCard"
-  },
-
 	initialize: function() { 
-    this.listenTo(app.Deck, 'change', this.render);
+		_.bindAll(this, "newCard");
+		vent.bind("newCard", this.newCard);
+		this.collection = new app.Deck();
     this.render();
+    this.listenTo(this.collection, 'add', this.renderCard);
 	},
 
 	render: function() {
-		this.$el.html(this.template);
+		this.collection.each(function(item) {
+			this.renderCard(item);
+		}, this);
 		tab.show();
-		new app.CreateCardView();
+		new app.CreateCardView({vent: vent});
 		new app.SearchView();
 		new app.MessageView();
 		new app.NotificationView();
@@ -28,9 +34,18 @@ app.HandView = Backbone.View.extend({
 		new app.PreferencesView();
 	},
 
-  addCard: function() {
-    console.log("Making a card.");
-    var content = $('card-textarea').val();
-    app.Deck.add(new Card(content));
-  }
+	renderCard: function(item) {
+		var cardView = new app.CardView({
+			model: item
+		});
+		//this is the cards content
+		var elem = cardView.render().el;
+		this.$el.prepend(elem); //add to the container
+		msnry.prepended(elem); //add to masonry
+		msnry.layout();
+	},
+
+	newCard: function(card) {
+		this.collection.add(card);
+	}
 });

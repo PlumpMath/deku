@@ -1,9 +1,10 @@
-var Card = Backbone.Model.extend({
+var app = app || {};
+
+app.Card = Backbone.Model.extend({
   defaults: {
-    content: ""
+    category: "",
+		tags: "",
+		content: ""
   },
 
-  initialize: function(content) {
-    this.content = content;
-  }
 });

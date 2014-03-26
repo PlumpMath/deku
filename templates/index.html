@@ -196,9 +196,9 @@
 	</script>
 
   <script type="text/template" id="card-template">
-    <div class="card">
-      <p><%= content %> 
-    </div>
+		<div id="card-tags"><%= tags %></div>
+		<div id="card-content"><%= content %></div>
+    <div id="card-category"><%= category %></div>
   </script>
 
 	<!-- This view handles the hand view -->
@@ -218,8 +218,8 @@
 	<script type="text/template" id="card-create-view">
 		<form class="card-form" role="form" action="#">
 			<div class="form-group">
-				<input list="category" class="form-control" placeholder="Select a category">
-				<datalist id="category">
+				<input list="categories" id="category" class="form-control" placeholder="Select a category">
+				<datalist id="categories">
 					<option value="Administrative">
 					<option value="Club">
 					<option value="School Event">
@@ -227,12 +227,12 @@
 				</datalist>
 			</div>
 			<div class="form-group">
-				<input type="text" name="tags" placeholder="Enter tags">
+				<input type="text" id="tags" placeholder="Enter tags">
 			</div>
 			<div class="form-group">
-				<textarea id="card-textarea" name="card" rows="5" cols="30" placeholder="Share with your university"></textarea>
+				<textarea id="content" name="card" rows="5" cols="30" placeholder="Share with your university"></textarea>
 			</div>
-  		<button id="addStuff" class="btn">Add new posts</button>
+  		<button id="add" class="btn">Add new posts</button>
 		</form>
 	</script>
 
@@ -289,13 +289,13 @@
   <script src="{{ url_for('static', filename='js/models/card.js')}}"></script>
   <script src="{{ url_for('static', filename='js/collections/deck.js')}}"></script>
   <script src="{{ url_for('static', filename='js/views/card_view.js')}}"></script>
+	<script src="{{ url_for('static', filename='js/events/event_bus.js')}}"></script>
 	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
 	<!-- These jQuery calls will activate the slidebars and the collapsable menu -->
 	<script>
 		(function($) {
 		 $(document).ready(function() {
-			 //$.slidebars();
 			 collapse();
 			 $("#default").toggleClass("expanded")
 			 .children('ul').toggle('medium');

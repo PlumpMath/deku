@@ -1,4 +1,6 @@
-var PassResetView = Backbone.View.extend({
+var app = app || {};
+
+app.PassResetView = Backbone.View.extend({
 
 	el: "#container",
 

@@ -1,15 +1,19 @@
-var CardView = Backbone.View.extend({
-  template: _.template( $('#card-template').html() ),
+var app = app || {};
+
+app.CardView = Backbone.View.extend({
 
   tagName: 'div',
   
-  className: 'card small',
+  className: 'card post small',
 
-  initialize: function() {
+  template: _.template( $('#card-template').html() ),
+  
+	initialize: function() {
     this.render();
   },
 
   render: function() {
-    this.$el.append(this.template(this.model.toJSON() ) );
+    this.$el.html(this.template(this.model.toJSON() ) );
+		return this;
   }
 });

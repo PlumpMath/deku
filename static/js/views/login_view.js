@@ -1,4 +1,6 @@
-var LoginView = Backbone.View.extend({
+var app = app || {};
+
+app.LoginView = Backbone.View.extend({
 
 	el: "#container",
 
@@ -24,7 +26,6 @@ var LoginView = Backbone.View.extend({
 		//for authentication
 		//this is the app.py route info
 		var url = '../../../login';
-		console.log("Logging in");
 
 		//this is the data that is sent
 		var loginValues = {
@@ -39,13 +40,11 @@ var LoginView = Backbone.View.extend({
 			dataType: 'json',
 			data: loginValues,
 			success: function(data) {
-				console.log(["Login request details: ", data]);
 				//console.log("GO TO INDEX: AJAX");
 				window.location.replace('');
 			},
 
 			error: function() {
-				console.log("Login failed");
 				alert("Your email or password did not match");
 				$("#lemail").val('');
 				$("#lpassword").val('');
@@ -58,7 +57,7 @@ var LoginView = Backbone.View.extend({
 	//This will open the reset password view
 	resetPassword: function(event) {
 		event.preventDefault();
-		this.$el.fadeOut(350, function() {new PassResetView();});
+		this.$el.fadeOut(350, function() {new app.PassResetView();});
 	}
 
 });
