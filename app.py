@@ -41,7 +41,7 @@ def login():
         else:
             session.clear()
             session['result'] = result
-            return jsonify(dict(login='failed'))
+            return ''
 @app.route('/logout')
 def logout():
     session.clear()
