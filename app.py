@@ -1,8 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/en:wqv python
 import os
 from flask import Flask, request
-
-app = Flask(__name__)
 
 @app.route('/deku/api/users', methods=['GET'])
 def users():
