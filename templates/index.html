@@ -99,8 +99,12 @@
     <h1>Create account</h1>
     <form role="form" action="" id="create">
       <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" class="form-control">
+        <label for="firstname">First Name</label>
+        <input type="text" id="firstname" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="lastname">Last Name</label>
+        <input type="text" id="lastname" class="form-control">
       </div>
       <div class="form-group">
         <label for="email">Email</label>
@@ -127,7 +131,7 @@
     <form role="form" action="" id="info">
     <div class="form-group">
       <label for="year">Graduation Year</label>
-      <input list="year" class="form-control">
+      <input list="year" id="grad-year" class="form-control">
       <datalist id="year">
         <option value="2014">
         <option value="2015">
@@ -137,7 +141,7 @@
 
     <div class="form-group">
       <label for="major">Major</label>
-      <input list="major" class="form-control">
+      <input list="major" id="major-list" class="form-control">
       <datalist id="major">
         <option value="Computer Science">
         <option value="Computer Engineering">
