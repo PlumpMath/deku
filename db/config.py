@@ -23,20 +23,22 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String(50), nullable=False)
+    firstname = Column(String(20), nullable=False)
+    lastname = Column(String(30), nullable=False)
     email = Column(String(50), unique=True, nullable=False, index=True)
     password = Column(String(100,collation='utf8_bin'), nullable=False)
     university = Column(String(100), nullable=False)
     created = Column(DateTime, default=datetime.utcnow)
-    graduation_year = Column(String(10))
+    year = Column(String(10))
     major = Column(String(50))
     classes = Column(String(100))
-    biography = Column(String(37777))
+    bio = Column(String(33777))
     
     cards = relationship('Card', cascade="all,delete", backref="user")
 
-    def __init__(self, name='', email='', password='', university =''):
-        self.name = name
+    def __init__(self, firstname='', lastname='', email='', password='', university =''):
+        self.firstname = firstname
+        self.lastname=lastname
         self.email = email
         self.password = self.setPassword(password)
         self.university = university
@@ -46,6 +48,11 @@ class User(Base):
 
     def checkPassword(self, password):
         return check_password_hash(self.password, password)
+    
+    def update(self,fields):
+        print fields
+        for (key,value) in fields.items():
+            setattr(self,key,value)
     
     def __repr__(self):
         return "<User(id='%s',name='%s', email='%s', university='%s', graduation='%s', major='%s', classes='%s', biography='%s')>" % (self.id, self.name, self.email,self.university, self.graduation_year, self.major, self.classes, self.biography)
@@ -77,7 +84,9 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
     card_id = Column(Integer, ForeignKey('card.id'), nullable=False)
     tag = Column(String(37), nullable=False, index=True)
-    
+    def __init__(self, tag):
+        self.tag = tag
+
     def toDict(self):
         tag = dict(id=self.id,card_id=self.card_id,tag=self.tag)
         return tag

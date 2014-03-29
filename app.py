@@ -11,6 +11,21 @@ import re
 app = Flask(__name__)
 app.secret_key=os.urandom(777)
 
+#session_scope is wrapper for things that need a dbsession
+from contextlib import contextmanager
+@contextmanager
+def session_scope():
+    """Provide a transactional scope around a series of operations."""
+    dbsession = DBSession()
+    try:
+        yield dbsession
+        dbsession.commit()
+    except:
+        dbsession.rollback()
+        raise
+    finally:
+        dbsession.close()
+        
 @app.route('/')
 @app.route('/index')
 def index():
@@ -33,9 +48,9 @@ def login():
     else:
         dbsession = DBSession()
         result = db.user.login(dbsession, email = request.form['email'],password =request.form['password'])
-        print result
         if isinstance(result,db.user.User):
-            session['user_name'] = result.name
+            session['first_name'] = result.firstname
+            session['last_name'] = result.lastname
             session['user_id'] = result.id
             session['logged_in'] = True
             return jsonify(dict(login='true'))
@@ -56,15 +71,18 @@ def logout():
 @app.route('/register',methods = ['POST'])
 def register():
     print 'REGISTER'
-    name = request.form['name']
+    firstname = request.form['firstname']
+    lastname = request.form['lastname']
     email = request.form['email']
     password = request.form['password']
     university = request.form['university']
     
     #validate
     errors = []
-    if name == '':
-        errors.append('no name')
+    if firstname == '':
+        errors.append('no first name')
+    if lastname == '':
+        errors.append('no last name')
     if len(password) < 6:
         errors.append('Password must be at least 6 characters')
     if not re.match("[^@]+@[^@]+\.[^@]+", email):
@@ -73,69 +91,83 @@ def register():
         errors.append('no university')
     #if there are errors, return them
     if len(errors) > 0:
-        return jsonify(dict(errors=errors))
-    
-    #create dbsession
-    dbsession = DBSession()
+        return jsonify(errors=errors)
+
     #grab user if registered
-    user = dbsession.query(db.config.User).filter(db.config.User.email == email).first()
-    #if already registered, return
+    with session_scope() as dbsession:
+        user = dbsession.query(db.config.User).filter(db.config.User.email == email).first()
+        
+    #if already registered, don't register
     if isinstance(user, db.user.User):
-        return jsonify(dict(errors="Already registered"))
+        return jsonify(errors="Already registered")
     
-    #register user
-    user = db.config.User(name, email, password, university)
-    dbsession.add(user)
-    dbsession.commit()
-    session['user_id'] = user.id
-    return jsonify(dict())
+    user = db.config.User(firstname, lastname, email, password, university)
+
+    #register user and
+    #return session_id to use for edit profileprint user
+    with session_scope() as dbsession:
+        dbsession.add(user)
+        dbsession.commit()
+        session['user_id'] = user.id
+        
+    return jsonify(dict(data=""))
 
 #allows a user to edit his own profile
 @app.route('/editprofile', methods = ['POST'])
 def editprofile():
+    print 'asdf'
     if 'user_id' not in session:
-        return dict("not logged in/registering")
-    profile_cols = ['graduation_year','major','classes','biography']
-    fields=request.form
-    user_id = session['user_id']
-    
-    dbsession = DBSession()
-    #call function, pass in dbsession, user_id and fields in profile to update
-    result = db.user.updateProfile(dbsession, user_id, fields)
-    if not isinstance(result, db.config.User):
-        raise Exception(result)
-    try:
-        dbsession.commit()
-    except:
-        raise Exception('some sql error')
-    return result.name + ': classes[' + result.classes + '] major[' + result.major + '] biography[' + result.biography + '] graduation[' + result.graduation_year+']' 
+        print 'fail user session'
+        return dict(error="not logged in/registering")
+
+    fields = dict()
+    if 'year' in request.form:
+        fields['year']=request.form['year']
+    if 'major' in request.form:
+        fields['major']=request.form['major']
+    if 'classes' in request.form:
+        fields['classes']=request.form['classes']
+    if 'bio' in request.form:
+        fields['bio']=request.form['bio']
+        
+    #get and update fields
+    with session_scope() as dbsession:
+        user = dbsession.query(db.config.User).filter(db.config.User.id == session['user_id']).first()      
+        user.update(fields)
+        
+    return jsonify(dict(data="")) 
 
 @app.route('/addcard', methods=['POST'])
 def addcard():
     print 'ADDCARD'
-    if 'user_id' not in session:
+    
+    #make sure user is logged in
+    if 'logged_in' not in session:
         return "User must be logged in" 
-    ####################DUMMYTESTDATA
-    #category='f'
-    #content='asdf@fjaiwfaewji.aw'
-    #tags=['ffffff','gggg','hhhh']
-    #user_id='1'
-    #DUMMYTESTDATA###################
-    ####################REALDATAA?#
+
     category = request.form['category']
     content = request.form['content']
     tags = request.form['tags']
-    user_id = session['user_id']
-    #REALDATAA?####################
+
     tags = json.loads(tags)
-    dbsession = DBSession()
-    result = db.card.addCard(dbsession, user_id, category, content, tags)
-    try:
-        dbsession.commit()
-    except:
-        raise Exception('some kind of sql error')
-    print result
-    return ''
+
+    with session_scope() as dbsession:
+        user = dbsession.query(db.config.User).filter(db.config.User.id == session['user_id']).first()
+        card = db.config.Card()
+        print card
+        card.content = content
+        print card
+        card.category = category
+        print card
+        user.cards.append(card)
+        print card
+        for tag in tags:
+            print tag
+            tag = db.config.Tag(tag)
+            card.tags.append(tag)
+            print card
+        print card
+    return jsonify(dict(data=""))
 
 @app.route('/getCards')
 def getCards():
@@ -159,7 +191,6 @@ def testLoginStatus():
         #return 'Username: '+session['user_name'] + ' id: '+str(session['user_id'])
     else:
         return 'False'
-
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
