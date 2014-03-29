@@ -1,35 +1,81 @@
+#!.venv/bin/python
 import os
-import app
 import unittest
-import tempfile
 
-class FlaskrTestCase(unittest.TestCase):
+from config import basedir
+from app import app, db
+from app.models import User, Card
+
+class APITestCase(unittest.TestCase):
 
     def setUp(self):
-        pass
+        app.config['TESTING'] = True
+        app.config['CSRF_ENABLED'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'test.db')
+        self.app = app.test_client()
+        db.create_all()
 
     def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
+    # Test /deku/api/users GET
+    def test_get_all_users(self):
         pass
-    
-    def test_stuff(self):
-        client = app.app.test_client()
-        email = 'a@b.cd'
-        password = 'password'
-        fields=dict(name="REGIS2", email=email, password=password, university='umbc1',classes="are",major="pain",innn="the",biography="face",graduation_year="1973")
-        #register a new user
-        print client.post('/register', data=fields).data
-        #login with newly registered user
-        print client.post('/login',data=dict(email=email, password=password))
-        #check status of login
-        print client.get('/test/login/status',data=dict(email=email, password=password)).data
-        #modify profile information
-        print client.post('/editprofile', data=dict(classes="allyour",major="bases",innn="are",biography="arebelong",graduation_year="toUs")).data
-        #add a card with 3 tags
-        print client.post('/addcard', data=dict(category='cat', content='content', tags=['tagone','tagtwo','tagthree3']))
-        #get last 2 cards posted in json form
-        #currently returns a "python list" of cards...   [ {id:}{user_id:}{tags:[1,2,...]}{created:}{content} , card2 , card3 ]
-        print vars(client.get('/getCards?numCards=2'))
-        
+
+    # Test /deku/api/users POST
+    def test_post_new_user(self):
+        pass
+
+    # Test /deku/api/users/<int:user_id> GET    
+    def test_get_user(self):
+        pass
+
+    def test_get_user_fail(self):
+        pass
+
+    # Test /deku/api/users/<int:user_id> PUT
+    def test_mod_user(self):
+        pass
+
+    def test_mod_user_fail(self):
+        pass
+
+    # Test /deku/api/users/<int:user_id> DELETE
+    def test_delete_user(self):
+        pass
+
+    def test_delete_user_fail(self):
+        pass
+
+    # Test /deku/api/cards GET
+    def test_get_all_cards(self):
+        pass
+
+    # Test /deku/api/cards POST
+    def test_post_new_card(self):
+        pass
+
+    # Test /deku/api/cards/<int:card_id> GET
+    def test_get_card(self):
+        pass
+
+    def test_get_card_fail(self):
+        pass
+
+    # Test /deku/api/cards/<int:card_id> PUT
+    def test_mod_card(self):
+        pass
+
+    def test_mod_card_fail(self):
+        pass
+
+    # Test /deku/api/cards/<int:card_id> DELETE
+    def test_delete_card(self):
+        pass
+
+    def test_delete_card_fail(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
