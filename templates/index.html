@@ -196,10 +196,19 @@
 		</form>
 	</script>
 
+
+  <!-- This view contains the layout for the card -->
   <script type="text/template" id="card-template">
 		<div id="card-tags"><%= tags %></div>
 		<div id="card-content"><%= content %></div>
     <div id="card-category"><%= category %></div>
+  </script>
+
+  
+  <!-- This view contains data about search criteria -->
+
+  <script type="text/template" id="filter-view">
+    <%= filter =>
   </script>
 
 	<!-- This view handles the hand view -->
@@ -241,11 +250,20 @@
 	<script type="text/template" id="search-view">
 		<form class="search-form" role="form" action="#">
 			<div class="form-group">
-				<input type="text" name="search-tags" placeholder="Search by tags">
+				<input type="text" id="s-tag" name="search-tags" placeholder="Search by tags">
+        <button id="search-tag" class="btn">Search</button>
 			</div>
 			<div class="form-group">
-				<input type="text" name="search-author" placeholder="Search by author">
+				<input type="text" id="s-author" name="search-author" placeholder="Search by author">
+        <button id="search-author" class="btn">Search</button>
 			</div>
+			<div class="form-group">
+				<input type="text" id="s-category" name="search-category" placeholder="Search by category">
+        <button id="search-category" class="btn">Search</button>
+			</div>
+      <div class="form-group">
+        <button id="search-clear" class="btn">Clear Search</button><div id="filter">No filter applied</div>
+      </div>
 		</form>
 	</script>
 

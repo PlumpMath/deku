@@ -137,6 +137,16 @@ input {
   background-color: #fff;
 }
 
+#filter {
+    float: left;
+    width: 60%;
+    text-align: center;
+    color: #fff;
+    font-size: 12pt;
+	vertical-align: middle;
+	display: table-cell;
+}
+
 #collapsed-list {
 	width:100%;
 	float: left;
