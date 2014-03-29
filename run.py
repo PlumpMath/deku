@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!.venv/bin/python
 import os
 from flask import Flask, request, jsonify
 from app import app, db, models
