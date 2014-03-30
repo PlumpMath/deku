@@ -1,5 +1,12 @@
 var app = app || {};
 
+app.msnry = new Masonry( container, {
+    // Masonry options
+    columnWidth: 60,
+    itemSelector: '.post',
+    gutter: 10
+});
+
 app.AppView = Backbone.View.extend({
   el: "#main",
 

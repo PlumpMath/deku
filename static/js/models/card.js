@@ -5,6 +5,6 @@ app.Card = Backbone.Model.extend({
     category: "",
 		tags: "",
 		content: ""
-  },
+  }
 
 });

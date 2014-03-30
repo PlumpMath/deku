@@ -15,12 +15,31 @@ app.LoginView = Backbone.View.extend({
 		this.render();
     this.$emailInput = this.$('#lemail');
     this.$passwordInput = this.$('#lpassword');
-		this.$emailInput.focus();
 	},
 
 	render: function() {
 		this.$el.html(this.template).fadeIn(350);
 	},
+
+  formError: function(values) {
+    error = false;
+
+    if (values.password === '') {
+      error = true;
+      $('#lpassword').val('')
+      .attr('placeholder', 'Enter your password')
+      .focus();
+    }
+    
+    if (values.email === '') {
+      error = true;
+      $('#lemail').val('')
+      .attr('placeholder', 'Enter your e-mail associated with this account')
+      .focus();
+    }
+
+    return error;
+  },
 
 	sendLogin: function(event) {
 		event.preventDefault();
@@ -31,27 +50,29 @@ app.LoginView = Backbone.View.extend({
 
 		//this is the data that is sent
 		var loginValues = {
-			email: this.$emailInput.val(),
-			password: this.$passwordInput.val()
+			email: this.$emailInput.val().trim(),
+			password: this.$passwordInput.val().trim()
 		};
-		
-		//this is the ajax post request
-		$.ajax({
-			url: url,
-			type: 'POST',
-			dataType: 'json',
-			data: loginValues,
-			success: function(data) {
-				window.location.replace('');
-			},
+	
+    if (!this.formError(loginValues)) {	
+	  	//this is the ajax post request
+  		$.ajax({
+  			url: url,
+  			type: 'POST',
+  			dataType: 'json',
+ 	  		data: loginValues,
+  			success: function(data) {
+		  		window.location.replace('');
+		  	},
 
-			error: function() {
-				alert("Your email or password did not match");
-				$('#lemail').val('');
-				$('#lpassword').val('');
-				$('#lemail').focus();
-			}
-		});
+			  error: function() {
+			  	alert("Your email or password did not match");
+			  	$('#lemail').val('');
+			  	$('#lpassword').val('');
+			  	$('#lemail').focus();
+		  	}
+  		});
+    }
 
 	},
 

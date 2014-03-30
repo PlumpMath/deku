@@ -1,11 +1,5 @@
 var tab = $('#tab-container');
 var container = document.querySelector('#container');
-var msnry = new Masonry( container, {
-    // Masonry options
-    columnWidth: 60,
-    itemSelector: '.post',
-    gutter: 10
-});
 
 var app = app || {};
 
@@ -41,8 +35,8 @@ app.HandView = Backbone.View.extend({
 		//this is the cards content
 		var elem = cardView.render().el;
 		this.$el.prepend(elem); //add to the container
-		msnry.prepended(elem); //add to masonry
-		msnry.layout();
+		app.msnry.prepended(elem); //add to masonry
+		app.msnry.layout();
 	},
 
 	newCard: function(card) {
