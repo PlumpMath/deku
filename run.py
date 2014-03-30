@@ -1,6 +1,6 @@
 #!.venv/bin/python
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort, make_response
 from app import app, db, models
 
 @app.route('/deku/api/users', methods=['GET', 'POST'])
@@ -18,9 +18,9 @@ def users():
                                email = email)
             db.session.add(user)
             db.session.commit()
-            return "New user added to database.\n"
+            return make_response(("User created.", 201, None))
         else:
-            return "Wrong args passed.\n"
+            abort(400)
     else:
         pass
 
@@ -29,10 +29,9 @@ def user_by_id(user_id):
     if request.method == 'GET':
         user = models.User.query.get(int(user_id))
         if (user):
-            return jsonify(id=user.id, firstName=user.firstName,
-                    lastName=user.lastName, email=user.email)
+            return jsonify(user = user.serialize)
         else:
-            return "User %d not found.\n" % (user_id)
+            abort(404)
     elif request.method == 'PUT':
         user = models.User.query.get(int(user_id))
         firstName = request.form.get('firstName')
@@ -46,18 +45,18 @@ def user_by_id(user_id):
             if (email):
                 user.email = email
             db.session.commit()
-            return "User %d updated.\n" % (user_id)
+            return jsonify(user = user.serialize)
         else:
-            return "User %d not found.\n" % (user_id)
+            abort(404)
 
     elif request.method == 'DELETE':
         user = models.User.query.get(int(user_id))
-        if (user):
+        if user is not None:
             db.session.delete(user)
             db.session.commit()
-            return "User %d deleted.\n" % (user_id)
+            return make_response(("User deleted.", 200, None))
         else:
-            return "User %d not found.\n" % (user_id)
+            return make_response(("No user found.", 204, None))
     else:
         pass
 
@@ -71,9 +70,9 @@ def cards():
             card = models.Card(content = content)
             db.session.add(card)
             db.session.commit()
-            return "New card added to database.\n"
+            return make_response(('Card created.', 201, None))
         else:
-            return "Wrong args passed.\n"
+            return abort(400)
     else:
         pass
 
@@ -82,9 +81,9 @@ def card_by_id(card_id):
     if request.method == 'GET':
         card = models.Card.query.get(int(card_id))
         if (card):
-            return jsonify(content=card.content, author_id=card.user_id)
+            return jsonify(card = card.serialize)
         else:
-            return "Card %d not found.\n" % (card_id)
+            return abort(404)
     elif request.method == 'PUT':
         card = models.Card.query.get(int(card_id))
         content = request.form.get('content')
@@ -92,18 +91,18 @@ def card_by_id(card_id):
             if (content):
                 card.content = content
             db.session.commit()
-            return "Card %d updated.\n" % (card_id)
+            return make_response(("Card modified.", 200, None))
         else:
-            return "Card %d not found.\n" % (card_id)
+            return abort(404)
 
     elif request.method == 'DELETE':
         card = models.Card.query.get(int(card_id))
         if (card):
             db.session.delete(card)
             db.session.commit()
-            return "Card %d deleted.\n" % (card_id)
-        else:
-            return "Card %d not found.\n" % (card_id)
+            return make_response(("Card deleted.", 200, None))
+        elif (card is None):
+            return make_response(("No card found.", 204, None))
     else:
         pass
 
