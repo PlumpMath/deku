@@ -2,7 +2,6 @@
 import os
 import unittest
 import urllib2
-import run
 
 from flask import json
 from config import basedir
@@ -12,7 +11,6 @@ from app.models import User, Card
 class APITestCase(unittest.TestCase):
 
     def setUp(self):
-<<<<<<< HEAD
         app.config['TESTING'] = True
         app.config['CSRF_ENABLED'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'test.db')
