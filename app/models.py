@@ -1,7 +1,8 @@
 from app import db
 
 ROLE_USER = 0
-ROLE_ADMIN = 1
+ROLE_MOD = 1
+ROLE_ADMIN = 2
 
 MAX_CONTENT_LENGTH = 256
 
@@ -11,6 +12,7 @@ class User(db.Model):
     lastName = db.Column(db.String(128), index = True, unique = False)
     role = db.Column(db.SmallInteger, default = ROLE_USER)
     email = db.Column(db.String(128), index = True, unique = True)
+    password = db.Column(db.LargeBinary(60))
     cards = db.relationship('Card', backref = 'author', lazy = 'dynamic')
 
     def __repr__(self):
@@ -22,7 +24,8 @@ class User(db.Model):
         return {
             "firstName": self.firstName,
             "lastName": self.lastName,
-            "email": self.email
+            "email": self.email,
+            "role": self.role
         }
 
 class Card(db.Model):

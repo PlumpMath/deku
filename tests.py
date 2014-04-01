@@ -5,7 +5,7 @@ import urllib2
 
 from flask import json
 from config import basedir
-from app import app, db
+from app import app, db, bcrypt
 from app.models import User, Card
 
 class APITestCase(unittest.TestCase):
@@ -18,8 +18,12 @@ class APITestCase(unittest.TestCase):
         db.create_all()
 
         # Mock users
-        user = User(firstName="John", lastName="Doe", email="johndoe@email.com")
-        user2 = User(firstName="Jane", lastName="Doe", email="janedoe@email.com")
+        password1 = bcrypt.generate_password_hash('password')
+        password2 = bcrypt.generate_password_hash('password1')
+        user = User(firstName="John", lastName="Doe", email="johndoe@email.com",
+                password=password1)
+        user2 = User(firstName="Jane", lastName="Doe",
+                email="janedoe@email.com", password=password2)
         db.session.add(user)
         db.session.add(user2)
         db.session.commit()
@@ -46,10 +50,11 @@ class APITestCase(unittest.TestCase):
         response = self.app.post('/deku/api/users', data = dict(
             firstName = "Carrie",
             lastName = "Hildebrand",
-            email = "carrie.hildebrand@gmail.com" ))
+            email = "carrie.hildebrand@gmail.com",
+            password = bcrypt.generate_password_hash('password2')))
         self.assertEquals(response.status_code, 201)
 
-    def test_post_new_user_fail(self):
+    def test_post_new_user_bad_request(self):
         response = self.app.post('/deku/api/users', data = dict(
             firstName = "Peter"))
         self.assertEquals(response.status_code, 400)
@@ -80,6 +85,24 @@ class APITestCase(unittest.TestCase):
     def test_delete_user_fail(self):
         response = self.app.delete('/deku/api/users/8')
         self.assertEquals(response.status_code, 204)
+
+    def test_user_login(self):
+        response = self.app.post('/deku/api/users/login', data = dict(
+            email="johndoe@email.com",
+            password="password"))
+        self.assertEquals(response.status_code, 200)
+
+    def test_user_login_bad_password(self):
+        response = self.app.post('/deku/api/users/login', data = dict(
+            email="johndoe@email.com",
+            password="blahblahblah"))
+        self.assertEquals(response.status_code, 401)
+
+    def test_user_login_user_does_not_exist(self):
+        response = self.app.post('/deku/api/users/login', data = dict(
+            email="boristhesovietlovehammer@motherrussia.ru",
+            password="putinismycomrade"))
+        self.assertEquals(response.status_code, 404)
 
     # Test /deku/api/cards GET
     def test_get_all_cards(self):
