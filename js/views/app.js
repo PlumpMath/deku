@@ -15,11 +15,12 @@ app.AppView = Backbone.View.extend({
   },
 
   initialize: function() {
-		if ($('#logout').is(":visible")) {
-			new app.HandView();
-		} else {
-			new app.CreateView();
-		}
+    new app.HeaderView({ model: app.user });
+	if (app.user != null) {
+	  new app.HandView();
+	} else {
+	  new app.CreateView();
+	}
     this.$slidebars = new $.slidebars();
   },
 

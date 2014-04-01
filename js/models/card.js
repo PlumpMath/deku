@@ -4,7 +4,7 @@ app.Card = Backbone.Model.extend({
   defaults: {
     category: "",
 		tags: "",
-		content: ""
+	 content: ""
   }
 
 });

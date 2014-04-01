@@ -25,11 +25,6 @@
             <!-- Have login form in the header. If user is logged in, show some account
             info instead. -->
             <form class="navbar-form navbar-right" role="form" method="post" action="login">
-                <span class="info">Username</span>
-                <span class="info"><a id="logout" class="btn btn-success" href="/logout">Logout</a></span>
-                <span class="info">Already have an account?</span>
-                <!-- This button sends the user straight to the login screen -->
-                <span class="info"><button id="login-button" class="btn btn-success">Login</button></span>
             </form>
           </div>
       </div>
@@ -90,6 +85,17 @@
   </div>
 
   <!-- Templates -->
+
+  <script type="text/template" id="login_header">
+    <span class="info">Already have an account?</span>
+    <span class="info"><button id="login-button" class="btn btn-success">Login</button></span> -->
+  </script>
+
+  <script type="text/template" id="logout_header">
+    <span class="info">Hello, <%= firstName || "User" %></span>
+    <span class="info"><a id="logout" class="btn btn-success">Logout</a></span>
+  </script>
+
 
 	<!-- This template handles the first stage of creating and account -->
   <script type="text/template" id="create-form">
@@ -161,7 +167,7 @@
     <button id="submit" class="btn btn-success">Done</button>
   </script>
 
-	<!-- This will let the user login. This is defaulted after the account is created -->
+  <!-- This will let the user login. This is defaulted after the account is created -->
 	<script type="text/template" id="login-form">
 		<h1>Login</h1>
 		<form role="form" action="login" method="post" id="login">
@@ -300,9 +306,11 @@
 	<script src="js/views/search_view.js"></script>
 	<script src="js/views/message_view.js"></script>
 	<script src="js/views/notification_view.js"></script>
-	<script src="js/views/account_view.js"></script>
+    <script src="js/views/account_view.js"></script>
+    <script src="js/views/header_view.js"></script>
   <script src="js/views/preferences_view.js"></script>
   <script src="js/views/app.js"></script>
+  <script src="js/models/user.js"></script>
   <script src="js/models/card.js"></script>
   <script src="js/collections/deck.js"></script>
   <script src="js/views/card_view.js"></script>
