@@ -70,18 +70,3 @@ class Card(db.Model):
             "author_id": self.user_id
         }
 
-class Tag(db.Model):
-    __tablename__ = 'tag'
-    id = db.Column(db.Integer, primary_key=True)
-    card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
-    tag = db.Column(db.String(37), nullable=False, index=True)
-    def __init__(self, tag):
-        self.tag = tag
-
-    def toDict(self):
-        tag = dict(id=self.id,card_id=self.card_id,tag=self.tag)
-        return tag
-
-    def __repr__(self):
-        #return "[TAG][id=%s][parent=%s][tag=%s]"%(self.id, self.parent_id, self.tag)
-        return "[TAG][id=%s][tag=%s]"%(self.id, self.tag)

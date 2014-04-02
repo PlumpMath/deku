@@ -112,17 +112,13 @@ def user_by_id(user_id):
         form['password']=request.form.get('password')
         form['id'] = user_id
         auth = auth_helper(form)
-        user = models.User.query.get(int(user_id))
-        if user:
-            pass
-        else:
-            return make_response(jsonify({"error":"User doesn't exist"}),404)
-
         if auth:
             user = models.User.query.get(int(user_id))
             if user:
                 if user.id != user_id:
                     return make_response(jsonify({"You can not modify someone elses info"}),401)
+            else:
+                return make_response(jsonify({"error":"User doesn't exist"}),404)
             firstName = request.form.get('firstName')
             lastName = request.form.get('lastName')
             email = request.form.get('email')
@@ -230,7 +226,6 @@ def cards():
             card = models.Card(content = content)
             db.session.add(card)
             db.session.commit()
-            print card
             return make_response(('Card created.', 201, None))
         else:
             return abort(400)
