@@ -40,38 +40,19 @@ def something():
         print user
     print user
     user.profile.major = "something else"
-    user = models.User.query.get(2)
-    print user.profile
+    usersss = models.User.query.get(2)
+    print usersss.profile
     db.session.commit()
-    card = models.Card(content="something", category="cat")
-    card2 = models.Card(content="something2", category="cat2")
-    user.cards.append(card)
-    user.cards.append(card2)
-    cards = user.cards
-    tag1= models.Tag("one")
-    tag2= models.Tag("two")
-    tag3=models.Tag("one")
-    card.tags.append(tag1)
-    card.tags.append(tag2)
-    card2.tags.append(tag3)
-    db.session.commit()
-    print cards
-    for card in cards:
-        print card
-    cards = [card.serialize for card in models.Card.query.all()]
-    print cards
-
+    models.Card(content="something")
+    user.ca
     return make_response(something)
 
 @app.route('/somethingy', methods=['GET','POST'])
 def somethingy():
-    user = models.User.query.get(2)
-    print user
-    cards = [card.serialize for card in models.Card.query.all()]
-    mystr=""
-    for card in cards:
-        mystr = mystr+ str(card)
-    return make_response(mystr)
+    print 'wt'
+    usersss = models.User.query.get(2)
+    print usersss.profile.major
+    return make_response(usersss.profile.major)
 
 
 #this works
@@ -136,6 +117,7 @@ def user_by_id(user_id):
             pass
         else:
             return make_response(jsonify({"error":"User doesn't exist"}),404)
+
         if auth:
             user = models.User.query.get(int(user_id))
             if user:
