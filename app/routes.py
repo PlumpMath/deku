@@ -71,6 +71,8 @@ def somethingy():
     mystr=""
     for card in cards:
         mystr = mystr+ str(card)
+    result = card_by_tag('one')
+    print result.data
     return make_response(mystr)
 
 
@@ -289,8 +291,16 @@ def card_by_id(card_id):
 @app.route('/deku/api/cards/userID/<int:user_id>', methods=['GET', 'PUT'])
 def card_by_user_id(user_id):
     if request.method=='GET':
-        models.Card.query.filter(models.Card.user_id == user_id).all()
-        return jsonify(cards = [card.serialize for card in models.Card.query.all()])
+        result = models.Card.query.filter(models.Card.user_id == user_id).all()
+        return jsonify(cards = [card.serialize for card in result])
+    elif request.method=='PUT':
+        pass
+    
+@app.route('/deku/api/cards/tag/<tag>', methods=['GET', 'PUT'])
+def card_by_tag(tag):
+    if request.method=='GET':
+        result = models.Card.query.filter(models.Tag.tag == tag).all()
+        return jsonify(cards = [card.serialize for card in result])
     elif request.method=='PUT':
         pass
 
