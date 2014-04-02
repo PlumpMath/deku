@@ -46,7 +46,7 @@ app.LoginView = Backbone.View.extend({
 		//This will contain some event that sends the data to the server
 		//for authentication
 		//this is the app.py route info
-		var url = '../../../login';
+		var url = '/deku/api/users/login';
 
 		//this is the data that is sent
 		var loginValues = {
@@ -59,6 +59,7 @@ app.LoginView = Backbone.View.extend({
   		$.ajax({
   			url: url,
   			type: 'POST',
+        contentType: 'application/json',
   			dataType: 'json',
  	  		data: loginValues,
   			success: function(data) {

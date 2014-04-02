@@ -88,7 +88,7 @@
 
   <script type="text/template" id="login_header">
     <span class="info">Already have an account?</span>
-    <span class="info"><button id="login-button" class="btn btn-success">Login</button></span> -->
+    <span class="info"><button id="login-button" class="btn btn-success">Login</button></span>
   </script>
 
   <script type="text/template" id="logout_header">
@@ -211,7 +211,7 @@
   <!-- This view contains data about search criteria -->
 
   <script type="text/template" id="filter-view">
-    <%= filter =>
+    <div id="filter-by"><%= filter %></div>
   </script>
 
 	<!-- This view handles the hand view -->
@@ -265,7 +265,7 @@
         <button id="search-category" class="btn">Search</button>
 			</div>
       <div class="form-group">
-        <button id="search-clear" class="btn">Clear Search</button><div id="filter">No filter applied</div>
+        <button id="search-clear" class="btn">Clear Search</button><div id="filter"></div>
       </div>
 		</form>
 	</script>
@@ -306,12 +306,14 @@
 	<script src="js/views/search_view.js"></script>
 	<script src="js/views/message_view.js"></script>
 	<script src="js/views/notification_view.js"></script>
-    <script src="js/views/account_view.js"></script>
-    <script src="js/views/header_view.js"></script>
+  <script src="js/views/account_view.js"></script>
+  <script src="js/views/header_view.js"></script>
   <script src="js/views/preferences_view.js"></script>
   <script src="js/views/app.js"></script>
+  <script src="js/views/filter_view.js"></script>
   <script src="js/models/user.js"></script>
   <script src="js/models/card.js"></script>
+  <script src="js/models/filter.js"></script>
   <script src="js/collections/deck.js"></script>
   <script src="js/views/card_view.js"></script>
 	<script src="js/events/event_bus.js"></script>
