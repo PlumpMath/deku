@@ -32,6 +32,7 @@ app.CardView = Backbone.View.extend({
       this.$el.flippy({
         duration: "1000",
         light: "0",
+        depth: "0",
         verso: elem
       });
     } else {
@@ -44,6 +45,7 @@ app.CardView = Backbone.View.extend({
       this.$el.flippy({
         duration: "1000",
         light: "0",
+        depth: "0",
         verso: elem
       });
     }
