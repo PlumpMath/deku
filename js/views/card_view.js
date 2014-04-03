@@ -23,30 +23,32 @@ app.CardView = Backbone.View.extend({
 
   flip: function(event) {
     if (this.$el.hasClass('card')) {
-      console.log('currently in card mode');
-      this.$el.removeClass('card')
-      .addClass('inspect');
-      app.msnry.layout();
+      this.$el.switchClass('card', 'inspect', 1000);
+      //app.msnry.layout();
       this.template = _.template($('#inspect-template').html());
       var elem = this.template(this.model.toJSON());
       this.$el.flippy({
         duration: "1000",
         light: "0",
         depth: "0",
-        verso: elem
+        verso: elem,
+        onFinish: function() {
+          app.msnry.layout();
+        }
       });
     } else {
-      console.log('currently in inspect mode');
-      this.$el.removeClass('inspect')
-      .addClass('card');
-      app.msnry.layout();
+      this.$el.switchClass('inspect', 'card', 1000);
+      //app.msnry.layout();
       this.template = _.template($('#card-template').html());
       var elem = this.template(this.model.toJSON());
       this.$el.flippy({
         duration: "1000",
         light: "0",
         depth: "0",
-        verso: elem
+        verso: elem,
+        onFinish: function() {
+          app.msnry.layout();
+        }
       });
     }
   },
