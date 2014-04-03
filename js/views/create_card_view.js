@@ -49,9 +49,13 @@ app.CreateCardView = Backbone.View.extend({
 
 	addCard: function(event) {
 		event.preventDefault();
+    var tag_array = $('#tags').val().split(',');
+    console.log("Array before trimming ", tag_array);
+    tag_array = _.map(tag_array, function(tag) { return tag.trim();});
+    console.log("The array ", tag_array);
 		var formData = {
 			category: $('#category').val(),
-			tags: $('#tags').val().trim(),
+			tags: tag_array,
 			content: $('#content').val().trim()
 		};
 

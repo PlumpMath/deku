@@ -202,7 +202,11 @@
 
   <!-- This view contains the layout for the card -->
   <script type="text/template" id="card-template">
-		<div id="card-tags"><%= tags %></div>
+		<div id="card-tags">
+      <% for (var tag in tags) { %>
+        <div class="card-tag"><%= tags[tag] %></div>
+      <% } %>
+    </div>
 		<div id="card-content"><%= content %></div>
     <div id="card-category"><%= category %></div>
   </script>
@@ -210,7 +214,11 @@
 
   <!-- This view will inspect the card, more details -->
   <script type="text/template" id="inspect-template">
-    <div id="inspect-tags"><%= tags %></div>
+    <div id="inspect-tags">
+      <% for (var tag in tags) { %>
+        <div class="card-tag"><%= tags[tag] %></div>
+      <% } %>
+    </div>
     <div id="inspect-author"><%= author %></div>
     <div id="inspect-time"><%= time %></div>
     <div id="inspect-date"><%= date %></div>
