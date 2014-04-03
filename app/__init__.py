@@ -8,4 +8,5 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 import models
-import routes
+import users
+import cards
