@@ -32,7 +32,7 @@
 
     <!-- This is the region that holds the cards. Main content shown here -->
     <div id="sb-site">
-      <div id="container" class="container">
+      <div id="container" class="container flipbox-container">
       </div>
     </div>
     <!-- this needs to infinite scroll, so having a footer is stupid. Looking at
@@ -207,7 +207,22 @@
     <div id="card-category"><%= category %></div>
   </script>
 
-  
+
+  <!-- This view will inspect the card, more details -->
+  <script type="text/template" id="inspect-template">
+    <div id="inspect-tags"><%= tags %></div>
+    <div id="inspect-author"><%= author %></div>
+    <div id="inspect-time"><%= time %></div>
+    <div id="inspect-date"><%= date %></div>
+    <div id="inspect-content"><%= content %></div>
+    <div id="inspect-category"><%= category %></div>
+    <div id="inspect-marks"><%= marks %></div>
+    <div id="inspect-adds"><%= adds %></div>
+    <div id="inspect-comments"><%= comments %></div>
+    <div id="inspect-popularity"><%= popularity %></div>
+  </script>
+
+ 
   <!-- This view contains data about search criteria -->
 
   <script type="text/template" id="filter-view">
@@ -297,6 +312,7 @@
 	<script src="js/lib/backbone-min.js"></script>
 	<script src="js/lib/masonry.pkgd.min.js"></script>
 	<script src="js/lib/slidebars.min.js"></script>
+  <script src="js/lib/jquery.flippy.min.js"></script>
 	<script src="js/views/create_view.js"></script>
 	<script src="js/views/info_view.js"></script>
 	<script src="js/views/login_view.js"></script>
@@ -316,6 +332,7 @@
   <script src="js/models/filter.js"></script>
   <script src="js/collections/deck.js"></script>
   <script src="js/views/card_view.js"></script>
+  <script src="js/views/inspect_view.js"></script>
 	<script src="js/events/event_bus.js"></script>
 	<script src="js/app.js"></script>
 

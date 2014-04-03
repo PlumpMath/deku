@@ -42,4 +42,5 @@ app.HandView = Backbone.View.extend({
   newCard: function(card) {
     this.collection.add(card);
   }
+
 });
