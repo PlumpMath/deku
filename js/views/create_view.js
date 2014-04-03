@@ -36,11 +36,11 @@ app.CreateView = Backbone.View.extend({
 		}
 	 
   	if (values.university === '' || $.inArray(values.university, univ_list) === -1) {
-			error = true;
-			$('#univ').val('');
-			$('#univ').attr('placeholder', 'Please select your university from the list');
-      $('#univ').focus();
-		}
+	    error = true;
+		$('#univ').val('');
+		$('#univ').attr('placeholder', 'Please select your university from the list');
+        $('#univ').focus();
+	}
 
 		//test if the email is valid
 		if (!email_reg.test(values.email)) {
@@ -72,44 +72,24 @@ app.CreateView = Backbone.View.extend({
 		//This will contain some event that sends the data to the server
 		//for authentication
 		//this is the app.py route info
-		var url = '../../../register';
+		var url = "http://localhost:4568/deku/api/users";
 
 		//this is the data that is sent
 		var registerValues = {
 			email: $("#email").val(),
 			password: $("#password").val().trim(),
 			university: $("#univ").val(),
-			firstname: $("#firstname").val().trim(),
-			lastname: $("#lastname").val().trim()
+			firstName: $("#firstname").val().trim(),
+			lastName: $("#lastname").val().trim()
 		};
 		
-		if (!this.formError(registerValues))
-		{
-			//this is the ajax post request
-			$.ajax({
-				url: url,
-				type: 'POST',
-				dataType: 'json',
-				data: registerValues,
-				success: function(data) {
-					if(typeof data.errors == "undefined"){
-						alert("i cant figure out how to do el fadeout thing. get it get it? el=the?");
-						$("#container").fadeOut(350, function() {new app.InfoView();});
-					}else{
-						alert(data.errors);
-					}
-				},
-				error: function() {
-					alert('fail');
-					$('#email').val('');
-					$('#password').val('');
-					$('#univ').val('');
-					$('#firstname').val('');
-					$('#lastname').val('');
-				}
-			});
-			// this is a temporary backdoor. Will be removed once server works
-			$('#container').fadeOut(350, function() {new app.InfoView();});
+		if (!this.formError(registerValues)) {
+      $.post(url, registerValues, function(data, textStatus, jqXHR) {
+        app.user = new app.User(data['user']);
+        $('#container').fadeOut(350, function() {new app.InfoView();});
+      }).fail(function(error) {
+        console.log(error);
+      });
 		}
   }
 

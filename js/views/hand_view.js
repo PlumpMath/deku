@@ -1,6 +1,3 @@
-var tab = $('#tab-container');
-var container = document.querySelector('#container');
-
 var app = app || {};
 
 app.HandView = Backbone.View.extend({
@@ -19,7 +16,6 @@ app.HandView = Backbone.View.extend({
     this.collection.each(function(item) {
       this.renderCard(item);
       }, this);
-    tab.show();
     new app.CreateCardView({vent: vent});
     new app.SearchView();
     new app.MessageView();

@@ -13,6 +13,7 @@ class User(db.Model):
     role = db.Column(db.SmallInteger, default = ROLE_USER)
     email = db.Column(db.String(128), index = True, unique = True)
     password = db.Column(db.LargeBinary(60))
+    university = db.Column(db.String(128))
     cards = db.relationship('Card', backref = 'author', lazy = 'dynamic')
 
     def __repr__(self):
@@ -25,7 +26,8 @@ class User(db.Model):
             "firstName": self.firstName,
             "lastName": self.lastName,
             "email": self.email,
-            "role": self.role
+            "role": self.role,
+            "university": self.university
         }
 
 class Card(db.Model):

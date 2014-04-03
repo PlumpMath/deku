@@ -46,7 +46,7 @@ app.LoginView = Backbone.View.extend({
 		//This will contain some event that sends the data to the server
 		//for authentication
 		//this is the app.py route info
-		var url = '/deku/api/users/login';
+		var url = 'http://localhost:4568/deku/api/users/login';
 
 		//this is the data that is sent
 		var loginValues = {
@@ -54,25 +54,17 @@ app.LoginView = Backbone.View.extend({
 			password: this.$passwordInput.val().trim()
 		};
 	
-    if (!this.formError(loginValues)) {	
-	  	//this is the ajax post request
-  		$.ajax({
-  			url: url,
-  			type: 'POST',
-        contentType: 'application/json',
-  			dataType: 'json',
- 	  		data: loginValues,
-  			success: function(data) {
-		  		window.location.replace('');
-		  	},
-
-			  error: function() {
-			  	alert("Your email or password did not match");
-			  	$('#lemail').val('');
-			  	$('#lpassword').val('');
-			  	$('#lemail').focus();
-		  	}
-  		});
+    if (!this.formError(loginValues)) {
+        $.post(url, loginValues, function( data, textStatus, jqXHR ) {
+            app.user = new app.User(data['user']);
+            alert("Welcome, " + app.user.get("firstName") + "!");
+        })
+        .fail(function() {
+            alert("Your email or password did not match.");
+            $('#lemail').val("");
+            $('#lpassword').val("");
+            $('#lemail').focus();
+        });
     }
 
 	},

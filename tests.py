@@ -21,9 +21,9 @@ class APITestCase(unittest.TestCase):
         password1 = bcrypt.generate_password_hash('password')
         password2 = bcrypt.generate_password_hash('password1')
         user = User(firstName="John", lastName="Doe", email="johndoe@email.com",
-                password=password1)
+                password=password1, university="UMBC")
         user2 = User(firstName="Jane", lastName="Doe",
-                email="janedoe@email.com", password=password2)
+                email="janedoe@email.com", password=password2, university="UMBC")
         db.session.add(user)
         db.session.add(user2)
         db.session.commit()
@@ -51,7 +51,8 @@ class APITestCase(unittest.TestCase):
             firstName = "Carrie",
             lastName = "Hildebrand",
             email = "carrie.hildebrand@gmail.com",
-            password = bcrypt.generate_password_hash('password2')))
+            password = bcrypt.generate_password_hash('password2'),
+            university = "UMBC"))
         self.assertEquals(response.status_code, 201)
 
     def test_post_new_user_bad_request(self):

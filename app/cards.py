@@ -4,7 +4,9 @@ import os
 from flask import Flask, request, jsonify, abort, make_response
 from app import app, db
 from app.models import Card
+from cors import crossdomain
 
+@crossdomain(origin='*')
 @app.route('/deku/api/cards', methods=['GET', 'POST'])
 def cards():
     if request.method == 'GET':
@@ -21,6 +23,7 @@ def cards():
     else:
         pass
 
+@crossdomain(origin='*')
 @app.route('/deku/api/cards/<int:card_id>', methods=['GET', 'PUT', 'DELETE'])
 def card_by_id(card_id):
     if request.method == 'GET':
