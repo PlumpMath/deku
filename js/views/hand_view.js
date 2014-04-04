@@ -16,12 +16,8 @@ app.HandView = Backbone.View.extend({
     this.collection.each(function(item) {
       this.renderCard(item);
       }, this);
-    new app.CreateCardView({vent: vent});
-    new app.SearchView();
-    new app.MessageView();
-    new app.NotificationView();
-    new app.AccountView();
-    new app.PreferencesView();
+    new app.SlidebarView();
+    new app.ToggleView();
   },
 
   renderCard: function(item) {

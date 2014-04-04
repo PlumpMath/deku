@@ -13,21 +13,18 @@
 <body>
   <div id="main">
     <header class="navbar navbar-inverse navbar-fixed-top sb-slide" role="navigation">
-        <div class="sb-toggle-right navbar-right">
-          <div class="navicon-line"></div>
-          <div class="navicon-line"></div>
-          <div class="navicon-line"></div>
+      <div id="toggle-bars" class="sb-toggle-right navbar-right">
+      </div>
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">dek&#363;</a>
         </div>
-        <div class="container">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="#">dek&#363;</a>
-          </div>
-          <div class="navbar-right">
-            <!-- Have login form in the header. If user is logged in, show some account
-            info instead. -->
-            <form class="navbar-form navbar-right" role="form" method="post" action="login">
-            </form>
-          </div>
+        <div class="navbar-right">
+          <!-- Have login form in the header. If user is logged in, show some account
+          info instead. -->
+          <form class="navbar-form navbar-right" role="form" method="post" action="login">
+          </form>
+        </div>
       </div>
     </header>
 
@@ -41,51 +38,56 @@
 
     <!-- Location of the right slidebar. Overlayed for clean look, no pushing -->
     <div id="slidebar-right" class="sb-slidebar sb-right sb-style-overlay">
-      <!-- This is a collapsable menu that contains all the options a user can do -->
-      <div id="menu">
-        <ul id="collapsed-list">
-          <li id="default">Create Card
-            <ul>
-              <div id="card">
-              </div>
-            </ul>
-          </li>
-          <li>Search
-            <ul>
-              <div id="search">
-              </div>
-            </ul>
-          </li>
-          <li>Messages
-            <ul>
-              <div id="messages">
-              </div>
-            </ul>
-          </li>
-          <li>Notifications
-            <ul>
-              <div id="notifications">
-              </div>
-            </ul>
-          </li>
-          <li>My Account
-            <ul>
-              <div id="my-account">
-              </div>
-            </ul>
-          </li>
-          <li>My Preferences
-            <ul>
-              <div id="my-preferences">
-              </div>
-            </ul>
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
 
   <!-- Templates -->
+
+  <!-- slidebar setup -->
+  <script type="text/template" id="slidebar-view">
+    <!-- This is a collapsable menu that contains all the options a user can do -->
+    <div id="menu">
+      <ul id="collapsed-list">
+        <li id="default">Create Card
+          <ul>
+            <div id="card"></div>
+          </ul>
+        </li>
+        <li>Search
+          <ul>
+            <div id="search"></div>
+          </ul>
+        </li>
+        <li>Messages
+          <ul>
+            <div id="messages"></div>
+          </ul>
+        </li>
+        <li>Notifications
+          <ul>
+            <div id="notifications"></div>
+          </ul>
+        </li>
+        <li>My Account
+          <ul>
+            <div id="my-account"></div>
+          </ul>
+        </li>
+        <li>My Preferences
+          <ul>
+            <div id="my-preferences"></div>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </script>
+
+  <!-- Contains navicons used to expand the slidebars -->
+  <script type="text/template" id="toggle-view">
+    <div class="navicon-line"></div>
+    <div class="navicon-line"></div>
+    <div class="navicon-line"></div>
+  </script>
 
   <script type="text/template" id="login_header">
     <span class="info">Already have an account?</span>
@@ -338,6 +340,7 @@
 	<script src="js/views/login_view.js"></script>
 	<script src="js/views/password_reset_view.js"></script>
 	<script src="js/views/hand_view.js"></script>
+  <script src="js/views/slidebar_view.js"></script>
 	<script src="js/views/create_card_view.js"></script>
 	<script src="js/views/search_view.js"></script>
 	<script src="js/views/message_view.js"></script>
@@ -347,6 +350,7 @@
   <script src="js/views/preferences_view.js"></script>
   <script src="js/views/app.js"></script>
   <script src="js/views/filter_view.js"></script>
+  <script src="js/views/toggle_view.js"></script>
   <script src="js/models/user.js"></script>
   <script src="js/models/card.js"></script>
   <script src="js/models/filter.js"></script>
@@ -355,17 +359,6 @@
 	<script src="js/events/event_bus.js"></script>
 	<script src="js/app.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-
-	<!-- These jQuery calls will activate the slidebars and the collapsable menu -->
-	<script>
-		(function($) {
-		 $(document).ready(function() {
-			 collapse();
-			 $("#default").toggleClass("expanded")
-			 .children('ul').toggle('medium');
-			 });
-		 }) (jQuery);
-	</script>
 
   </body>
 </html>
