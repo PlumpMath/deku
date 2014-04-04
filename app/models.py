@@ -1,12 +1,13 @@
 from app import db
+from datetime import datetime
 
 ROLE_USER = 0
 ROLE_MOD = 1
 ROLE_ADMIN = 2
-
 MAX_CONTENT_LENGTH = 256
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key = True)
     firstName = db.Column(db.String(64), index = True, unique = False)
     lastName = db.Column(db.String(128), index = True, unique = False)
@@ -14,7 +15,9 @@ class User(db.Model):
     email = db.Column(db.String(128), index = True, unique = True)
     password = db.Column(db.LargeBinary(60))
     university = db.Column(db.String(128))
-    cards = db.relationship('Card', backref = 'author', lazy = 'dynamic')
+    created = db.Column(db.DateTime, default=datetime.utcnow)
+    profile = db.relationship('Profile', uselist=False, backref='user')
+    cards = db.relationship('Card', backref = 'user', cascade='all,delete', lazy = 'dynamic')
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)
@@ -29,8 +32,32 @@ class User(db.Model):
             "role": self.role,
             "university": self.university
         }
+        
+class Profile(db.Model):
+    __tablename__ = 'profile'
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    year = db.Column(db.String(10))
+    major = db.Column(db.String(50))
+    classes = db.Column(db.String(100))
+    biography = db.Column(db.String(33777))
+    
+    def __repr__(self):
+        return '<Profile %r>' %(str(self.user.id) + " " + str(self.major))
+
+    @property
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user id": self.user_id,
+            "year": self.year,
+            "major": self.major,
+            "classes": self.classes,
+            "biography": self.biography
+        }
 
 class Card(db.Model):
+    __tablename__ = 'card'
     id = db.Column(db.Integer, primary_key = True)
     content = db.Column(db.String(MAX_CONTENT_LENGTH))
     timestamp = db.Column(db.DateTime)
@@ -48,3 +75,21 @@ class Card(db.Model):
             "author_id": self.user_id
         }
 
+class Tag(db.Model):
+    __tablename__ = 'tag'
+    id = db.Column(db.Integer, primary_key=True)
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
+    tag = db.Column(db.String(37), nullable=False, index=True)
+    def __init__(self, tag):
+        self.tag = tag
+
+    @property
+    def serialize(self):
+        return {
+            "id": self.id,
+            "card_id": self.card_id,
+            "tag": self.tag,
+        }
+
+    def __repr__(self):
+        return "[TAG][id=%s][tag=%s]"%(self.id, self.tag)
