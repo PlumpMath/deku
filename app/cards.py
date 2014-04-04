@@ -1,8 +1,8 @@
 #!.venv/bin/python
 
 import os
-from flask import Flask, request, jsonify, abort, make_response
-from app import app, db
+from flask import Flask, request, jsonify, abort, make_response, json
+from app import app, db, models, session
 from app.models import Card
 from cors import crossdomain
 
@@ -12,12 +12,24 @@ def cards():
     if request.method == 'GET':
         return jsonify(cards = [card.serialize for card in Card.query.all()])
     elif request.method == 'POST':
+        if 'id' not in session:
+            return make_response("Must be logged in to post a new card", 401)
+        user = db.session.query(models.User).filter(models.User.id == session['id']).first()
+        print user
         content = request.form.get('content')
+        suit = request.form.get('suit')
+        tags = request.form.get('tags')
+        tags = json.loads(tags)
+        print tags
         if (content):
-            card = Card(content = content)
-            db.session.add(card)
+            card = Card(user_id = id, content = content)
+            if suit:
+                card.suit = suit
+            user.cards.append(card)
+            for tag in tags:
+                card.tags.append(models.Tag(tag))
             db.session.commit()
-            return make_response(('Card created.', 201, None))
+            return make_response((jsonify(card = card.serialize), 201))
         else:
             return abort(400)
     else:

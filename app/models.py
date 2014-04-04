@@ -60,6 +60,8 @@ class Card(db.Model):
     __tablename__ = 'card'
     id = db.Column(db.Integer, primary_key = True)
     content = db.Column(db.String(MAX_CONTENT_LENGTH))
+    category = db.Column(db.String(MAX_CONTENT_LENGTH))
+    tags = db.relationship('Tag', cascade="all,delete", backref="card")
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -69,11 +71,13 @@ class Card(db.Model):
     @property
     def serialize(self):
         # Return Card data in a serializable format
-        return {
+        card= {
             "content": self.content,
             "created_at": self.timestamp,
-            "author_id": self.user_id
+            "author_id": self.user_id,
+            "tags": [tag.serialize for tag in self.tags]
         }
+        return card
 
 class Tag(db.Model):
     __tablename__ = 'tag'

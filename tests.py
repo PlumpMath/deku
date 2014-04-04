@@ -156,8 +156,24 @@ class APITestCase(unittest.TestCase):
         print response.status_code
         print response.data
         self.assertEquals(user.__dict__, temp)
-        print '----------modify info-----------'
-
+       
+        
+        
+        #Test Add Card
+        print '----------add card-----------'
+        response = self.app.post('/deku/api/users/login', data = dict(
+            email='janedoe@email.com',
+            password='password1'))
+        print response.status_code
+        print '----------add card-----------'
+        tags=json.dumps(['one','two','three'])
+        print tags
+        response = self.app.post('/deku/api/cards', data=dict(
+            content='some content',
+            tags=tags,
+            suit='somesuit'))
+        print response.data
+        
+        
 if __name__ == '__main__':
-
     unittest.main()
