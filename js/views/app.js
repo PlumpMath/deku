@@ -16,11 +16,11 @@ app.AppView = Backbone.View.extend({
 
   initialize: function() {
     new app.HeaderView({ model: app.user });
-	if (app.user.get("firstName") !== "") {
-	  new app.HandView();
-	} else {
-	  new app.CreateView();
-	}
+	  if (app.user.get("firstName") !== "") {
+	    new app.HandView();
+  	} else {
+  	  new app.CreateView();
+  	}
     this.$slidebars = new $.slidebars();
   },
 

@@ -18,11 +18,12 @@ app.CardView = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON() ) );
-    console.log(this.model.toJSON().tags);
 		return this;
   },
 
+  //this controls the flipping of the card
   flip: function(event) {
+    //if we are currently on the card
     if (this.$el.hasClass('card')) {
       this.$el.switchClass('card', 'inspect', 1000);
       this.template = _.template($('#inspect-template').html());
@@ -32,7 +33,7 @@ app.CardView = Backbone.View.extend({
         light: "0",
         depth: "0",
         verso: elem,
-        onFinish: function() {
+        onAnimation: function() {
           app.msnry.layout();
         }
       });
@@ -45,7 +46,7 @@ app.CardView = Backbone.View.extend({
         light: "0",
         depth: "0",
         verso: elem,
-        onFinish: function() {
+        onAnimation: function() {
           app.msnry.layout();
         }
       });
