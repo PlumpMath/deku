@@ -209,6 +209,7 @@
         <div class="card-tag <%=tags[tag]%>" style="width: <%=100.0/tags.length%>%"></div>
       <% } %>
     </div>
+    <div id="card-author"><%= author %></div>
 		<div id="card-content"><%= content %></div>
     <div id="card-category"><%= category %></div>
   </script>
@@ -216,20 +217,29 @@
 
   <!-- This view will inspect the card, more details -->
   <script type="text/template" id="inspect-template">
-    <div id="inspect-tags">
-      <% for (var tag in tags) { %>
-        <div class="card-tag"><%= tags[tag] %></div>
+    <!-- due to floating point numbers being weird, set the background of container to last tag -->
+		<div id="card-tags" class="<%=tags[0]%>">
+      <!-- Purely for appearance, the tags are in reverse order on a card flip -->
+      <% for (var tag = tags.length-1; tag >= 0; tag--) { %>
+        <div class="card-tag <%=tags[tag]%>" style="width: <%=100.0/tags.length%>%"></div>
       <% } %>
     </div>
-    <div id="inspect-author"><%= author %></div>
-    <div id="inspect-time"><%= post_time %></div>
-    <div id="inspect-date"><%= post_date %></div>
-    <div id="inspect-content"><%= content %></div>
-    <div id="inspect-category"><%= category %></div>
-    <div id="inspect-marks"><%= marks %></div>
-    <div id="inspect-adds"><%= adds %></div>
-    <div id="inspect-comments"><%= comments %></div>
-    <div id="inspect-popularity"><%= popularity %></div>
+    <div id="inspect-header">
+      <%= author %> @ <%= post_time %> on <%= post_date %> Category: <%= category %>
+      <button id="flip-return" class="btn">Flip to front</button>
+    </div>
+    <div id="card-content"><%= content %></div>
+    <div id="inspect-footer">
+      <div id="inspect-marks" class="inspect-footer-elem"><%= marks %> People marked this</div>
+      <div id="inspect-adds" class="inspect-footer-elem"><%= adds %> People added this</div>
+      <div id="inspect-comments" class="inspect-footer-elem"><%= comments.length %> Comments</div>
+      <div id="inspect-joker" class="inspect-footer-elem">
+        <button id="report-joker" class="btn">Report Card as Joker</button>
+      </div>
+      <div id="inspect-hide" class="inspect-footer-elem">
+        <button id="hide-card" class="btn">Hide card from Hand</button>
+      </div>
+    </div>
   </script>
 
  
