@@ -21,7 +21,7 @@ app.SlidebarView = Backbone.View.extend({
     new app.SearchView();
     new app.MessageView();
     new app.NotificationView();
-    new app.AccountView();
+    new app.AccountView({model: app.user});
     new app.PreferencesView();
     this.initMenu(); //start up the menu
     this.closeAll(); //by default, only card is open
