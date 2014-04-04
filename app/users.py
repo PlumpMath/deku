@@ -19,9 +19,6 @@ def users():
         password = request.form.get('password')            
         university = request.form.get('university')
         if (firstName and lastName and email and password and university):
-            print password
-            print firstName
-            print password
             pw_hash = bcrypt.generate_password_hash(password)
             user = models.User(firstName = firstName,
                                lastName = lastName,
@@ -60,7 +57,6 @@ def user_by_id(user_id):
         else:
             abort(404)
     elif request.method == 'PUT':
-        print '********----modinfo----'
         if u'id' not in session:
             return make_response("not logged in",401)
         if session[u'id'] != user_id:
@@ -69,8 +65,6 @@ def user_by_id(user_id):
         result = db.session.query(models.User, models.Profile).filter(models.User.id== user_id).filter(models.User.id==models.Profile.user_id).first()
         user =  result.User
         profile = result.Profile
-        #q = models.User.query.filter(models.User.id == user_id).join(models.User.profile)
-        print 'aaaa-----------'
         firstName = request.form.get('firstName')
         lastName = request.form.get('lastName')
         email = request.form.get('email')
