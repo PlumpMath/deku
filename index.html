@@ -228,18 +228,36 @@
     </div>
     <div id="inspect-header">
       <%= author %> @ <%= post_time %> on <%= post_date %> Category: <%= category %>
-      <button id="flip-return" class="btn">Flip to front</button>
+      <button id="flip-return" class="btn btn-success">Flip to front</button>
     </div>
-    <div id="card-content"><%= content %></div>
+    <div id="inspect-content"><%= content %></div>
     <div id="inspect-footer">
-      <div id="inspect-marks" class="inspect-footer-elem"><%= marks %> People marked this</div>
-      <div id="inspect-adds" class="inspect-footer-elem"><%= adds %> People added this</div>
-      <div id="inspect-comments" class="inspect-footer-elem"><%= comments.length %> Comments</div>
+      <div id="inspect-marks" class="inspect-footer-elem">
+        <button id="marks-btn" class="btn btn-success"><%= marks.length %> People marked this</button>
+      </div>
+      <div id="inspect-adds" class="inspect-footer-elem">
+        <button id="adds-btn" class="btn btn-success"><%= adds.length %> People added this</button>
+      </div>
+      <div id="inspect-comments" class="inspect-footer-elem">
+        <button id="comment-btn" class="btn btn-success"><%= comments.length %> Comments</button>
+      </div>
       <div id="inspect-joker" class="inspect-footer-elem">
-        <button id="report-joker" class="btn">Report Card as Joker</button>
+        <button id="report-joker" class="btn btn-success">Report Card as Joker</button>
       </div>
       <div id="inspect-hide" class="inspect-footer-elem">
-        <button id="hide-card" class="btn">Hide card from Hand</button>
+        <button id="hide-card" class="btn btn-success">Hide card from Hand</button>
+      </div>
+    </div>
+    <div id="inspect-comment">
+      <div id="inspect-comment-list">
+        <% for (var comment in comments) { %>
+          <div class="card-comment"><%=comments[comment].author%>: <%=comments[comment].comment%>
+          </div>
+        <% } %>
+      </div>
+      <div id="inspect-comment-create">
+				<input type="text" id="create-comment" placeholder="Comment on this card..." class="form-control">
+        <button id="post-comment" class="btn">Comment</button>
       </div>
     </div>
   </script>
