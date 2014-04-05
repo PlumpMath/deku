@@ -227,10 +227,12 @@
       <% } %>
     </div>
     <div id="inspect-header">
-      <%= author %> @ <%= post_time %> on <%= post_date %> Category: <%= category %>
+      <%= author %> @ <%= post_time %> on <%= post_date %>
       <button id="flip-return" class="btn btn-success">Flip to front</button>
     </div>
-    <div id="inspect-content"><%= content %></div>
+    <div id="inspect-content"><%= content %>
+      <div id="card-category"><%= category %></div>
+    </div>
     <div id="inspect-footer">
       <div id="inspect-marks" class="inspect-footer-elem">
         <button id="marks-btn" class="btn btn-success"><%= marks.length %> People marked this</button>
@@ -266,7 +268,7 @@
   <!-- This view contains data about search criteria -->
 
   <script type="text/template" id="filter-view">
-    <div id="filter-by"><%= filter %></div>
+    <div id="filter-by" class="<%=field%>"><%= filter %></div>
   </script>
 
 	<!-- This view handles the hand view -->
