@@ -245,7 +245,7 @@ input {
   width: 100%;
 }
 
-.navbar .sb-toggle-right {
+.navbar #toggle-bars {
   width: 58px;
   padding: 14px;
 }

@@ -17,7 +17,6 @@ app.HandView = Backbone.View.extend({
       this.renderCard(item);
       }, this);
     new app.SlidebarView();
-    new app.ToggleView();
   },
 
   renderCard: function(item) {

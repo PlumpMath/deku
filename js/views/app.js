@@ -22,7 +22,6 @@ app.AppView = Backbone.View.extend({
   	} else {
   	  new app.CreateView();
   	}
-    this.$slidebars = new $.slidebars();
   },
 
   login: function(event) {
