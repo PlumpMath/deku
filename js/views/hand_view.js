@@ -8,8 +8,10 @@ app.HandView = Backbone.View.extend({
     _.bindAll(this, "newCard");
     vent.bind("newCard", this.newCard);
     this.collection = new app.Deck();
+    this.collection.fetch({reset:true});
     this.render();
     this.listenTo(this.collection, 'add', this.renderCard);
+    this.listenTo(this.collection, 'reset', this.render);
   },
 
   render: function() {
@@ -31,7 +33,7 @@ app.HandView = Backbone.View.extend({
   },
 
   newCard: function(card) {
-    this.collection.add(card);
+    this.collection.create(card);
   }
 
 });

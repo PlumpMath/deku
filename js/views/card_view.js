@@ -34,12 +34,12 @@ app.CardView = Backbone.View.extend({
     // if the user has NOT marked the card
     if (index === -1) {
       marks_list.push(app.user.get('email'));
-      this.model.set({"marks": marks_list});
+      this.model.save({"marks": marks_list});
       this.render();
     } else {
       //else remove their mark
       marks_list.splice(index,1);
-      this.model.set({"marks": marks_list});
+      this.model.save({"marks": marks_list});
       this.render();
     }
   },
@@ -56,7 +56,7 @@ app.CardView = Backbone.View.extend({
     var text = $('#create-comment').val().trim();
     var comment_list = this.model.get('comments');
     comment_list.push({"author": app.user.get('firstName'), "comment": text});
-    this.model.set({"comments": comment_list});
+    this.model.save({"comments": comment_list});
     this.render();
   },
 
