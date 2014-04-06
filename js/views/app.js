@@ -16,8 +16,7 @@ app.AppView = Backbone.View.extend({
 
   initialize: function() {
     new app.HeaderView({ model: app.user });
-    //Checks User because I set that as a default for debugging purposes. Will get rid of it soon
-	  if (app.user.get("firstName") !== "" && app.user.get("firstName") !== "User"){
+	  if (app.user.get("firstName") !== ""){
 	    new app.HandView();
   	} else {
   	  new app.CreateView();

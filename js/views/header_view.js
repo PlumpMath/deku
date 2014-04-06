@@ -6,13 +6,12 @@ app.HeaderView = Backbone.View.extend({
     template: _.template( $('#login_header').html() ),
 
     initialize: function() {
-        this.listenTo(app.user, "change", this.alertToChange);
+        this.listenTo(app.user, "change", this.render);
         this.render();
     },
 
     render: function() {
-        //for debugging and trials user is a person's default name. Just modified this to reflect that.
-        if (app.user.get("firstName") !== "" && app.user.get("firstName") !== "User") {
+        if (app.user.get("firstName") !== "") {
             this.template = _.template( $('#logout_header').html() );
             this.$el.html(this.template(app.user.toJSON()));
         } else {
