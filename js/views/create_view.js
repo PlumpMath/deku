@@ -50,14 +50,14 @@ app.CreateView = Backbone.View.extend({
       $('#email').focus();
 		}
 
-		if (values.lastname === '') {
+		if (values.lastName === '') {
 			error = true;
 			$('#lastname').val('');
 			$('#lastname').attr('placeholder', 'Please enter your last name');
       $('#lastname').focus();
 		}
 
-		if (values.firstname === '') {
+		if (values.firstName === '') {
 			error = true;
 			$('#firstname').val('');
 			$('#firstname').attr('placeholder', 'Please enter your first name');
