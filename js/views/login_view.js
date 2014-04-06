@@ -13,8 +13,8 @@ app.LoginView = Backbone.View.extend({
 
 	initialize: function() {
 		this.render();
-        this.$emailInput = this.$('#lemail');
-        this.$passwordInput = this.$('#lpassword');
+    this.$emailInput = this.$('#lemail');
+    this.$passwordInput = this.$('#lpassword');
 	},
 
 	render: function() {
