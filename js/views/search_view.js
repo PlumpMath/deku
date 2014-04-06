@@ -9,20 +9,26 @@ app.SearchView = Backbone.View.extend({
   events: {
     "click #search-category": "searchCategory",
     "click #search-clear": "searchClear",
-    "click .filter": "removeFilter"
   },
 
 	initialize: function() {
-		this.render();
+    this.collection = new app.FilterCollection(); //this collection holds everything we are filtering by
+		this.render(); // render the view
+    this.init(); // initialize all the local variables
+    this.listenTo(this.collection, 'add', this.renderFilter); //listen for added filters
+    this.listenTo(this.collection, 'remove', this.remove); // listen for removing a filter
 	},
 
-	render: function() {
-		this.$el.html(this.template);
+  init: function() {
     filter_category = []; //cards in the category filter
     filter_author = [] // cards in the author filter
     filter_tags = [] // cards in the tags filter
     to_hide = []; // all the items to hide
     msnry_items = []; // array to hold the hidden masonry items
+  },
+
+	render: function() {
+		this.$el.html(this.template);
 	},
 
   searchCategory: function(event) {
@@ -37,7 +43,8 @@ app.SearchView = Backbone.View.extend({
       //find all cards that match this search
       //first clear previous category filter
       to_hide = _.difference(to_hide, filter_category);
-      filter_category = _.reject(cards, function(card) {
+      //temporary placeholder, need the old version to delete from
+      filter_temp = _.reject(cards, function(card) {
         // card vs. inspect view will have different setup
         if ($(card).hasClass('card')) {
           if ($(card).children('#card-category').html() === this.search) {return this}
@@ -45,17 +52,21 @@ app.SearchView = Backbone.View.extend({
           if ($(card).children('#inspect-content').children('#card-category').html() === this.search) {return this}
         }
       });
-      to_hide = _.union(to_hide, filter_category);
+      to_hide = _.union(to_hide, filter_temp);
       msnry_items = _.map(to_hide, function(card) { return app.msnry.getItem(card);});
       $('#s-category').val('');
       app.msnry.hide(msnry_items);
       _.map(to_hide, function(card) {card.style.display = 'none';}); 
       app.msnry.layout();
       var filter = new app.Filter({filter: search, field: "category"});
-      var filterView = new app.FilterView({model: filter});
-      var elem = filterView.render().el;
-      $(".category").remove();
-      $('#filter').prepend(elem);
+      this.collection.each(function(f) {
+        if (f.toJSON().field === "category") {
+          this.collection.remove(f); //remove any previous category (only 1 possible) filters
+        }
+      }, this);
+      //put temp back in and add this filter
+      filter_category = filter_temp;
+      this.collection.add(filter);
     } else
     {
       $('#s-category').val('')
@@ -63,6 +74,28 @@ app.SearchView = Backbone.View.extend({
     }
   },
 
+  //this will render a new filter item and put it at the top of the filter area
+  renderFilter: function(filter) {
+    var filterView = new app.FilterView({model: filter});
+    var elem = filterView.render().el;
+    $('#filter').prepend(elem);
+  },
+
+  //this removes one filter at a time, user clicks a label at a time.
+  remove: function(filter) {
+    app.msnry.reveal(msnry_items); // reveal everything
+    if (filter.toJSON().field === "category") {
+      to_hide = _.difference(to_hide, filter_category); // clear to hide from over category
+      filter_category = []; // clear the filter array
+      msnry_items = _.map(to_hide, function(card) { return app.msnry.getItem(card);});
+      app.msnry.hide(msnry_items); // hide the stuff that needs hiding
+      _.map(to_hide, function(card) {card.style.display = 'none';}); 
+      app.msnry.layout();
+    }
+    this.render(); //render everything again
+  },
+
+  //Clear all of the searches
   searchClear: function(event) {
     event.preventDefault();
     if (to_hide !== []) {
@@ -73,20 +106,13 @@ app.SearchView = Backbone.View.extend({
       $('#s-tags').val('');
       $('#s-author').val('');
       $('#s-category').val('');
-      $('.filter').remove();
+      this.collection.reset();
+      this.render();
       filter_category = []; 
       filter_author = []; 
       filter_tags = []; 
       to_hide = [];
       msnry_items = [];
     }
-  },
-
-  removeFilter: function(event) {
-    event.preventDefault();
-    console.log("remove filter");
-    var pillBox = $(event.target).html();
-    console.log("remove: ", pillBox);
   }
-    
 });
