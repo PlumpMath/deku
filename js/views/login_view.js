@@ -58,7 +58,7 @@ app.LoginView = Backbone.View.extend({
         $.post(url, loginValues, function( data, textStatus, jqXHR ) {
             app.user.set(data['user']);
             //alert("Welcome, " + app.user.get("firstName") + "!"); // not really useful
-            $('#container').fadeOut(350, function() {new app.HandView()});
+            $('#container').fadeOut();
         })
         .fail(function() {
             alert("Your email or password did not match.");

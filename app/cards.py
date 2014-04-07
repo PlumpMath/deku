@@ -9,14 +9,14 @@ from app.utils import cors_response
 @app.route('/deku/api/cards', methods=['GET', 'POST'])
 def cards():
     if request.method == 'GET':
-        return jsonify(cards = [card.serialize for card in Card.query.all()])
+        return cors_response(jsonify(cards = [card.serialize for card in Card.query.all()]))
     elif request.method == 'POST':
         content = request.form.get('content')
         if (content):
             card = Card(content = content)
             db.session.add(card)
             db.session.commit()
-            return cors_response(('Card created.', 201))
+            return cors_response(((jsonify(user = user.serialize), 201))
         else:
             return cors_response(('No content provided', 400))
     else:

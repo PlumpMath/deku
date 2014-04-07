@@ -7,6 +7,7 @@ app.HandView = Backbone.View.extend({
   initialize: function() { 
     _.bindAll(this, "newCard");
     vent.bind("newCard", this.newCard);
+    new app.SlidebarView();
     this.collection = new app.Deck();
     this.collection.fetch({reset:true});
     this.render();
@@ -18,7 +19,6 @@ app.HandView = Backbone.View.extend({
     this.collection.each(function(item) {
       this.renderCard(item);
       }, this);
-    new app.SlidebarView();
   },
 
   renderCard: function(item) {
