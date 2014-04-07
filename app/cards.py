@@ -6,7 +6,7 @@ from app import app, db
 from app.models import Card
 from app.utils import cors_response
 
-@app.route('/deku/api/cards', methods=['GET', 'POST'])
+@app.route('/deku/api/cards', methods=['GET', 'POST', 'OPTIONS'])
 def cards():
     if request.method == 'GET':
         return cors_response(jsonify(cards = [card.serialize for card in Card.query.all()]))
@@ -19,6 +19,8 @@ def cards():
             return cors_response(('Card created.', 201))
         else:
             return cors_response(('No content provided', 400))
+    elif request.method == 'OPTIONS':
+        return cors_response(('Request acknowledged.', 200))
     else:
         pass
 

@@ -30,7 +30,7 @@ app.SlidebarView = Backbone.View.extend({
     this.$el.html(this.template);
     //this is our slidebar instance
     //create all the views of the submenus within the slidebar
-    new app.CreateCardView({vent: vent});
+    new app.CreateCardView();
     new app.SearchView();
     new app.MessageView();
     new app.NotificationView();

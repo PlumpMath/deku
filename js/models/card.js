@@ -15,6 +15,5 @@ app.Card = Backbone.Model.extend({
       comments: new Array(),
       popularity: 0
     }
-  }
-
+  },
 });

@@ -36,7 +36,7 @@ app.AppView = Backbone.View.extend({
 
   logout: function(event) {
     event.preventDefault();
-    app.user.set(app.user.defaults());
+    app.user.set(app.User.defaults());
     $('#container').fadeOut(350);
   }
 });

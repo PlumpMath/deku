@@ -4,16 +4,18 @@ app.HandView = Backbone.View.extend({
 
   el: "#container",
 
+  renderCount: 0,
+
   initialize: function() { 
     new app.SlidebarView();
     app.Deck = new app.CardList();
-    app.Deck.fetch({reset:true});
-    this.render();
     this.listenTo(app.Deck, 'add', this.renderCard);
     this.listenTo(app.Deck, 'reset', this.render);
+    app.Deck.fetch();
   },
 
   render: function() {
+    console.log("this has been called " + (this.renderCount++) + " times.");
     app.Deck.each(function(item) {
       this.renderCard(item);
       }, this);

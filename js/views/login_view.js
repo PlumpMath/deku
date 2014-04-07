@@ -14,6 +14,7 @@ app.LoginView = Backbone.View.extend({
 	initialize: function() {
 		this.render();
     this.$emailInput = this.$('#lemail');
+    this.$emailInput.focus();
     this.$passwordInput = this.$('#lpassword');
 	},
 
@@ -43,6 +44,7 @@ app.LoginView = Backbone.View.extend({
 
 	sendLogin: function(event) {
 		event.preventDefault();
+    var that = this;
 		//This will contain some event that sends the data to the server
 		//for authentication
 		//this is the app.py route info
@@ -58,7 +60,7 @@ app.LoginView = Backbone.View.extend({
         $.post(url, loginValues, function( data, textStatus, jqXHR ) {
             app.user.set(data['user']);
             //alert("Welcome, " + app.user.get("firstName") + "!"); // not really useful
-            $('#container').fadeOut();
+            that.$el.html(""); 
         })
         .fail(function() {
             alert("Your email or password did not match.");
