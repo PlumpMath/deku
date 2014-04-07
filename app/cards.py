@@ -9,7 +9,7 @@ from app.utils import cors_response
 @app.route('/deku/api/cards', methods=['GET', 'POST'])
 def cards():
     if request.method == 'GET':
-        return cors_response(jsonify(cards = [card.serialize for card in Card.query.all()]))
+        return cors_response((jsonify(cards = [card.serialize for card in Card.query.all()])))
     elif request.method == 'POST':
         content = request.form.get('content')
         if (content):
@@ -27,7 +27,7 @@ def card_by_id(card_id):
     if request.method == 'GET':
         card = Card.query.get(int(card_id))
         if (card):
-            return cors_response(jsonify(card = card.serialize))
+            return cors_response((jsonify(card = card.serialize), 200))
         else:
             return cors_response(("Card not found", 404))
     elif request.method == 'PUT':
@@ -37,7 +37,7 @@ def card_by_id(card_id):
             if (content):
                 card.content = content
             db.session.commit()
-            return cors_response(("Card modified.", 200, None))
+            return cors_response(("Card modified.", 200))
         else:
             return cors_response(("Card not found", 404))
 
@@ -46,9 +46,9 @@ def card_by_id(card_id):
         if (card):
             db.session.delete(card)
             db.session.commit()
-            return cors_response(("Card deleted.", 200, None))
+            return cors_response(("Card deleted.", 200))
         elif card is None:
-            return cors_response(("No card found.", 204, None))
+            return cors_response(("No card found.", 204))
     else:
         pass
 
