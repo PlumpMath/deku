@@ -23,6 +23,7 @@ app.SlidebarView = Backbone.View.extend({
   initialize: function() {
     //listen for a window resize
     this.listenTo(window, 'resize', _.debounce(this.slidebarsResize, 500));
+    this.listenTo(app.user, 'set change', this.destroyView);
     this.render();
   },
 
@@ -89,6 +90,17 @@ app.SlidebarView = Backbone.View.extend({
   closeAll: function() {
     $('.collapsed').removeClass('expanded')
     .children().hide('medium');
+  },
+
+  destroyView: function() {
+    if (app.user.get('firstName') === '') {
+      console.log('go away');
+      app.$slidebars.close();
+      this.undelegateEvents();
+      this.$el.empty();
+      this.stopListening();
+      return this;
+    }
   }
 
 });
