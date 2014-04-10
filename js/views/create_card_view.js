@@ -11,7 +11,6 @@ app.CreateCardView = Backbone.View.extend({
   template: _.template( $('#card-create-view').html() ),
 
 	initialize: function() {
-		this.vent = vent;
 		this.render();
 	},
 
@@ -71,9 +70,7 @@ app.CreateCardView = Backbone.View.extend({
 
     //this checks the input for validation
     if (!this.formError(formData)) {
-  		var card = new app.Card(formData);
-
-	  	this.vent.trigger("newCard", card);
+	  	app.Deck.create(formData);
   		$('#category').val('');
   		$('#tags').val('');
   		$('#content').val('');

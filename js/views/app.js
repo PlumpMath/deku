@@ -17,15 +17,19 @@ app.AppView = Backbone.View.extend({
 
   initialize: function() {
     new app.HeaderView({ model: app.user });
-    this.listenTo(app.user, 'change', this.render);
+    var deku = JSON.parse(localStorage.getItem('deku'));
+	  if (deku !== null){
+      app.user.set(deku);
+    }
+    this.listenTo(app.user, 'set change', this.render);
     this.render();
   },
 
   render: function() {
-	  if (app.user.get("firstName") !== ""){
+	  if (app.user.get('firstName') !== ''){
 	    new app.HandView();
   	} else {
-  	  new app.CreateView();
+  	  $('#container').fadeOut(350, function() {new app.CreateView();});
   	}
   },
 
@@ -36,7 +40,7 @@ app.AppView = Backbone.View.extend({
 
   logout: function(event) {
     event.preventDefault();
+    localStorage.removeItem('deku');
     app.user.set(app.user.defaults());
-    $('#container').fadeOut(350);
   }
 });

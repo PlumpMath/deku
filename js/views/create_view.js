@@ -1,5 +1,3 @@
-var tab = $("#tab-container");
-
 var app = app || {};
 
 app.CreateView = Backbone.View.extend({
@@ -16,8 +14,8 @@ app.CreateView = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template);
-		tab.hide();
+    console.log('rendering create');
+    this.$el.html(this.template).fadeIn(350);
   },
 
 	formError: function(values) {
@@ -74,6 +72,7 @@ app.CreateView = Backbone.View.extend({
 		//this is the app.py route info
 		var url = "http://localhost:4568/deku/api/users";
 
+    console.log('attempt create');
 		//this is the data that is sent
 		var registerValues = {
 			email: $("#email").val(),
@@ -82,15 +81,23 @@ app.CreateView = Backbone.View.extend({
 			firstName: $("#firstname").val().trim(),
 			lastName: $("#lastname").val().trim()
 		};
-		
+
+    var that = this;
+    	
 		if (!this.formError(registerValues)) {
       $.post(url, registerValues, function(data, textStatus, jqXHR) {
         app.user = new app.User(data['user']);
-        $('#container').fadeOut(350, function() {new app.InfoView();});
+        that.$el.fadeOut(350, function() {new app.InfoView(); that.destroyView});
       }).fail(function(error) {
         console.log(error);
       });
 		}
-  }
+  },
 
+  destroyView: function() {
+    this.undelegateEvents();
+    this.$el.empty();
+    this.stopListening();
+    return this;
+  }
 });

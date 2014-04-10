@@ -5,18 +5,17 @@ app.HandView = Backbone.View.extend({
   el: "#container",
 
   initialize: function() { 
-    _.bindAll(this, "newCard");
-    vent.bind("newCard", this.newCard);
     new app.SlidebarView();
-    this.collection = new app.Deck();
-    this.collection.fetch({reset:true});
-    this.render();
-    this.listenTo(this.collection, 'add', this.renderCard);
-    this.listenTo(this.collection, 'reset', this.render);
+    app.Deck = new app.CardList();
+    this.listenTo(app.user, 'set change', this.destroyView);
+    this.listenTo(app.Deck, 'add', this.renderCard);
+    this.listenTo(app.Deck, 'reset', this.render);
+    app.Deck.fetch();
   },
 
   render: function() {
-    this.collection.each(function(item) {
+    console.log('render hand');
+    app.Deck.each(function(item) {
       this.renderCard(item);
       }, this);
   },
@@ -32,8 +31,13 @@ app.HandView = Backbone.View.extend({
     app.msnry.layout();
   },
 
-  newCard: function(card) {
-    this.collection.create(card);
+  destroyView: function() {
+    if (app.user.get('firstName') === '') {
+      console.log('go away');
+      this.undelegateEvents();
+      this.$el.empty();
+      this.stopListening();
+      return this;
+    }
   }
-
 });

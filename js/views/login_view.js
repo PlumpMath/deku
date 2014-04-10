@@ -14,6 +14,7 @@ app.LoginView = Backbone.View.extend({
 	initialize: function() {
 		this.render();
     this.$emailInput = this.$('#lemail');
+    this.$emailInput.focus();
     this.$passwordInput = this.$('#lpassword');
 	},
 
@@ -43,6 +44,7 @@ app.LoginView = Backbone.View.extend({
 
 	sendLogin: function(event) {
 		event.preventDefault();
+    var that = this;
 		//This will contain some event that sends the data to the server
 		//for authentication
 		//this is the app.py route info
@@ -53,12 +55,17 @@ app.LoginView = Backbone.View.extend({
 			email: this.$emailInput.val().trim(),
 			password: this.$passwordInput.val().trim()
 		};
-	
+
+    console.log('attempt login', loginValues);
+
     if (!this.formError(loginValues)) {
         $.post(url, loginValues, function( data, textStatus, jqXHR ) {
-            app.user.set(data['user']);
             //alert("Welcome, " + app.user.get("firstName") + "!"); // not really useful
-            $('#container').fadeOut();
+            //this.loginValues = null;
+            //that.$el.html("");
+            that.destroyView();
+            localStorage.setItem('deku', JSON.stringify(data['user']));
+            app.user.set(data['user']);
         })
         .fail(function() {
             alert("Your email or password did not match.");
@@ -67,13 +74,19 @@ app.LoginView = Backbone.View.extend({
             $('#lemail').focus();
         });
     }
-
 	},
 
 	//This will open the reset password view
 	resetPassword: function(event) {
 		event.preventDefault();
 		this.$el.fadeOut(350, function() {new app.PassResetView();});
-	}
+	},
 
+  //this destroys the view and all of the events. 
+  destroyView: function() {
+    this.undelegateEvents();
+    this.$el.empty();
+    this.stopListening();
+    return this;
+  }
 });
