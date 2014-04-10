@@ -5,16 +5,17 @@ app.HandView = Backbone.View.extend({
   el: "#container",
 
   initialize: function() { 
+    //this will remove the login view that existed before, or anything else that was present
+    this.$el.empty();
     new app.SlidebarView();
     app.Deck = new app.CardList();
-    this.listenTo(app.user, 'set change', this.destroyView);
+    this.listenTo(app.user, 'change', this.destroyView);
     this.listenTo(app.Deck, 'add', this.renderCard);
     this.listenTo(app.Deck, 'reset', this.render);
     app.Deck.fetch();
   },
 
   render: function() {
-    console.log('render hand');
     app.Deck.each(function(item) {
       this.renderCard(item);
       }, this);
@@ -33,9 +34,7 @@ app.HandView = Backbone.View.extend({
 
   destroyView: function() {
     if (app.user.get('firstName') === '') {
-      console.log('go away');
       this.undelegateEvents();
-      this.$el.empty();
       this.stopListening();
       return this;
     }

@@ -6,7 +6,7 @@ app.HeaderView = Backbone.View.extend({
     template: _.template( $('#login_header').html() ),
 
     initialize: function() {
-        this.listenTo(app.user, "set change", this.render);
+        this.listenTo(app.user, "change", this.render);
         this.render();
     },
 
