@@ -10,11 +10,12 @@ app.CreateView = Backbone.View.extend({
   template: _.template( $("#create-form").html() ),
 
   initialize: function() {
+    //listens to the changing of app.user to destroy this view
+    this.listenTo(app.user, 'change', this.destroyView);
     this.render();
   },
 
   render: function() {
-    console.log('rendering create');
     this.$el.html(this.template).fadeIn(350);
   },
 
@@ -72,7 +73,6 @@ app.CreateView = Backbone.View.extend({
 		//this is the app.py route info
 		var url = "http://localhost:4568/deku/api/users";
 
-    console.log('attempt create');
 		//this is the data that is sent
 		var registerValues = {
 			email: $("#email").val(),
@@ -86,17 +86,18 @@ app.CreateView = Backbone.View.extend({
     	
 		if (!this.formError(registerValues)) {
       $.post(url, registerValues, function(data, textStatus, jqXHR) {
-        app.user = new app.User(data['user']);
-        that.$el.fadeOut(350, function() {new app.InfoView(); that.destroyView});
+        //fade out the view and load the infoView
+        that.destroyView();
+        that.$el.fadeOut(350, function() {new app.InfoView();});
       }).fail(function(error) {
         console.log(error);
       });
 		}
   },
 
+  //logic to handle proper destruction of the current view
   destroyView: function() {
     this.undelegateEvents();
-    this.$el.empty();
     this.stopListening();
     return this;
   }
