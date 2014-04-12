@@ -38,13 +38,16 @@ app.AppView = Backbone.View.extend({
 
   login: function(event) {
     event.preventDefault();
-    //force a trigger event that will affect any open views.
-    //for control purposes only trigger email because we don't want 
-    //app.js render to run unless a real user is being added
+    /* Force a trigger event that will affect any open views.
+     * for control purposes only trigger email because we don't want 
+     * app.js render to run unless a real user is being added
+     */
     app.user.trigger('change', 'email');
-    //this button should do NOTHING if the login view is active
-    //this checks to see if container has a header with text Login
-    //if it doesn't, then it switches views.
+
+    /* this button should do NOTHING if the login view is active
+     * this checks to see if container has a header with text Login
+     * if it doesn't, then it switches views.
+     */
     if ($('#container').has('h1').length !== 0) {
       if ($('#container').children('h1').html() !== "Login") {
         $('#container').fadeOut(350, function() {new app.LoginView();});
