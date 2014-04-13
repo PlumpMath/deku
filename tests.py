@@ -7,7 +7,7 @@ from flask import json
 from config import basedir
 from app import app, db, bcrypt, session, models, users
 from app.models import User, Card
-from app.users import authenticate
+from app.users import authenticate,cors_response
 from sqlalchemy import outerjoin
 
 class APITestCase(unittest.TestCase):
@@ -161,7 +161,6 @@ class APITestCase(unittest.TestCase):
         
         after = "" + str(user.serialize) + user.password
         self.assertEquals(before, after)
-        
         
         
     def test_modify_other_user_fields_as_admin(self):
