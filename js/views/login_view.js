@@ -56,16 +56,12 @@ app.LoginView = Backbone.View.extend({
 			password: this.$passwordInput.val().trim()
 		};
 
-    console.log('attempt login', loginValues);
-
     if (!this.formError(loginValues)) {
         $.post(url, loginValues, function( data, textStatus, jqXHR ) {
             //alert("Welcome, " + app.user.get("firstName") + "!"); // not really useful
-            //this.loginValues = null;
-            //that.$el.html("");
-            that.destroyView();
             localStorage.setItem('deku', JSON.stringify(data['user']));
             app.user.set(data['user']);
+            that.destroyView();
         })
         .fail(function() {
             alert("Your email or password did not match.");
@@ -79,13 +75,13 @@ app.LoginView = Backbone.View.extend({
 	//This will open the reset password view
 	resetPassword: function(event) {
 		event.preventDefault();
+    this.destroyView();
 		this.$el.fadeOut(350, function() {new app.PassResetView();});
 	},
 
   //this destroys the view and all of the events. 
   destroyView: function() {
     this.undelegateEvents();
-    this.$el.empty();
     this.stopListening();
     return this;
   }
