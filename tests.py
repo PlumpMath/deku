@@ -7,7 +7,7 @@ from flask import json
 from config import basedir
 from app import app, db, bcrypt, session, models, users
 from app.models import User, Card
-from app.users import authenticate,cors_response
+from app.users import authenticate
 from sqlalchemy import outerjoin
 
 class APITestCase(unittest.TestCase):

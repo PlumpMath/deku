@@ -75,9 +75,7 @@ def user_by_id(user_id):
             else:
                 #we're an admin editing someone elses stuff so let's get that stuff so we edit that instead of our own info.
                 user = models.User.query.get(int(user_id))
-                print 'wtf'
                 if user is None:
-                    print 'wtf2'
                     return cors_response(("User Not Found",204))
         
         #update fields
