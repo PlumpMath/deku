@@ -21,17 +21,21 @@ class APITestCase(unittest.TestCase):
        
         # from test_post_new_valid_user_with_no_profile
         response = self.app.post('/deku/api/users', data=dict(firstName="Jane", lastName="Doe", email="janedoe@email.edu", password="password1", university="UMBC"))
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
+        
         
         # from test_post_new_valid_user_with_full_profile
         response = self.app.post('/deku/api/users', data=dict(firstName="Carrie", lastName="Hildebrand", email="carrie.hildebrand2@gmail.com", password='password', university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
 
         #admin        
         response=self.app.post('/deku/api/users',data=dict(firstName="admin", lastName="admin", email="admin@deku.com", university="admin", password="admin"))
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
         user = models.User.query.filter(models.User.email=="admin@deku.com").first()
         user.role=models.ROLE_ADMIN
         db.session.commit()
         
-                               
+        
     def tearDown(self):
         db.session.remove()
         db.drop_all()
@@ -106,6 +110,7 @@ class APITestCase(unittest.TestCase):
         # user and pwd are used to confirm authentication.  email and password are for changing email and password
         response = self.app.put('/deku/api/users/' + str(user.id), data=dict(user="carrie.hildebrand2@gmail.com", pwd="password", firstName="a", lastName="b", university="c", email="d", password="h", grad_year="e", major="f", bio="g", classes=["aaa", "bbb", "ccc", "ddd"]))
         self.assertEquals(response.status_code,200)
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
 
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').all()
         self.assertEquals(len(user), 0)
@@ -142,6 +147,7 @@ class APITestCase(unittest.TestCase):
         # user and pwd are used to confirm authentication.  email and password are for changing email and password
         response = self.app.put('/deku/api/users/' + str(user.id), data=dict(user="carrie.hildebrand2@gmail.com", pwd="password1", firstName="a", lastName="b", university="c", email="d", password="h", grad_year="e", major="f", bio="g", classes=["aaa", "bbb", "ccc", "ddd"]))
         self.assertEquals(response.status_code, 401)
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
 
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').first()        
         
@@ -155,6 +161,7 @@ class APITestCase(unittest.TestCase):
         before = "" + str(user.serialize) + user.password
         # user and pwd are used to confirm authentication.  email and password are for changing email and password
         response = self.app.put('/deku/api/users/' + str(user.id), data=dict(user="janedoe@email.edu", pwd="password1", firstName="a", lastName="b", university="c", email="d", password="h", grad_year="e", major="f", bio="g", classes=["aaa", "bbb", "ccc", "ddd"]))
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
         self.assertEquals(response.data, "Unauthorized Access 1")
 
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').first()
@@ -170,6 +177,7 @@ class APITestCase(unittest.TestCase):
         # user and pwd are used to confirm authentication.  email and password are for changing email and password
         response = self.app.put('/deku/api/users/' + str(user.id), data=dict(user="admin@deku.com", pwd="admin", firstName="a", lastName="b", university="c", email="d", password="h", grad_year="e", major="f", bio="g", classes=["aaa", "bbb", "ccc", "ddd"]))
         self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
 
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').all()
         self.assertEquals(len(user), 0)
@@ -201,6 +209,7 @@ class APITestCase(unittest.TestCase):
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').first() 
         before = user.serialize
         response = self.app.get('/deku/api/users/' + str(user.id))
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
         data = json.loads(response.data)
         self.assertEquals(response.status_code,200)
         self.assertEquals(data['user'], before)
@@ -208,17 +217,18 @@ class APITestCase(unittest.TestCase):
     def test_get_invalid_user_by_id(self):
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').first() 
         response = self.app.get('/deku/api/users/' + str(user.id))
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
         self.assertEquals(response.status_code,200)
         
     def test_get_all_users(self):
         response = self.app.get('/deku/api/users')
+        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
         data = json.loads(response.data)
+        self.assertEquals(response.status_code,200)
         self.assertEquals(len(User.query.all()),len(data['users']))
         for user in data['users']:
             check_user = User.query.filter(User.email==user['email']).first()
             self.assertEquals(check_user.serialize,user)
-            
-
 
 if __name__ == '__main__':
     unittest.main()

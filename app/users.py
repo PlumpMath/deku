@@ -9,7 +9,7 @@ from utils import cors_response, authenticate
 @app.route('/deku/api/users', methods=['GET','POST'])
 def users():
     if request.method == 'GET':
-        return jsonify(users = [user.serialize for user in models.User.query.all()])
+        return cors_response((jsonify(users = [user.serialize for user in models.User.query.all()]),200))
     if request.method == 'POST':
         email = request.form.get('email')
         user = models.User.query.filter(models.User.email==email).first()
