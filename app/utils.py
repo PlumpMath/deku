@@ -1,4 +1,5 @@
 from flask import make_response
+from sqlalchemy import func
 from app import models, bcrypt
 
 def cors_response(response):
@@ -8,7 +9,7 @@ def cors_response(response):
 
 def authenticate(email, pwd):
     if (email and pwd):
-        user = models.User.query.filter(models.User.email==email).first()
+        user = models.User.query.filter(func.lower(models.User.email)==func.lower(email)).first()
         if (user):
             correct_pw = bcrypt.check_password_hash(user.password, pwd)
             if correct_pw:

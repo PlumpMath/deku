@@ -101,6 +101,8 @@ class APITestCase(unittest.TestCase):
         self.assertFalse(authenticate('carrie.hildebrand2@gmail.com', 'password1'))
         self.assertFalse(authenticate('carrie@aewr.er', 'passwordwer'))
         self.assertEquals(authenticate('carrie.hildebrand2@gmail.com', 'password').serialize, user.serialize)
+        self.assertEquals(authenticate('carrIE.hildebrand2@gmail.com', 'password').serialize, user.serialize)
+        self.assertEquals(authenticate('caRRie.hildebrand2@gmail.com', 'password').serialize, user.serialize)
         
     def test_modify_own_user_fields(self):
         # change all of carrie's fields to "a"
