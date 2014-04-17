@@ -112,8 +112,7 @@ class APITestCase(unittest.TestCase):
         response = self.app.get('/deku/api/cards')
         data = json.loads(response.data)
         print len(data['cards'])
-        #print response.data['cards']
-        #print (response.data['cards'])
+        self.assertEquals(len(data['cards']),2)
         
 
 if __name__ == '__main__':
