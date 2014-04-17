@@ -231,6 +231,6 @@ class APITestCase(unittest.TestCase):
         for user in data['users']:
             check_user = User.query.filter(User.email==user['email']).first()
             self.assertEquals(check_user.serialize,user)
-
+        
 if __name__ == '__main__':
     unittest.main()

@@ -4,28 +4,30 @@ import os
 from flask import Flask, request, jsonify, abort, make_response, json
 from app import app, db, models, session
 from app.models import Card
+from utils import cors_response, authenticate
 
 @app.route('/deku/api/cards', methods=['GET', 'POST'])
 def cards():
     if request.method == 'GET':
         return jsonify(cards = [card.serialize for card in Card.query.all()])
     elif request.method == 'POST':
-        if 'id' not in session:
-            return make_response("Must be logged in to post a new card", 401)
-        user = db.session.query(models.User).filter(models.User.id == session['id']).first()
-        print user
+        #authenticate
+        user = request.form.get('user')
+        pwd = request.form.get('password')
+        user = authenticate(user, pwd)
+        if not isinstance(user, models.User):
+            return cors_response(("Unauthorized Access. Login to post a card",401))
+        
         content = request.form.get('content')
-        suit = request.form.get('suit')
-        tags = request.form.get('tags')
-        tags = json.loads(tags)
-        print tags
+        category = request.form.get('category')
+        tags = request.form.getlist('tags')
         if (content):
-            card = Card(user_id = id, content = content)
-            if suit:
-                card.suit = suit
-            user.cards.append(card)
+            card = models.Card(user_id=user.id,content=content)
+            if (category):
+                card.category = category
             for tag in tags:
                 card.tags.append(models.Tag(tag))
+            db.session.add(card)
             db.session.commit()
             return make_response((jsonify(card = card.serialize), 201))
         else:
