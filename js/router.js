@@ -1,16 +1,27 @@
 var app = app || {};
 
 app.Router = Backbone.Router.extend({
+  
+  currentView: null,
+
   routes: {
     '': 'homeView',
     'login': 'login'
   },
 
+  changeView: function(view) {
+    if (this.currentView !== null) {
+      this.currentView.undelegateEvents();
+      this.currentView.stopListening();
+    }
+    this.currentView = view;
+  },
+
   homeView: function() {
-    new app.AppView();
+    this.changeView(new app.AppView());
   },
 
   login: function() {
-    new app.LoginView();
+    this.changeView(new app.LoginView());
   }
 });

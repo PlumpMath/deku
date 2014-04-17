@@ -95,11 +95,11 @@ app.CreateView = Backbone.View.extend({
       });
 		}
   },
-
+/*
   //logic to handle proper destruction of the current view
   destroyView: function() {
     this.undelegateEvents();
     this.stopListening();
     return this;
-  }
+  }*/
 });
