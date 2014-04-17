@@ -3,7 +3,7 @@ var app = app || {};
 app.InfoView = Backbone.View.extend({
   el: '#container',
 
-  template: _.template( $('#info-form').html() ),
+  template: "#info-form",
 
   events: {
 		"submit #info": "getLogin"
@@ -15,7 +15,8 @@ app.InfoView = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template).fadeIn(350);
+    var template = app.TemplateCache.get(this.template);
+    this.$el.html(template).fadeIn(350);
   },
 
 	formErrors: function(values) {

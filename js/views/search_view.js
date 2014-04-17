@@ -4,7 +4,7 @@ app.SearchView = Backbone.View.extend({
 
 	el: "#search",
 
-  template: _.template( $('#search-view').html() ),
+  template: "#search-view",
 
   events: {
     "click #search-category": "searchCategory",
@@ -28,7 +28,8 @@ app.SearchView = Backbone.View.extend({
   },
 
 	render: function() {
-		this.$el.html(this.template);
+    var template = app.TemplateCache.get(this.template);
+		this.$el.html(template);
 	},
 
   searchCategory: function(event) {

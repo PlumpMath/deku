@@ -4,14 +4,15 @@ app.PreferencesView = Backbone.View.extend({
 
 	el: "#my-preferences",
 
-  template: _.template( $('#preferences-view').html() ),
+  template: "#preferences-view",
 
 	initialize: function() {
 		this.render();
 	},
 
 	render: function() {
-		this.$el.html(this.template);
+    var template = app.TemplateCache.get(this.template);
+		this.$el.html(template);
 	}
 
 });

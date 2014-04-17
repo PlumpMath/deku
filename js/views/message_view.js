@@ -4,14 +4,15 @@ app.MessageView = Backbone.View.extend({
 
 	el: "#messages",
 
-  template: _.template( $('#message-view').html() ),
+  template: "#message-view",
 
 	initialize: function() {
 		this.render();
 	},
 
 	render: function() {
-		this.$el.html(this.template);
+    var template = app.TemplateCache.get(this.template);
+		this.$el.html(template);
 	}
 
 });

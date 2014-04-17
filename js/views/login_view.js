@@ -9,7 +9,7 @@ app.LoginView = Backbone.View.extend({
 		"reset #login": "resetPassword"
 	},
 
-	template: _.template($("#login-form").html()),
+	template: "#login-form",
 
 	initialize: function() {
 		this.render();
@@ -19,7 +19,8 @@ app.LoginView = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.$el.html(this.template).fadeIn(350);
+    var template = app.TemplateCache.get(this.template);
+		this.$el.html(template).fadeIn(350);
 	},
 
   formError: function(values) {

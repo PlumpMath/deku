@@ -6,7 +6,7 @@ app.CardView = Backbone.View.extend({
   
   className: 'card post small flipbox',
 
-  template: _.template( $('#card-template').html() ),
+  template: "#card-template",
 
   events: {
     "click": "flipInspect",
@@ -23,7 +23,9 @@ app.CardView = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.append(this.template(this.model.toJSON() ) );
+    var template = app.TemplateCache.get(this.template);
+    var html = template(this.model.toJSON());
+    this.$el.append(html);
 		return this;
   },
 

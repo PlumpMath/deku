@@ -1,22 +1,26 @@
 var app = app || {};
 
 app.HeaderView = Backbone.View.extend({
-    el: ".navbar-form",
+  el: ".navbar-form",
 
-    template: _.template( $('#login_header').html() ),
+  loginTemplate: "#login_header",
+  logoutTemplate: "#logout_header",
 
-    initialize: function() {
-        this.listenTo(app.user, "change", this.render);
-        this.render();
-    },
+  initialize: function() {
+    this.listenTo(app.user, "change", this.render);
+  },
 
-    render: function() {
-        if (localStorage.getItem('deku') !== null) {
-            this.template = _.template( $('#logout_header').html() );
-            this.$el.html(this.template(app.user.toJSON()));
-        } else {
-            this.template = _.template( $('#login_header').html() );
-            this.$el.html(this.template);
-        }
+  render: function() {
+    var localUser = localStorage.getItem('deku'),
+        template,
+        html;
+    if (localUser !== null) {
+      template = app.TemplateCache.get(this.logoutTemplate);
+      html = template(app.user.toJSON());
+      this.$el.html(html);
+    } else {
+      template = app.TemplateCache.get(this.loginTemplate);
+      this.$el.html(template);
     }
+  }
 })

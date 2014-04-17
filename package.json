@@ -1,0 +1,9 @@
+{
+  "name": "deku",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-contrib-jasmine": "^0.6.3",
+    "grunt-lib-phantomjs": "^0.5.0"
+  }
+}

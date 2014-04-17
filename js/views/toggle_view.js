@@ -4,7 +4,7 @@ app.ToggleView = Backbone.View.extend({
 
   el: "#toggle-bars",
 
-  template: _.template($("#toggle-view").html()),
+  template: "#toggle-view",
 
   events: {
     "click": "toggle"
@@ -16,7 +16,8 @@ app.ToggleView = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template);
+    var template = app.TemplateCache.get(this.template);
+    this.$el.html(template);
   },
 
   //custom toggle event using the Slidebars instance
