@@ -10,14 +10,16 @@ app.FilterView = Backbone.View.extend({
     'click': 'deleteFilter'
   },
 
-  template: _.template( $('#filter-view').html() ),
+  template: "#filter-view",
   
 	initialize: function() {
     this.render();
   },
 
   render: function() {
-    this.$el.html(this.template(this.model.toJSON() ) );
+    var template = app.TemplateCache.get(this.template);
+    var html = template(this.model.toJSON());
+    this.$el.html(html);
 		return this;
   },
 

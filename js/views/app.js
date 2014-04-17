@@ -1,12 +1,5 @@
 var app = app || {};
 
-app.msnry = new Masonry( container, {
-    // Masonry options
-    columnWidth: 60,
-    itemSelector: '.post',
-    gutter: 10
-});
-
 app.AppView = Backbone.View.extend({
   el: "#main",
 
@@ -16,7 +9,14 @@ app.AppView = Backbone.View.extend({
   },
 
   initialize: function() {
-    new app.HeaderView({ model: app.user });
+    var container = $("#container");
+    app.msnry = new Masonry( container[0], {
+      // Masonry options
+      columnWidth: 60,
+      itemSelector: ".post",
+      gutter: 10
+    });
+    new app.HeaderView();
     //When the app loads we want to pull from this id in localStorage.
     //It will be null if there is nothing there
     var deku = JSON.parse(localStorage.getItem('deku'));

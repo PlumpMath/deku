@@ -4,14 +4,15 @@ app.NotificationView = Backbone.View.extend({
 
 	el: "#notifications",
 
-  template: _.template( $('#notification-view').html() ),
+  template: "#notification-view",
 
 	initialize: function() {
 		this.render();
 	},
 
 	render: function() {
-		this.$el.html(this.template);
+    var template = app.TemplateCache.get(this.template);
+		this.$el.html(template);
 	}
 
 });

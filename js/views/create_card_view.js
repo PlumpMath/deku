@@ -8,14 +8,15 @@ app.CreateCardView = Backbone.View.extend({
 		"click #add": "addCard"
 	},
 
-  template: _.template( $('#card-create-view').html() ),
+  template: "#card-create-view",
 
 	initialize: function() {
 		this.render();
 	},
 
 	render: function() {
-		this.$el.html(this.template);
+    var template = app.TemplateCache.get(this.template);
+		this.$el.html(template);
 	},
 
   formError: function(values) {

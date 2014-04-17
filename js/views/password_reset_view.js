@@ -8,7 +8,7 @@ app.PassResetView = Backbone.View.extend({
 		"submit #password-reset": "reset"
 	},
 
-	template: _.template($("#password-reset-form").html()),
+	template: "#password-reset-form",
 
 	initialize: function() {
     this.listenTo(app.user, 'change', this.destroyView);
@@ -16,7 +16,8 @@ app.PassResetView = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.$el.html(this.template).fadeIn(350);
+    var template = app.TemplateCache.get(this.template);
+		this.$el.html(template).fadeIn(350);
 	},
 
 	//This function should handle the event a user resets their password

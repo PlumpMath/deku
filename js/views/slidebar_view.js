@@ -18,7 +18,7 @@ app.SlidebarView = Backbone.View.extend({
     "click": "collapse",
   },
 
-  template: _.template($("#slidebar-view").html()),
+  template: "#slidebar-view",
 
   initialize: function() {
     //listen for a window resize
@@ -28,7 +28,8 @@ app.SlidebarView = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template);
+    var template = app.TemplateCache.get(this.template);
+    this.$el.html(template);
     //this is our slidebar instance
     //create all the views of the submenus within the slidebar
     new app.CreateCardView();

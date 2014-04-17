@@ -7,7 +7,7 @@ app.CreateView = Backbone.View.extend({
     "submit #create": "getInfo"
   },
 
-  template: _.template( $("#create-form").html() ),
+  template: "#create-form",
 
   initialize: function() {
     //listens to the changing of app.user to destroy this view
@@ -16,7 +16,8 @@ app.CreateView = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template).fadeIn(350);
+    var template = app.TemplateCache.get(this.template);
+    this.$el.html(template).fadeIn(350);
   },
 
 	formError: function(values) {
