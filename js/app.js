@@ -45,6 +45,7 @@ app.TemplateCache = {
     var template = this.templates[selector];
     if (!template) {
       var tmpl = $(selector).html();
+      console.log(selector + ": " + tmpl);
       template = _.template(tmpl);
       this.templates[selector] = template;
     }
@@ -54,5 +55,7 @@ app.TemplateCache = {
 };
 
 $(function() {
-  new app.AppView();
+  app.router = new app.Router();
+  Backbone.history.start();
+  //new app.AppView();
 });

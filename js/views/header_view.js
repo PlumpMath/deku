@@ -8,6 +8,7 @@ app.HeaderView = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(app.user, "change", this.render);
+    this.render();
   },
 
   render: function() {
@@ -23,4 +24,4 @@ app.HeaderView = Backbone.View.extend({
       this.$el.html(template);
     }
   }
-})
+});
