@@ -44,7 +44,7 @@ app.HeaderView = Backbone.View.extend({
      */
     if ($('#container').has('h1').length !== 0) {
       if ($('#container').children('h1').html() !== "Login") {
-        app.router.navigate('login', {trigger: true, replace: true});
+        app.router.navigate('login', {trigger: true});
       }
     }
   },
