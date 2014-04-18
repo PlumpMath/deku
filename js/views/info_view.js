@@ -62,17 +62,14 @@ app.InfoView = Backbone.View.extend({
   getLogin: function(event) {
     event.preventDefault();
 
-    console.log('user id is: ', app.user.get('id'));
-
     var url = "http://localhost:4568/deku/api/users";
 
     var that = this;
 
-    var class_array = $('#classes').val().toLowerCase().split(',');
+    //classes should be in all caps, number is unaffected
+    var class_array = $('#classes').val().toUpperCase().split(',');
 	  //for each tag, remove whitespace around it
     class_array = _.map(class_array, function(c) { return c.trim();});
-
-    console.log('Classes are: ', class_array);
 	
     // new info from this view, attributes match up with what database expects	
 		values = {

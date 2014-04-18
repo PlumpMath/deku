@@ -54,7 +54,9 @@ app.CreateCardView = Backbone.View.extend({
 	addCard: function(event) {
 		event.preventDefault();
 
-    // only allow card creation is the current route is hand.    
+    /* This code is redundant security. Create card view should not be visible outside of hand route
+     * only allow card creation is the current route is hand.
+     */
     if (Backbone.history.fragment === 'hand') {
       //This array will have all the tags the user provided. Comma delimited and lowercased
       var tag_array = $('#tags').val().toLowerCase().split(',');
@@ -83,6 +85,8 @@ app.CreateCardView = Backbone.View.extend({
       // check the first piece of the fragment for search
     } else if (Backbone.history.fragment.substring(0,6) === 'search') {
       alert("Clear your search before posting a new card!");
+    } else if (Backbone.history.fragment.substring(0,7) === 'profile') {
+      alert("Return to the home view to post a new card!");
     }
 	}
 });

@@ -18,6 +18,7 @@ app.Router = Backbone.Router.extend({
     'login': 'login',
     'reset_password': 'reset_password',
     'hand': 'hand',
+    'profile/:username': 'profileView',
     'search/category/:query': 'search'
   },
 
@@ -105,7 +106,14 @@ app.Router = Backbone.Router.extend({
        * from being able to get back to the main site.
        */
       this.changeView(new app.HandView());
-      this.setChildren();
+      if (!$('#default').is(":visible")) {
+        $('#default').show('medium');
+      }
+      //The handView's children must be visible. If the page refreshed they would disappear. This combats that
+      if (this.slideView === null && this.toggleView === null) {
+        // they do, so remove them and close the slidebar (only real permanent solution)
+        this.setChildren();
+      }
     }
   },
 
@@ -116,6 +124,25 @@ app.Router = Backbone.Router.extend({
   },
 
   search: function(query) {
-    // TO BE IMPLEMENTED. FOR NOW IT IS A DUMMY ROUTE. Actually, in the end there may be nothing here
-  }
+    // is there a logged in user
+    if (localStorage.getItem('deku') !== null) {
+      //The handView's children must be visible. If the page refreshed they would disappear. This combats that
+			if (this.slideView === null && this.toggleView === null) {
+			// they do, so remove them and close the slidebar (only real permanent solution)
+      	this.setChildren();
+    	}
+    	$('#default').hide('medium');
+    }
+  },
+
+  profileView: function(username) {
+    // is there a logged in user
+    if (localStorage.getItem('deku') !== null) {
+      if (this.slideView === null && this.toggleView === null) {
+        // they do, so remove them and close the slidebar (only real permanent solution)
+        this.setChildren();
+      }
+      $('#default').hide('medium');
+    }
+	}
 });

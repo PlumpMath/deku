@@ -11,7 +11,8 @@ app.HeaderView = Backbone.View.extend({
    */
   events: {
     'click #login-button': 'login',
-    'click #logout': 'logout'
+    'click #logout': 'logout',
+    'click #user-profile': 'goToProfile'
   },
   
   initialize: function() {
@@ -57,5 +58,11 @@ app.HeaderView = Backbone.View.extend({
 
     // navigate back to the register route
     app.router.navigate('register', {trigger: true});
+  },
+
+  goToProfile: function(event) {
+    event.preventDefault();
+    // navigate to the route for the user's profile
+    app.router.navigate('profile/' + app.user.get('firstName') + "_" + app.user.get('lastName'), {trigger: true});
   }
 });

@@ -37,11 +37,8 @@ app.SearchView = Backbone.View.extend({
     search = $('#s-category').val().trim(); //our filter for category
     category_list = $('#categories').children().map(function() { return this.value;}).get(); //possible categories
     if (search !== '' && $.inArray(search, category_list) !== -1) {
-      // This is useful for making sure the search route is not set many times
-      if (Backbone.history.fragment !== 'search') {
-        // Change the URL to match search, don't trigger anything however.
-        app.router.navigate('search/category/' + search);
-      }
+      // Change the URL to match search
+      app.router.navigate('search/category/' + search, {trigger: true});
       
       //reveal everything, undo filter for the new search
       app.msnry.reveal(msnry_items);
@@ -108,8 +105,8 @@ app.SearchView = Backbone.View.extend({
   //Clear all of the searches
   searchClear: function(event) {
     event.preventDefault();
-    // don't use trigger on this because we do NOT need a refresh.
-    app.router.navigate('hand');
+    // return to hand route
+    app.router.navigate('hand', {trigger: true});
     if (to_hide !== []) {
       _.map(to_hide, function(card) {card.style.display = 'visible';});
       app.msnry.reveal(msnry_items);
