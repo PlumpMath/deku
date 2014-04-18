@@ -10,6 +10,8 @@ app.Router = Backbone.Router.extend({
 
   toggleView: null,
 
+  profileView: null,
+
   // a list of all the existing routes
   routes: {
     '': 'home',
@@ -18,7 +20,7 @@ app.Router = Backbone.Router.extend({
     'login': 'login',
     'reset_password': 'reset_password',
     'hand': 'hand',
-    'profile/:username': 'profileView',
+    'profile/:username/:id': 'profileView',
     'search/category/:query': 'search'
   },
 
@@ -106,13 +108,13 @@ app.Router = Backbone.Router.extend({
        * from being able to get back to the main site.
        */
       this.changeView(new app.HandView());
-      if (!$('#default').is(":visible")) {
-        $('#default').show('medium');
-      }
       //The handView's children must be visible. If the page refreshed they would disappear. This combats that
       if (this.slideView === null && this.toggleView === null) {
         // they do, so remove them and close the slidebar (only real permanent solution)
         this.setChildren();
+      }
+      if (!$('#default').is(":visible")) {
+        $('#default').show('medium');
       }
     }
   },
@@ -135,7 +137,8 @@ app.Router = Backbone.Router.extend({
     }
   },
 
-  profileView: function(username) {
+  profileView: function(username, id) {
+    console.log('profile');
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
       if (this.slideView === null && this.toggleView === null) {
@@ -143,6 +146,11 @@ app.Router = Backbone.Router.extend({
         this.setChildren();
       }
       $('#default').hide('medium');
+      $.get("http://localhost:4568/deku/api/users/" + id, function(data) {
+        console.log('the user is: ', data['user']);
+        var profile = new app.User(data['user']);
+        profileView = new app.ProfileView({model: profile});
+      });
     }
 	}
 });

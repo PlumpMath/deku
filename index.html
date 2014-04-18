@@ -102,10 +102,14 @@
   </script>
 
   <script type="text/template" id="logout_header">
-    <span class="info">Hello, <span><a id="user-profile"><%= firstName || "User" %></a></span></span>
+    <span class="info">Hello, <a id="user-profile"><%= firstName || "User" %></a></span>
     <span class="info"><a id="logout" class="btn btn-success">Logout</a></span>
   </script>
 
+  <script type="text/template" id="profile_view">
+    <h2><%= firstName %> <%= lastName %></h2>
+    <h4>Student at <%= university %></h4>
+  </script>
 
 	<!-- This template handles the first stage of creating an account -->
   <script type="text/template" id="create-form">
@@ -388,6 +392,7 @@
   <script src="js/views/filter_view.js"></script>
   <script src="js/views/toggle_view.js"></script>
   <script src="js/views/icon_view.js"></script>
+  <script src="js/views/profile_view.js"></script>
   <script src="js/models/user.js"></script>
   <script src="js/models/card.js"></script>
   <script src="js/models/filter.js"></script>
