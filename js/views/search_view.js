@@ -37,13 +37,19 @@ app.SearchView = Backbone.View.extend({
     search = $('#s-category').val().trim(); //our filter for category
     category_list = $('#categories').children().map(function() { return this.value;}).get(); //possible categories
     if (search !== '' && $.inArray(search, category_list) !== -1) {
+      // Change the URL to match search, don't trigger anything however.
+      app.router.navigate('search');
+      
       //reveal everything, undo filter for the new search
       app.msnry.reveal(msnry_items);
       cards = app.msnry.getItemElements(); //all cards stored in masonry
       search = $('#s-category').val().trim();
-      //find all cards that match this search
-      //first clear previous category filter
+      
+      /* find all cards that match this search
+       * first clear previous category filter
+       */
       to_hide = _.difference(to_hide, filter_category);
+      
       //temporary placeholder, need the old version to delete from
       filter_temp = _.reject(cards, function(card) {
         // card vs. inspect view will have different setup
@@ -99,6 +105,8 @@ app.SearchView = Backbone.View.extend({
   //Clear all of the searches
   searchClear: function(event) {
     event.preventDefault();
+    // don't use trigger on this because we do NOT need a refresh.
+    app.router.navigate('hand');
     if (to_hide !== []) {
       _.map(to_hide, function(card) {card.style.display = 'visible';});
       app.msnry.reveal(msnry_items);

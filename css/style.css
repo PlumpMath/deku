@@ -260,6 +260,10 @@ input {
 	text-decoration: none;
 }
 
+#deku-icon a {
+    cursor: pointer;
+}
+
 .info {
 	color: #999;
 	size: 16pt;

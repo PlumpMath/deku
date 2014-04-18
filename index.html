@@ -16,8 +16,7 @@
       <div id="toggle-bars" class="navbar-right">
       </div>
       <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">dek&#363;</a>
+        <div class="navbar-header" id="deku-icon">
         </div>
         <div class="navbar-right">
           <!-- Have login form in the header. If user is logged in, show some account
@@ -45,6 +44,10 @@
 
   <script type="text/template" id="test_view">
     <p>This is a test</p>
+  </script>
+
+  <script type="text/template" id="icon-view">
+    <a class="navbar-brand">dek&#363;</a>
   </script>
 
   <!-- slidebar setup -->
@@ -202,7 +205,7 @@
 				<label for="remail">Enter your e-mail</label>
 				<input type="text" id="remail" class="form-control">
 			</div>
-			<button type="submit" class="btn btn-success">Send me my new password</button>
+			<button id="reset-password-button" type="submit" class="btn btn-success">Send me my new password</button>
 		</form>
 	</script>
 
@@ -384,6 +387,7 @@
   <script src="js/views/app.js"></script>
   <script src="js/views/filter_view.js"></script>
   <script src="js/views/toggle_view.js"></script>
+  <script src="js/views/icon_view.js"></script>
   <script src="js/models/user.js"></script>
   <script src="js/models/card.js"></script>
   <script src="js/models/filter.js"></script>

@@ -10,7 +10,6 @@ app.InfoView = Backbone.View.extend({
 	},
 
   initialize: function() {
-    this.listenTo(app.user, 'change', this.destroyView);
     this.render(); 
   },
 
@@ -73,13 +72,8 @@ app.InfoView = Backbone.View.extend({
 		};
 
 		if (!this.formErrors(values)) {
-			this.$el.fadeOut(350, function() {new app.LoginView();});
+      // THIS AREA SHOULD SEND PROFILE DATA TO THE SERVER
+      app.router.navigate('login', {trigger: true});
 		}
-  },
-
-  destroyView: function() {
-    this.undelegateEvents();
-    this.stopListening();
-    return this;
   }
 });

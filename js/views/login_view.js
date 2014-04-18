@@ -62,13 +62,13 @@ app.LoginView = Backbone.View.extend({
             //alert("Welcome, " + app.user.get("firstName") + "!"); // not really useful
             localStorage.setItem('deku', JSON.stringify(data['user']));
             app.user.set(data['user']);
-            that.destroyView();
+            app.router.navigate('hand', {trigger: true});
         })
         .fail(function() {
             alert("Your email or password did not match.");
-            $('#lemail').val("");
-            $('#lpassword').val("");
-            $('#lemail').focus();
+            that.$emailInput.val("");
+            that.$passwordInput.val("");
+            that.$emailInput.focus();
         });
     }
 	},
@@ -76,14 +76,7 @@ app.LoginView = Backbone.View.extend({
 	//This will open the reset password view
 	resetPassword: function(event) {
 		event.preventDefault();
-    this.destroyView();
-		this.$el.fadeOut(350, function() {new app.PassResetView();});
-	},
-
-  //this destroys the view and all of the events. 
-  destroyView: function() {
-    this.undelegateEvents();
-    this.stopListening();
-    return this;
-  }
+    //Set the route to the reset password view
+    app.router.navigate('reset_password', {trigger: true});
+	}
 });

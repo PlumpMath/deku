@@ -1,6 +1,7 @@
 var app = app || {};
 
 app.user = new app.User();
+app.router = new app.Router();
 
 Backbone.sync = function(method, model, options) {
   if (method === 'create') { // HTTP POST
@@ -55,7 +56,6 @@ app.TemplateCache = {
 };
 
 $(function() {
-  app.router = new app.Router();
+  new app.AppView();
   Backbone.history.start();
-  //new app.AppView();
 });

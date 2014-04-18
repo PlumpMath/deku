@@ -23,14 +23,13 @@ app.SlidebarView = Backbone.View.extend({
   initialize: function() {
     //listen for a window resize
     this.listenTo(window, 'resize', _.debounce(this.slidebarsResize, 500));
-    this.listenTo(app.user, 'change', this.destroyView);
     this.render();
   },
 
   render: function() {
     var template = app.TemplateCache.get(this.template);
     this.$el.html(template);
-    //this is our slidebar instance
+    
     //create all the views of the submenus within the slidebar
     new app.CreateCardView();
     new app.SearchView();
@@ -38,7 +37,7 @@ app.SlidebarView = Backbone.View.extend({
     new app.NotificationView();
     new app.AccountView({model: app.user});
     new app.PreferencesView();
-    new app.ToggleView();
+    
     //initially, check out window size
     this.slidebarsResize();
     this.initMenu(); //start up the menu
@@ -91,15 +90,5 @@ app.SlidebarView = Backbone.View.extend({
   closeAll: function() {
     $('.collapsed').removeClass('expanded')
     .children().hide('medium');
-  },
-
-  destroyView: function() {
-    if (app.user.get('firstName') === '') {
-      app.$slidebars.close();
-      this.undelegateEvents();
-      this.stopListening();
-      return this;
-    }
   }
-
 });

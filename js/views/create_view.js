@@ -11,7 +11,6 @@ app.CreateView = Backbone.View.extend({
 
   initialize: function() {
     //listens to the changing of app.user to destroy this view
-    this.listenTo(app.user, 'change', this.destroyView);
     this.render();
   },
 
@@ -87,19 +86,11 @@ app.CreateView = Backbone.View.extend({
     	
 		if (!this.formError(registerValues)) {
       $.post(url, registerValues, function(data, textStatus, jqXHR) {
-        //fade out the view and load the infoView
-        that.destroyView();
-        that.$el.fadeOut(350, function() {new app.InfoView();});
+        // navigate to the profile route
+        app.router.navigate('profile', {trigger: true});
       }).fail(function(error) {
         console.log(error);
       });
 		}
-  },
-/*
-  //logic to handle proper destruction of the current view
-  destroyView: function() {
-    this.undelegateEvents();
-    this.stopListening();
-    return this;
-  }*/
+  }
 });
