@@ -7,6 +7,7 @@ app.HandView = Backbone.View.extend({
   initialize: function() { 
     //this will remove the login view that existed before, or anything else that was present
     this.$el.empty();
+    this.$el.fadeIn(350);
     app.Deck = new app.CardList();
     this.listenTo(app.Deck, 'add', this.renderCard);
     this.listenTo(app.Deck, 'reset', this.render);

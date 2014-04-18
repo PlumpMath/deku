@@ -12,7 +12,7 @@ app.HeaderView = Backbone.View.extend({
   events: {
     'click #login-button': 'login',
     'click #logout': 'logout',
-    'click #user-profile': 'goToProfile'
+    'click #user-profile-name': 'goToProfile'
   },
   
   initialize: function() {
@@ -60,9 +60,17 @@ app.HeaderView = Backbone.View.extend({
     app.router.navigate('register', {trigger: true});
   },
 
+  // get the user's profile page
   goToProfile: function(event) {
     event.preventDefault();
     // navigate to the route for the user's profile
-    app.router.navigate('profile/' + app.user.get('firstName') + "_" + app.user.get('lastName') + "/" + app.user.get('id'), {trigger: true});
+    profile = (app.user.get('firstName') + "_" + app.user.get('lastName')).split(' ');
+    route = '';
+    // if someone's name has many spaces, this will replace spaces with '_'
+    for (p in profile) {
+      route += (profile[p] += '_');
+    }
+    route = route.substring(0, route.length - 1); //chop off the last '_'
+    app.router.navigate('profile/' + route + "/" + app.user.get('id'), {trigger: true});
   }
 });

@@ -8,6 +8,7 @@ app.Card = Backbone.Model.extend({
 	  	tags: new Array(),
       content: "",
       author: "Author",
+      author_id: -1,
       post_time: "",
       post_date: "",
       marks: new Array(),

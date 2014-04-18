@@ -84,7 +84,11 @@ app.Router = Backbone.Router.extend({
       this.removeChildren();
       app.$slidebars.close();
     }
-    $('#container').fadeOut(350, function() {that.changeView(new app.CreateView());});
+    $('#container').fadeOut(350, function() {
+      // In the case that container was shifted in hand route, undo that here
+      $(this).css('margin-left', 'auto');
+      that.changeView(new app.CreateView());
+		});
   },
 
   // navigation to get to loginView
@@ -107,7 +111,9 @@ app.Router = Backbone.Router.extend({
        * This is partly a protection against a user that logged out from using the back button
        * from being able to get back to the main site.
        */
-      this.changeView(new app.HandView());
+
+      var that = this;
+      $('#container').fadeOut(350, function() { that.changeView(new app.HandView());});
       //The handView's children must be visible. If the page refreshed they would disappear. This combats that
       if (this.slideView === null && this.toggleView === null) {
         // they do, so remove them and close the slidebar (only real permanent solution)
@@ -133,12 +139,12 @@ app.Router = Backbone.Router.extend({
 			// they do, so remove them and close the slidebar (only real permanent solution)
       	this.setChildren();
     	}
+      // hides the ability to create while not in hand route
     	$('#default').hide('medium');
     }
   },
 
   profileView: function(username, id) {
-    console.log('profile');
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
       if (this.slideView === null && this.toggleView === null) {
@@ -146,10 +152,10 @@ app.Router = Backbone.Router.extend({
         this.setChildren();
       }
       $('#default').hide('medium');
+      var that = this;
       $.get("http://localhost:4568/deku/api/users/" + id, function(data) {
-        console.log('the user is: ', data['user']);
         var profile = new app.User(data['user']);
-        profileView = new app.ProfileView({model: profile});
+        $('#container').fadeOut(350, function() {that.changeView(new app.ProfileView({model: profile}))});
       });
     }
 	}

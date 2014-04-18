@@ -99,6 +99,10 @@ app.SearchView = Backbone.View.extend({
       _.map(to_hide, function(card) {card.style.display = 'none';}); 
       app.msnry.layout();
     }
+    // if our stuff to hind is now empty, search is basically done
+    if (to_hide) {
+      app.router.navigate('hand', {trigger: true});
+    }
     this.render(); //render everything again
   },
 
@@ -106,7 +110,6 @@ app.SearchView = Backbone.View.extend({
   searchClear: function(event) {
     event.preventDefault();
     // return to hand route
-    app.router.navigate('hand', {trigger: true});
     if (to_hide !== []) {
       _.map(to_hide, function(card) {card.style.display = 'visible';});
       app.msnry.reveal(msnry_items);
@@ -123,5 +126,6 @@ app.SearchView = Backbone.View.extend({
       to_hide = [];
       msnry_items = [];
     }
+    app.router.navigate('hand', {trigger: true});
   }
 });

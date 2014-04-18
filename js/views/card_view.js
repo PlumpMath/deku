@@ -9,6 +9,8 @@ app.CardView = Backbone.View.extend({
   template: "#card-template",
 
   events: {
+    "click #car-auth": "goToProfile",
+    "click #ins-auth": "goToProfile",
     "click": "flipInspect",
     "click #flip-return": "flipCard",
     "click #post-comment": "postComment",
@@ -65,8 +67,10 @@ app.CardView = Backbone.View.extend({
   //this controls the flipping of the card to inspect
   flipInspect: function(event) {
     event.preventDefault();
-    //if this is the card view, then go to inspect. otherwise leave it alone
-    if (this.$el.hasClass('card')) {
+    /* if this is the card view, then go to inspect. otherwise leave it alone
+     * also don't react if the link was clicked
+     */
+    if (this.$el.hasClass('card') && !$(event.target).is('a')) {
       //use jQuery UI switchClass for smooth resize
       this.$el.switchClass('card', 'inspect', 1000);
       //switch the templates
@@ -99,5 +103,24 @@ app.CardView = Backbone.View.extend({
         app.msnry.layout();
       }
     });
+  },
+
+  /* This will route the user to the profile page of the author of this card.
+   * It will use the data in the card model and parse the name and get the id
+   * The router will handle the rest.
+   */
+  goToProfile: function(event) {
+    event.preventDefault();
+    /* navigate to the route for the user's profile
+     * Cards store a user's name in one chunk, so I use this to split all the spaces into underscores for cleanness
+     */
+    profile = this.model.get('author').split(' ');
+    route = '';
+    // if someone's name has many spaces, this will replace spaces with '_'
+    for (p in profile) {
+      route += (profile[p] += '_');
+    }
+    route = route.substring(0, route.length - 1); //chop off the last '_'
+    app.router.navigate('profile/' + route + "/" + this.model.get('author_id'), {trigger: true});
   }
 });

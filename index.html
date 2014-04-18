@@ -102,13 +102,25 @@
   </script>
 
   <script type="text/template" id="logout_header">
-    <span class="info">Hello, <a id="user-profile"><%= firstName || "User" %></a></span>
+    <span class="info">Hello, <a id="user-profile-name"><%= firstName || "User" %></a></span>
     <span class="info"><a id="logout" class="btn btn-success">Logout</a></span>
   </script>
 
   <script type="text/template" id="profile_view">
-    <h2><%= firstName %> <%= lastName %></h2>
-    <h4>Student at <%= university %></h4>
+    <div id="user-profile">
+      <!-- PROFILE PICTURE WILL GO HERE SOMEWHERE -->
+      <h2><%= firstName %> <%= lastName %> <button id="follow-btn" class="btn">Follow</button></h4>
+      <hr />
+      <h4>Studies <%= major %> at <%= university %> | Year of <%= grad_year %></h4>
+      <ul><h4>Enrolled in:</h4><%for (c in classes) {%>
+			  <li><h5><%=classes[c]%></h5></li>
+        <%}%>
+      </ul>
+      <h4>About <%= firstName %> </h4>
+      <h5><%= bio %> </h5>
+    </div>
+    <br />
+    <h4 id='end-of-profile'>Here is what <%= firstName %> has shared with <%= university %></h4>
   </script>
 
 	<!-- This template handles the first stage of creating an account -->
@@ -222,7 +234,7 @@
         <div class="card-tag <%=tags[tag]%>" style="width: <%=100.0/tags.length%>%" title="<%=tags[tag]%>"></div>
       <% } %>
     </div>
-    <div id="card-author"><%= author %></div>
+    <div id="card-author"><a id="car-auth"><%= author %></a></div>
 		<div id="card-content"><%= content %></div>
     <div id="card-category"><%= category %></div>
   </script>
@@ -238,7 +250,7 @@
       <% } %>
     </div>
     <div id="inspect-header">
-      <%= author %> @ <%= post_time %> on <%= post_date %>
+      <a id="ins-auth"><%= author %></a> @ <%= post_time %> on <%= post_date %>
       <button id="flip-return" class="btn btn-success">Flip to front</button>
     </div>
     <div id="inspect-content"><%= content %>
@@ -359,6 +371,8 @@
     </div>
     <div id="user-grad">Graduation Year: <%=grad_year%></div>
     <div id="user-bio">Biography: <%=bio%></div>
+    <br />
+    <button id="update-account">Update your account</button>
  	</script>
 
 	<!-- This is the view for preferences -->
