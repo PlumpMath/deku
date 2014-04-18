@@ -12,6 +12,7 @@ app.LoginView = Backbone.View.extend({
 	template: "#login-form",
 
 	initialize: function() {
+    app.user.set(app.user.defaults());
 		this.render();
     this.$emailInput = this.$('#lemail');
     this.$emailInput.focus();
@@ -59,7 +60,7 @@ app.LoginView = Backbone.View.extend({
 
     if (!this.formError(loginValues)) {
         $.post(url, loginValues, function( data, textStatus, jqXHR ) {
-            //alert("Welcome, " + app.user.get("firstName") + "!"); // not really useful
+            // Store that user in localStorage for persistent user state.
             localStorage.setItem('deku', JSON.stringify(data['user']));
             app.user.set(data['user']);
             app.router.navigate('hand', {trigger: true});

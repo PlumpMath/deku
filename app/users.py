@@ -61,7 +61,7 @@ def user_by_id(user_id):
             return cors_response(("Invalid Request",400))
     elif request.method == 'PUT':
         #authenticate
-        user = request.form.get('user')
+        user = request.form.get('id')
         pwd = request.form.get('pwd')
         user = authenticate(user, pwd)
         if not isinstance(user, models.User):

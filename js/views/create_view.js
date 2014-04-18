@@ -85,12 +85,13 @@ app.CreateView = Backbone.View.extend({
     var that = this;
     	
 		if (!this.formError(registerValues)) {
-      $.post(url, registerValues, function(data, textStatus, jqXHR) {
-        // navigate to the profile route
-        app.router.navigate('profile', {trigger: true});
-      }).fail(function(error) {
-        console.log(error);
-      });
+      /* The user account should not be set up until the end.
+       * So for now we are just using app.user to pass the information on
+       * to the next view. localStorage is used to validate a logged in user
+       * so this will not cause confusion.
+       */
+      app.user.set(registerValues);
+      app.router.navigate('profile', {trigger: true});
 		}
   }
 });

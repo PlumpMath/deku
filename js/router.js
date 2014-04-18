@@ -18,7 +18,7 @@ app.Router = Backbone.Router.extend({
     'login': 'login',
     'reset_password': 'reset_password',
     'hand': 'hand',
-    'search': 'search'
+    'search/category/:query': 'search'
   },
 
   /* This function facilitates view transitions for #container
@@ -60,13 +60,11 @@ app.Router = Backbone.Router.extend({
   home: function() {
     var that = this;
     // no logged in user
-    if (app.user.get('firstName') === '') {
+    if (localStorage.getItem('deku') === null) {
       // go to register
-      console.log('register');
       this.navigate('register', {trigger: true});
     } else {
       // otherwise go to hand
-      console.log('hand');
       this.navigate('hand', {trigger: true});
     }
   },
@@ -101,7 +99,7 @@ app.Router = Backbone.Router.extend({
   // A little bit tricky, this creates the HandView and the associated children (slidebars and toggle)
   hand: function() {
     // is there a logged in user
-    if (app.user.get('firstName') !== '') {
+    if (localStorage.getItem('deku') !== null) {
       /* Yes, we can load the page.
        * This is partly a protection against a user that logged out from using the back button
        * from being able to get back to the main site.
@@ -117,7 +115,7 @@ app.Router = Backbone.Router.extend({
     $('#container').fadeOut(350, function() {that.changeView(new app.PassResetView());});
   },
 
-  search: function() {
+  search: function(query) {
     // TO BE IMPLEMENTED. FOR NOW IT IS A DUMMY ROUTE. Actually, in the end there may be nothing here
   }
 });

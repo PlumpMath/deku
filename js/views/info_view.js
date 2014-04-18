@@ -49,7 +49,7 @@ app.InfoView = Backbone.View.extend({
 
 		//eventually, we might want to consider adding an upper bound
 		//to the grad year
-		if (values.year === '' || $.inArray(values.year, year_list) === -1){
+		if (values.grad_year === '' || $.inArray(values.grad_year, year_list) === -1){
 			error = true;
 			$('#grad-year').val('')
 			.attr('placeholder', 'Please enter a valid graduation year')
@@ -62,18 +62,36 @@ app.InfoView = Backbone.View.extend({
   getLogin: function(event) {
     event.preventDefault();
 
+    console.log('user id is: ', app.user.get('id'));
+
+    var url = "http://localhost:4568/deku/api/users";
+
     var that = this;
-		
+
+    var class_array = $('#classes').val().toLowerCase().split(',');
+	  //for each tag, remove whitespace around it
+    class_array = _.map(class_array, function(c) { return c.trim();});
+
+    console.log('Classes are: ', class_array);
+	
+    // new info from this view, attributes match up with what database expects	
 		values = {
-			year: $('#grad-year').val(),
+			grad_year: $('#grad-year').val(),
 			major: $('#major-list').val(),
-			classes: $('#classes').val().trim(),
+			classes: class_array,
 			bio: $('#bio').val().trim()
 		};
 
 		if (!this.formErrors(values)) {
-      // THIS AREA SHOULD SEND PROFILE DATA TO THE SERVER
-      app.router.navigate('login', {trigger: true});
+      app.user.set(values);
+      // app.user holds all the data we need, send a JSON packet of that to the server
+      $.post(url, app.user.toJSON(), function(data, textStatus, jqXHR) {
+        // navigate to the profile route, clear the user since we don't need it anymore until login
+        app.user.set(app.user.defaults());
+    	  app.router.navigate('login', {trigger: true});
+      }).fail(function(error) {
+        console.log(error);
+      });
 		}
   }
 });

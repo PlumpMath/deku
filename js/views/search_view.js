@@ -37,8 +37,11 @@ app.SearchView = Backbone.View.extend({
     search = $('#s-category').val().trim(); //our filter for category
     category_list = $('#categories').children().map(function() { return this.value;}).get(); //possible categories
     if (search !== '' && $.inArray(search, category_list) !== -1) {
-      // Change the URL to match search, don't trigger anything however.
-      app.router.navigate('search');
+      // This is useful for making sure the search route is not set many times
+      if (Backbone.history.fragment !== 'search') {
+        // Change the URL to match search, don't trigger anything however.
+        app.router.navigate('search/category/' + search);
+      }
       
       //reveal everything, undo filter for the new search
       app.msnry.reveal(msnry_items);

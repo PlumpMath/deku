@@ -25,7 +25,7 @@ app.IconView = Backbone.View.extend({
    */
   refresh: function(event) {
     // this checks if there is a user logged in
-    if (app.user.get('firstName') === '') {
+    if (localStorage.getItem('deku') === null) {
       // the navigate function does NOT reload the current URL. So I need a work around
       if (Backbone.history.fragment === 'register') {
         // so if the current route matches 'register', then reload that same view with history

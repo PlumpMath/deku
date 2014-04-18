@@ -53,28 +53,36 @@ app.CreateCardView = Backbone.View.extend({
 
 	addCard: function(event) {
 		event.preventDefault();
-    //This array will have all the tags the user provided. Comma delimited and lowercased
-    var tag_array = $('#tags').val().toLowerCase().split(',');
-    //for each tag, remove whitespace around it
-    tag_array = _.map(tag_array, function(tag) { return tag.trim();});
-    var date = new Date();
-    var card_time = date.toLocaleTimeString();
-    var card_day = date.toDateString();
-    //this is the data in a JSON packet
-		var formData = {
-			category: $('#category').val().trim(),
-			tags: tag_array,
-			content: $('#content').val().trim(),
-      post_time: card_time,
-      post_date: card_day
-		};
 
-    //this checks the input for validation
-    if (!this.formError(formData)) {
-	  	app.Deck.create(formData);
-  		$('#category').val('');
-  		$('#tags').val('');
-  		$('#content').val('');
+    // only allow card creation is the current route is hand.    
+    if (Backbone.history.fragment === 'hand') {
+      //This array will have all the tags the user provided. Comma delimited and lowercased
+      var tag_array = $('#tags').val().toLowerCase().split(',');
+	    //for each tag, remove whitespace around it
+  	  tag_array = _.map(tag_array, function(tag) { return tag.trim();});
+			var date = new Date();
+    	var card_time = date.toLocaleTimeString();
+    	var card_day = date.toDateString();
+    	//this is the data in a JSON packet
+			var formData = {
+				category: $('#category').val().trim(),
+				tags: tag_array,
+        author: app.user.get('firstName') + " " + app.user.get('lastName'),
+				content: $('#content').val().trim(),
+				post_time: card_time,
+      	post_date: card_day
+			};
+
+    	//this checks the input for validation
+    	if (!this.formError(formData)) {
+	  		app.Deck.create(formData);
+  			$('#category').val('');
+  			$('#tags').val('');
+  			$('#content').val('');
+    	}
+      // check the first piece of the fragment for search
+    } else if (Backbone.history.fragment.substring(0,6) === 'search') {
+      alert("Clear your search before posting a new card!");
     }
 	}
 });
