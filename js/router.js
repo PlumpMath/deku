@@ -21,7 +21,7 @@ app.Router = Backbone.Router.extend({
     'reset_password': 'reset_password',
     'hand': 'hand',
     'profile/:username/:id': 'profileView',
-    'update': 'update',
+    'update/:username/:id': 'update',
     'search/category/:query': 'search'
   },
 
@@ -188,16 +188,21 @@ app.Router = Backbone.Router.extend({
 	},
 
   // view for updating user's information
-  update: function() {
+  update: function(username, id) {
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
-      if (this.slideView === null && this.toggleView === null) {
-        // they do, so remove them and close the slidebar (only real permanent solution)
-        this.setChildren();
+      // prevents someone from accessing the update view of another user
+      if (parseInt(id) === app.user.get('id')) {
+        if (this.slideView === null && this.toggleView === null) {
+          // they do, so remove them and close the slidebar (only real permanent solution)
+          this.setChildren();
+        }
+        $('#default').hide('medium');
+        $('#container').fadeOut(350, function() { that.changeView(new app.UpdateAccountView()); });
+      } else {
+        $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
       }
-      $('#default').hide('medium');
-      $('#container').fadeOut(350, function() { that.changeView(new app.UpdateAccountView()); });
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }
