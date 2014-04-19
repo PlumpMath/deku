@@ -28,9 +28,10 @@ app.CreateView = Backbone.View.extend({
     univ_list = $('#university').children().map(function() { return this.value;}).get();
 
     // a password must be at least eight characters, and must match the confirm password
-		if (values.password.length < 8 && values.password !== $('#passwordConfirm').val()) {
+		if (values.password.length < 8 || values.password !== $('#passwordConfirm').val()) {
 			error = true;
 			$('#password').val('');
+      $('#passwordConfirm').val('');
 			$('#password').attr('placeholder', 'Your password must be at least 8 characters long');
       $('#passwordConfirm').attr('placeholder', 'Confirm your password');
       $('#password').focus();
