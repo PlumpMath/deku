@@ -18,11 +18,20 @@ header {
 }
 
 table {
-    width: 70%;
+    width: 60%;
+    table-layout: fixed;
+}
+
+input {
+    margin-top: 10px;
 }
 
 td {
    padding: 10px;
+   width: 50%;
+   font-size: 12pt;
+   color: #222;
+   vertical-align: top;
 }
 
 a {

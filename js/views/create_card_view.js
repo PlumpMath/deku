@@ -85,9 +85,9 @@ app.CreateCardView = Backbone.View.extend({
     	}
       // check the first piece of the fragment for search
     } else if (Backbone.history.fragment.substring(0,6) === 'search') {
-      alert("Clear your search before posting a new card!");
+      bootbox.alert("Clear your search before posting a new card!");
     } else if (Backbone.history.fragment.substring(0,7) === 'profile') {
-      alert("Return to the home view to post a new card!");
+      bootbox.alert("Return to the home view to post a new card!");
     }
 	}
 });

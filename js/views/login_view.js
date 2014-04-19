@@ -66,7 +66,7 @@ app.LoginView = Backbone.View.extend({
             app.router.navigate('hand', {trigger: true});
         })
         .fail(function() {
-            alert("Your email or password did not match.");
+            bootbox.alert("Your email or password did not match.");
             that.$emailInput.val("");
             that.$passwordInput.val("");
             that.$emailInput.focus();

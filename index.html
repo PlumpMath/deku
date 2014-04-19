@@ -152,6 +152,8 @@
       <div class="form-group">
         <label for="password">Password</label>
         <input type="password" id="password" class="form-control">
+        <label for="passwordConfirm">Confirm Password</label>
+        <input type="password" id="passwordConfirm" class="form-control">
       </div>
       <button type="submit" class="btn btn-success">Sign up for Dek&#363</button>
     </form>
@@ -386,32 +388,65 @@
   <!-- This is the region for updating a user's account -->
   <script type="text/template" id="update-view">
     <h2>Update Account Information</h2>
+    <h4><a id="edit">Edit</a>
+      <span id='editSC'><a id="save">Save</a> | <a id="cancel">Cancel</a></span></h4>
+    <hr />
     <br />
     <table>
       <tr>
         <td>First Name</td>
-        <td><%= firstName %></td>
-        <td><a id="fname-edit">Edit</a></td>
+        <td><span id="fname" class='current-data'><%= firstName %></span>
+          <span id="fname-e" class='edit-data'><input type="text" placeholder="Your new first name..." id="fname-input" value="<%=firstName%>">
+          </span>
+        </td>
       </tr>
       <tr>
         <td>Last Name</td>
-        <td><%= lastName %></td>
-        <td><a id="lname-edit">Edit</a></td>
+        <td><span id="lname" class='current-data'><%= lastName %></span>
+          <span id="lname-e" class='edit-data'><input type="text" placeholder="Your new last name..." id="lname-input" value="<%=lastName%>">
+          </span>
+        </td>
       </tr>
       <tr>
-        <td>Email</td>
-        <td><%= email %></td>
-        <td><a id="email-edit">Edit</a></td>
+        <td>E-mail</td>
+        <td><span id="email" class='current-data'><%= email %></span>
+          <span id="email-e" class='edit-data'><input type="text" placeholder="Your new e-mail..." id="email-input" value="<%=email%>">
+          </span>
+        </td>
       </tr>
       <tr>
         <td>Password</td>
-        <td>Password not shown</td>
-        <td><a id="password-edit">Edit</a></td>
+        <td><span id="password" class='current-data'>Not shown</span>
+          <span id="password-e" class='edit-data'><input type="text" placeholder="Enter current password..." id="password-pass">
+            <input type="text" placeholder="Enter new password..." id="password-input">
+            <input type="text" placeholder="Confirm new password..." id="password-confirm">
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>Major</td>
+        <td><span id="major" class='current-data'><%= major %></span>
+          <span id="major-e" class='edit-data'><input type="text" placeholder="Your new major..." id="major-input" value="<%=major%>">
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>Classes</td> <!-- TO BE IMPLEMENTED, PROBABLY USE TAG-THIS -->
+        <td><span id="classes" class='current-data'>placeholder</span></td>
       </tr>
       <tr>
         <td>Graduation Year</td>
-        <td><%= grad_year %></td>
-        <td><a id="year-edit">Edit</a></td>
+        <td><span id="year" class='current-data'><%= grad_year %></span>
+          <span id="year-e" class='edit-data'><input type="text" placeholder="Your new grad year..." id="year-input" value="<%=grad_year%>">
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>Biography</td>
+        <td><span id="bio" class='current-data'><%= bio %></span>
+          <span id="bio-e" class='edit-data'><textarea placeholder="Your new bio..." id="bio-input" value="<%= bio %>">
+          </span>
+        </td>
       </tr>
     </table>
   </script>
@@ -425,6 +460,7 @@
   <script src="js/lib/masonry.pkgd.min.js"></script>
   <script src="js/lib/slidebars.min.js"></script>
   <script src="js/lib/jquery.flippy.min.js"></script>
+  <script src="js/lib/bootbox.min.js"></script>
   <script src="js/views/create_view.js"></script>
   <script src="js/views/info_view.js"></script>
   <script src="js/views/login_view.js"></script>
