@@ -12,6 +12,11 @@ body {
     background: #666;
 }
 
+.create-card {
+    width: 90%;
+    font-size: 12pt;
+}
+
 header {
     clear: both;
 	margin-bottom: 0px;
@@ -23,7 +28,14 @@ table {
 }
 
 input {
+    border-radius: 5px;
+    text-align: center;
     margin-top: 10px;
+}
+
+.ui-autocomplete-input {
+    text-align: left;
+    width: 10px;
 }
 
 td {
@@ -70,11 +82,6 @@ hr {
     margin-top: 20px;
     margin: auto;
     color: #222;
-}
-
-input {
-    border-radius: 5px;
-    text-align: center;
 }
 
 #filter {
@@ -359,7 +366,7 @@ input {
 	padding: 0px;
 }
 
-#collapsed-list ul, li {
+.col-list {
 	list-style: none;
 	margin: 0px;
 	padding: 0px;
@@ -371,7 +378,7 @@ input {
     cursor: default;
 }
 
-#collapsed-list li {
+.list-item-collapse {
 	padding: 0px;
 	padding-top: 10px;
 	padding-bottom:10px;

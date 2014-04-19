@@ -17,6 +17,12 @@ app.CreateCardView = Backbone.View.extend({
 	render: function() {
     var template = app.TemplateCache.get(this.template);
 		this.$el.html(template);
+    $('#tags').tagit({
+      availableTags: ["pies", "breezeway", "fire"],
+      caseSensitive: false,
+      autocomplete: {delay: 0, minLength: 1},
+      placeholderTest: "Enter tags"
+    });
 	},
 
   formError: function(values) {
@@ -58,11 +64,12 @@ app.CreateCardView = Backbone.View.extend({
      * only allow card creation is the current route is hand.
      */
     if (Backbone.history.fragment === 'hand') {
-      //This array will have all the tags the user provided. Comma delimited and lowercased
-      var tag_array = $('#tags').val().toLowerCase().split(',');
-	    //for each tag, remove whitespace around it
-  	  tag_array = _.map(tag_array, function(tag) { return tag.trim();});
-			var date = new Date();
+      
+      //This array will have all the tags the user provided. uses tagit, still lowercases
+      var tag_array = $('#tags').tagit('assignedTags');
+      tag_array = _.map(tag_array, function(tag) {return tag.toLowerCase()});
+			
+      var date = new Date();
     	var card_time = date.toLocaleTimeString();
     	var card_day = date.toDateString();
     	//this is the data in a JSON packet
@@ -80,7 +87,7 @@ app.CreateCardView = Backbone.View.extend({
     	if (!this.formError(formData)) {
 	  		app.Deck.create(formData);
   			$('#category').val('');
-  			$('#tags').val('');
+  			$('#tags').tagit('removeAll');
   			$('#content').val('');
     	}
       // check the first piece of the fragment for search

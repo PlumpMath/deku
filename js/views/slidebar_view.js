@@ -70,9 +70,7 @@ app.SlidebarView = Backbone.View.extend({
 
   //This function starts up the menu by adding collapsed to everything
   initMenu: function() {
-  	$('#collapsed-list').find('li:has(ul)')
-    .addClass('collapsed')
-    .children('ul').hide();
+    $('.collapsed').children().hide();
   },
  
   //This function will control toggling the menus.
@@ -81,7 +79,7 @@ app.SlidebarView = Backbone.View.extend({
     //this is the target of the click
     var $target = $(event.target);
     //if the target is a list element
-    if ($target.is('li')) {
+    if ($target.hasClass('collapsed')) {
       //if it is not open already
       if (!$target.hasClass('expanded')) {
         this.closeAll(); //close everything and open the target

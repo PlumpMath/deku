@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/tags.css">
 	<link rel="stylesheet" href="css/slidebars.min.css">
+  <link rel="stylesheet" href="css/jquery.tagit.css">
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/south-street/jquery-ui.css">
 </head>
 <body>
   <div id="main">
@@ -55,33 +57,33 @@
     <!-- This is a collapsable menu that contains all the options a user can do -->
     <div id="menu" class="sb-disable-close">
       <ul id="collapsed-list">
-        <li id="default">Create Card
-          <ul>
+        <li id="default" class="list-item-collapse collapsed">Create Card
+          <ul class="col-list">
             <div id="card"></div>
           </ul>
         </li>
-        <li>Search
-          <ul>
+        <li class="list-item-collapse collapsed">Search
+          <ul class="col-list">
             <div id="search"></div>
           </ul>
         </li>
-        <li>Messages
-          <ul>
+        <li class="list-item-collapse collapsed">Messages
+          <ul class="col-list">
             <div id="messages"></div>
           </ul>
         </li>
-        <li>Notifications
-          <ul>
+        <li class="list-item-collapse collapsed">Notifications
+          <ul class="col-list">
             <div id="notifications"></div>
           </ul>
         </li>
-        <li>My Account
-          <ul>
+        <li class="list-item-collapse collapsed">My Account
+          <ul class="col-list">
             <div id="my-account"></div>
           </ul>
         </li>
-        <li>My Preferences
-          <ul>
+        <li class="list-item-collapse collapsed">My Preferences
+          <ul class="col-list">
             <div id="my-preferences"></div>
           </ul>
         </li>
@@ -188,7 +190,7 @@
 
     <div class="form-group">
       <label for="classes">Classes</label>
-      <input type="text" id="classes" class="form-control">
+      <input type="text" id="classes" class="form-control tagit-hidden-field">
     </div>
 
     <div class="form-group">
@@ -318,7 +320,7 @@
 	<script type="text/template" id="card-create-view">
 		<form class="card-form" role="form" action="#">
 			<div class="form-group">
-				<input list="categories" id="category" class="form-control" placeholder="Select a category">
+				<input list="categories" class="create-card" id="category" class="form-control" placeholder="Select a category">
 				<datalist id="categories">
 					<option value="Administrative">
 					<option value="Club">
@@ -326,11 +328,11 @@
 					<option value="other">
 				</datalist>
 			</div>
+      <div class="form-group">
+        <input type="text" id="tags" class="create-card tagit-hidden-field">
+      </div>
 			<div class="form-group">
-				<input type="text" id="tags" placeholder="Enter tags">
-			</div>
-			<div class="form-group">
-				<textarea id="content" name="card" rows="5" cols="30" placeholder="Share with your university"></textarea>
+				<textarea id="content" class="create-card" name="card" rows="5" placeholder="Share with your university"></textarea>
 			</div>
   		<button id="add" class="btn">Add new posts</button>
 		</form>
@@ -455,6 +457,7 @@
 
   <!-- Script declarations at base of page so everything else loads first. -->
   <script src="js/lib/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
   <script src-"bower_components/jasmine-jquery/lib/jasmine-jquery.js"></script>
   <script src="js/lib/bootstrap.min.js"></script>
   <script src="js/lib/underscore-min.js"></script>
@@ -463,6 +466,7 @@
   <script src="js/lib/slidebars.min.js"></script>
   <script src="js/lib/jquery.flippy.min.js"></script>
   <script src="js/lib/bootbox.min.js"></script>
+  <script src="js/lib/tag-it.min.js"></script>
   <script src="js/views/create_view.js"></script>
   <script src="js/views/info_view.js"></script>
   <script src="js/views/login_view.js"></script>
@@ -490,7 +494,6 @@
   <script src="js/views/card_view.js"></script>
   <script src="js/router.js"></script>
   <script src="js/app.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 
   </body>
 </html>

@@ -62,7 +62,6 @@ app.Router = Backbone.Router.extend({
 
   // Route on main load. Checks log in state and decides what to do
   home: function() {
-    var that = this;
     // no logged in user
     if (localStorage.getItem('deku') === null) {
       // go to register
@@ -79,33 +78,60 @@ app.Router = Backbone.Router.extend({
    */
   register: function() {
     var that = this;
-    // do the slidebar and toggle button exist
-    if (this.slideView !== null && this.toggleView !== null) {
-      // they do, so remove them and close the slidebar (only real permanent solution)
-      this.removeChildren();
-      app.$slidebars.close();
+    // if no user is logged in, we can go here
+    if (localStorage.getItem('deku') === null) {
+      // do the slidebar and toggle button exist
+      if (this.slideView !== null && this.toggleView !== null) {
+        // they do, so remove them and close the slidebar (only real permanent solution)
+        this.removeChildren();
+        app.$slidebars.close();
+      }
+      $('#container').fadeOut(350, function() {
+        // In the case that container was shifted in hand route, undo that here
+        $(this).css('margin-left', 'auto');
+        that.changeView(new app.CreateView());
+  		});
+    } else {
+      $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
     }
-    $('#container').fadeOut(350, function() {
-      // In the case that container was shifted in hand route, undo that here
-      $(this).css('margin-left', 'auto');
-      that.changeView(new app.CreateView());
-		});
   },
 
   // navigation to get to loginView
   login: function() {
     var that = this;
-    $('#container').fadeOut(350, function() {that.changeView(new app.LoginView());});
+    // if no user is logged in, we can go here
+    if (localStorage.getItem('deku') === null) {
+      $('#container').fadeOut(350, function() {that.changeView(new app.LoginView());});
+    } else {
+      $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
+    }
+  },
+
+  // Handles navigation to the password reset view
+  reset_password: function() {
+    var that = this;
+    // if no user is logged in, we can go here
+    if (localStorage.getItem('deku') === null) {
+      $('#container').fadeOut(350, function() {that.changeView(new app.PassResetView());});
+    } else {
+      $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
+    }
   },
 
   // navigation to get to InfoView
   profile: function() {
     var that = this;
-    $('#container').fadeOut(350, function() {that.changeView(new app.InfoView());});
+    // if no user is logged in, we can go here
+    if (localStorage.getItem('deku') === null) {
+      $('#container').fadeOut(350, function() {that.changeView(new app.InfoView());});
+    } else {
+      $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
+    }
   },
 
   // A little bit tricky, this creates the HandView and the associated children (slidebars and toggle)
   hand: function() {
+    var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
       /* Yes, we can load the page.
@@ -113,7 +139,6 @@ app.Router = Backbone.Router.extend({
        * from being able to get back to the main site.
        */
 
-      var that = this;
       $('#container').fadeOut(350, function() { that.changeView(new app.HandView());});
       //The handView's children must be visible. If the page refreshed they would disappear. This combats that
       if (this.slideView === null && this.toggleView === null) {
@@ -123,16 +148,13 @@ app.Router = Backbone.Router.extend({
       if (!$('#default').is(":visible")) {
         $('#default').show('medium');
       }
+    } else {
+      $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }
   },
 
-  // Handles navigation to the password reset view
-  reset_password: function() {
-    var that = this;
-    $('#container').fadeOut(350, function() {that.changeView(new app.PassResetView());});
-  },
-
   search: function(query) {
+    var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
       //The handView's children must be visible. If the page refreshed they would disappear. This combats that
@@ -142,10 +164,13 @@ app.Router = Backbone.Router.extend({
     	}
       // hides the ability to create while not in hand route
     	$('#default').hide('medium');
+    } else {
+      $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }
   },
 
   profileView: function(username, id) {
+    var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
       if (this.slideView === null && this.toggleView === null) {
@@ -153,16 +178,18 @@ app.Router = Backbone.Router.extend({
         this.setChildren();
       }
       $('#default').hide('medium');
-      var that = this;
       $.get("http://localhost:4568/deku/api/users/" + id, function(data) {
         var profile = new app.User(data['user']);
         $('#container').fadeOut(350, function() {that.changeView(new app.ProfileView({model: profile}))});
       });
+    } else {
+      $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }
 	},
 
   // view for updating user's information
   update: function() {
+    var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
       if (this.slideView === null && this.toggleView === null) {
@@ -170,8 +197,9 @@ app.Router = Backbone.Router.extend({
         this.setChildren();
       }
       $('#default').hide('medium');
-      var that = this;
       $('#container').fadeOut(350, function() { that.changeView(new app.UpdateAccountView()); });
+    } else {
+      $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }
   } 
 });
