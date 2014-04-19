@@ -9,29 +9,34 @@ from utils import cors_response, authenticate
 @app.route('/deku/api/cards', methods=['GET', 'POST'])
 def cards():
     if request.method == 'GET':
-        return jsonify(cards = [card.serialize for card in Card.query.all()])
+        return cors_response((jsonify(cards = [card.serialize for card in Card.query.all()]), 200))
     elif request.method == 'POST':
         #authenticate
-        user = request.form.get('user')
-        pwd = request.form.get('password')
-        user = authenticate(user, pwd)
-        if not isinstance(user, models.User):
-            return cors_response(("Unauthorized Access. Login to post a card",401))
+        #The user is not going to give their password each time they post a card
+        #user = request.form.get('user')
+        #pwd = request.form.get('password')
+        #user = authenticate(user, pwd)
+        #if not isinstance(user, models.User):
+        #    return cors_response(("Unauthorized Access. Login to post a card",401))
         
         content = request.form.get('content')
         category = request.form.get('category')
         tags = request.form.getlist('tags')
+        author = request.form.get('author')
+        author_id = request.form.get('author_id')
         if (content):
-            card = models.Card(user_id=user.id,content=content)
+            card = models.Card(user_id = author_id,
+                               content=content,
+                               user= author)
             if (category):
                 card.category = category
             for tag in tags:
                 card.tags.append(models.Tag(tag))
             db.session.add(card)
             db.session.commit()
-            return make_response((jsonify(card = card.serialize), 201))
+            return cors_response((jsonify(card = card.serialize), 201))
         else:
-            return abort(400)
+            return cors_response(("Invalid request", 400))
     else:
         pass
 
