@@ -6,6 +6,10 @@ app.ProfileView = Backbone.View.extend({
 
   template: "#profile_view",
 
+  events: {
+    'click #update-btn': 'update'
+  },
+
   initialize: function() {
     this.$el.empty();
     this.render();
@@ -15,10 +19,19 @@ app.ProfileView = Backbone.View.extend({
     var template = app.TemplateCache.get(this.template);
     var html = template(this.model.toJSON());
     this.$el.prepend(html).fadeIn(350);
-    // A user can't follow themselves
+    // A user can't follow themselves, but they can update their account
     if (this.model.get('id') === app.user.get('id')) {
       $('#follow-btn').hide();
+      $('#update-btn').show();
+    } else {
+      $('#follow-btn').show();
+      $('#update-btn').hide();
     }
+  },
+
+  update: function(event) {
+    event.preventDefault();
+    app.router.navigate('update', {trigger: true});
   }
 
 });

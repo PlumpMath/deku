@@ -17,6 +17,14 @@ header {
 	margin-bottom: 0px;
 }
 
+table {
+    width: 70%;
+}
+
+td {
+   padding: 10px;
+}
+
 a {
     text-decoration: none;
     color: #999;

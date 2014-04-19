@@ -21,6 +21,7 @@ app.Router = Backbone.Router.extend({
     'reset_password': 'reset_password',
     'hand': 'hand',
     'profile/:username/:id': 'profileView',
+    'update': 'update',
     'search/category/:query': 'search'
   },
 
@@ -158,5 +159,19 @@ app.Router = Backbone.Router.extend({
         $('#container').fadeOut(350, function() {that.changeView(new app.ProfileView({model: profile}))});
       });
     }
-	}
+	},
+
+  // view for updating user's information
+  update: function() {
+    // is there a logged in user
+    if (localStorage.getItem('deku') !== null) {
+      if (this.slideView === null && this.toggleView === null) {
+        // they do, so remove them and close the slidebar (only real permanent solution)
+        this.setChildren();
+      }
+      $('#default').hide('medium');
+      var that = this;
+      $('#container').fadeOut(350, function() { that.changeView(new app.UpdateAccountView()); });
+    }
+  } 
 });

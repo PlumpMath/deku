@@ -109,7 +109,10 @@
   <script type="text/template" id="profile_view">
     <div id="user-profile">
       <!-- PROFILE PICTURE WILL GO HERE SOMEWHERE -->
-      <h2><%= firstName %> <%= lastName %> <button id="follow-btn" class="btn">Follow</button></h4>
+      <h2><%= firstName %> <%= lastName %> 
+        <button id="follow-btn" class="btn">Follow <%= firstName %></button>
+        <button id="update-btn" class='btn'>Update Account</button>
+      </h4>
       <hr />
       <h4>Studies <%= major %> at <%= university %> | Year of <%= grad_year %></h4>
       <ul><h4>Enrolled in:</h4><%for (c in classes) {%>
@@ -372,13 +375,46 @@
     <div id="user-grad">Graduation Year: <%=grad_year%></div>
     <div id="user-bio">Biography: <%=bio%></div>
     <br />
-    <button id="update-account">Update your account</button>
+    <button id="update-account" class="btn">Update your account</button>
  	</script>
 
 	<!-- This is the view for preferences -->
 	<script type="text/template" id="preferences-view">
 		<p>User will be able to see their preferences</p>
 	</script>
+
+  <!-- This is the region for updating a user's account -->
+  <script type="text/template" id="update-view">
+    <h2>Update Account Information</h2>
+    <br />
+    <table>
+      <tr>
+        <td>First Name</td>
+        <td><%= firstName %></td>
+        <td><a id="fname-edit">Edit</a></td>
+      </tr>
+      <tr>
+        <td>Last Name</td>
+        <td><%= lastName %></td>
+        <td><a id="lname-edit">Edit</a></td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td><%= email %></td>
+        <td><a id="email-edit">Edit</a></td>
+      </tr>
+      <tr>
+        <td>Password</td>
+        <td>Password not shown</td>
+        <td><a id="password-edit">Edit</a></td>
+      </tr>
+      <tr>
+        <td>Graduation Year</td>
+        <td><%= grad_year %></td>
+        <td><a id="year-edit">Edit</a></td>
+      </tr>
+    </table>
+  </script>
 
   <!-- Script declarations at base of page so everything else loads first. -->
   <script src="js/lib/jquery.min.js"></script>
@@ -407,6 +443,7 @@
   <script src="js/views/toggle_view.js"></script>
   <script src="js/views/icon_view.js"></script>
   <script src="js/views/profile_view.js"></script>
+  <script src="js/views/update_account_view.js"></script>
   <script src="js/models/user.js"></script>
   <script src="js/models/card.js"></script>
   <script src="js/models/filter.js"></script>

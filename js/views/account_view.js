@@ -21,7 +21,8 @@ app.AccountView = Backbone.View.extend({
 	},
 
   update: function(event) {
-    // ACTION PENDING
+    event.preventDefault();
+    app.router.navigate('update', {trigger: true});
   }
 
 });
