@@ -37,6 +37,7 @@ app.InfoView = Backbone.View.extend({
         }
       }
     });
+    $('.ui-autocomplete-input').addClass('tagit-field');
   },
 
 	formErrors: function(values) {

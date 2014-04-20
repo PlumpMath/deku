@@ -18,11 +18,11 @@ app.CreateCardView = Backbone.View.extend({
     var template = app.TemplateCache.get(this.template);
 		this.$el.html(template);
     $('#tags').tagit({
-      availableTags: ["pies", "breezeway", "fire"],
-      caseSensitive: false,
-      autocomplete: {delay: 0, minLength: 1},
-      placeholderTest: "Enter tags"
+      availableTags: ['pies', 'breezeway', 'fire'],
+      removeConfirmation: true
     });
+    $('.ui-widget-content').val('')
+    .attr('placeholder', 'Add tags');
 	},
 
   formError: function(values) {
@@ -41,8 +41,8 @@ app.CreateCardView = Backbone.View.extend({
     //There must be at least 1 tag
     if (values.tags.length === 0) {
       error = true;
-      $('#tags').val('')
-      .attr('placeholder', 'Enter tags')
+      $('.ui-widget-content').val('')
+      .attr('placeholder', 'Add tags')
       .focus();
     }
 
@@ -79,8 +79,8 @@ app.CreateCardView = Backbone.View.extend({
         author: app.user.get('firstName') + " " + app.user.get('lastName'),
         author_id: app.user.get('id'),
 				content: $('#content').val().trim(),
-				post_time: card_time,
-      	post_date: card_day
+				//post_time: card_time,
+      	//post_date: card_day
 			};
 
     	//this checks the input for validation
