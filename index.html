@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/tags.css">
 	<link rel="stylesheet" href="css/slidebars.min.css">
+  <link rel="stylesheet" href="css/jquery.tagit.css">
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/south-street/jquery-ui.css">
 </head>
 <body>
   <div id="main">
@@ -55,33 +57,33 @@
     <!-- This is a collapsable menu that contains all the options a user can do -->
     <div id="menu" class="sb-disable-close">
       <ul id="collapsed-list">
-        <li id="default">Create Card
-          <ul>
+        <li id="default" class="list-item-collapse collapsed">Create Card
+          <ul class="col-list">
             <div id="card"></div>
           </ul>
         </li>
-        <li>Search
-          <ul>
+        <li class="list-item-collapse collapsed">Search
+          <ul class="col-list">
             <div id="search"></div>
           </ul>
         </li>
-        <li>Messages
-          <ul>
+        <li class="list-item-collapse collapsed">Messages
+          <ul class="col-list">
             <div id="messages"></div>
           </ul>
         </li>
-        <li>Notifications
-          <ul>
+        <li class="list-item-collapse collapsed">Notifications
+          <ul class="col-list">
             <div id="notifications"></div>
           </ul>
         </li>
-        <li>My Account
-          <ul>
+        <li class="list-item-collapse collapsed">My Account
+          <ul class="col-list">
             <div id="my-account"></div>
           </ul>
         </li>
-        <li>My Preferences
-          <ul>
+        <li class="list-item-collapse collapsed">My Preferences
+          <ul class="col-list">
             <div id="my-preferences"></div>
           </ul>
         </li>
@@ -109,7 +111,10 @@
   <script type="text/template" id="profile_view">
     <div id="user-profile">
       <!-- PROFILE PICTURE WILL GO HERE SOMEWHERE -->
-      <h2><%= firstName %> <%= lastName %> <button id="follow-btn" class="btn">Follow</button></h4>
+      <h2><%= firstName %> <%= lastName %> 
+        <button id="follow-btn" class="btn">Follow <%= firstName %></button>
+        <button id="update-btn" class='btn'>Update Account</button>
+      </h4>
       <hr />
       <h4>Studies <%= major %> at <%= university %> | Year of <%= grad_year %></h4>
       <ul><h4>Enrolled in:</h4><%for (c in classes) {%>
@@ -150,6 +155,10 @@
         <label for="password">Password</label>
         <input type="password" id="password" class="form-control">
       </div>
+      <div class="form-group">
+        <label for="passwordConfirm">Confirm Password</label>
+        <input type="password" id="passwordConfirm" class="form-control">
+      </div>
       <button type="submit" class="btn btn-success">Sign up for Dek&#363</button>
     </form>
   </script>
@@ -181,7 +190,7 @@
 
     <div class="form-group">
       <label for="classes">Classes</label>
-      <input type="text" id="classes" class="form-control">
+      <input type="text" id="classes" class="form-control tagit-hidden-field">
     </div>
 
     <div class="form-group">
@@ -303,7 +312,7 @@
 	<script type="text/template" id="card-create-view">
 		<form class="card-form" role="form" action="#">
 			<div class="form-group">
-				<input list="categories" id="category" class="form-control" placeholder="Select a category">
+				<input list="categories" class="create-card" id="category" class="form-control" placeholder="Select a category">
 				<datalist id="categories">
 					<option value="Administrative">
 					<option value="Club">
@@ -311,8 +320,15 @@
 					<option value="other">
 				</datalist>
 			</div>
+      <div class="form-group">
+        <input type="text" id="tags" class="create-card tagit-hidden-field">
+      </div>
 			<div class="form-group">
+<<<<<<< HEAD
 				<textarea id="content" name="card" rows="5" cols="30" placeholder="Share with your university"></textarea>
+=======
+				<textarea id="content" class="create-card" name="card" rows="5" placeholder="Share with your university"></textarea>
+>>>>>>> master
 			</div>
       <div class="form-group">
         <input type="text" id="tags" class="create-card form-control" data-role="tagsinput" />
@@ -366,7 +382,7 @@
       <div id="user-bio">Biography: <%=bio%></div>
     </span>
     <br />
-    <button id="update-account">Update your account</button>
+    <button id="update-account" class="btn">Update your account</button>
  	</script>
 
 	<!-- This is the view for preferences -->
@@ -433,7 +449,11 @@
       <tr>
         <td>Biography</td>
         <td><span id="bio" class='current-data'><%= bio %></span>
+<<<<<<< HEAD
           <span id="bio-e" class='edit-data'><textarea rows='5' placeholder="Your new bio..." id="bio-input" value="<%= bio %>">
+=======
+          <span id="bio-e" class='edit-data'><textarea placeholder="Your new bio..." id="bio-input" value="<%= bio %>">
+>>>>>>> master
           </span>
         </td>
       </tr>
@@ -442,6 +462,7 @@
 
   <!-- Script declarations at base of page so everything else loads first. -->
   <script src="js/lib/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
   <script src-"bower_components/jasmine-jquery/lib/jasmine-jquery.js"></script>
   <script src="js/lib/bootstrap.min.js"></script>
   <script src="js/lib/underscore-min.js"></script>
@@ -451,7 +472,10 @@
   <script src="js/lib/jquery.flippy.min.js"></script>
   <script src="js/lib/bootbox.min.js"></script>
   <script src="js/lib/tag-it.min.js"></script>
+<<<<<<< HEAD
   <script src="js/lib/bootstrap-tagsinput.min.js"></script>
+=======
+>>>>>>> master
   <script src="js/views/create_view.js"></script>
   <script src="js/views/info_view.js"></script>
   <script src="js/views/login_view.js"></script>
@@ -470,6 +494,7 @@
   <script src="js/views/toggle_view.js"></script>
   <script src="js/views/icon_view.js"></script>
   <script src="js/views/profile_view.js"></script>
+  <script src="js/views/update_account_view.js"></script>
   <script src="js/models/user.js"></script>
   <script src="js/models/card.js"></script>
   <script src="js/models/filter.js"></script>
@@ -478,7 +503,6 @@
   <script src="js/views/card_view.js"></script>
   <script src="js/router.js"></script>
   <script src="js/app.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 
   </body>
 </html>

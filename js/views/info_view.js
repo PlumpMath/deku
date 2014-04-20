@@ -37,7 +37,10 @@ app.InfoView = Backbone.View.extend({
         }
       }
     });
+<<<<<<< HEAD
     $('.ui-autocomplete-input').addClass('tagit-field');
+=======
+>>>>>>> master
   },
 
 	formErrors: function(values) {
@@ -51,17 +54,19 @@ app.InfoView = Backbone.View.extend({
 			.attr('placeholder', 'Please tell us something about yourself')
       .focus();
 		}
-		
-    if (values.classes === '') {
+
+    // Make sure the user enters at least one class.		
+    if (values.classes.length === 0) {
 			error = true;
-			$('#classes').val('')
-			.attr('placeholder', 'Please enter your classes this semester')
+      $('.ui-widget-content').val('')
+      .attr('placeholder', 'Enter a valid class')
       .focus();
 		}
 
-		//Right now this only checks for an empty string.
-		//Eventually it should compare against the possible list of options
-		//and reject it if it does not match something in it.
+		/* Right now this only checks for an empty string.
+		 * Eventually it should compare against the possible list of options
+		 * and reject it if it does not match something in it.
+     */
 		if (values.major === '' || $.inArray(values.major, major_list) === -1) {
 			error = true;
 			$('#major-list').val('')
@@ -88,10 +93,8 @@ app.InfoView = Backbone.View.extend({
 
     var that = this;
 
-    //classes should be in all caps, number is unaffected
-    var class_array = $('#classes').val().toUpperCase().split(',');
-	  //for each tag, remove whitespace around it
-    class_array = _.map(class_array, function(c) { return c.trim();});
+    // take the classes that are stored in the tags. That's it
+    var class_array = $('#classes').tagit('assignedTags');
 	
     // new info from this view, attributes match up with what database expects	
 		values = {
@@ -109,6 +112,7 @@ app.InfoView = Backbone.View.extend({
         app.user.set(app.user.defaults());
     	  app.router.navigate('login', {trigger: true});
       }).fail(function(error) {
+        bootbox.alert(error);
         console.log(error);
       });
 		}

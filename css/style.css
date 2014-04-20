@@ -12,6 +12,11 @@ body {
     background: #666;
 }
 
+.create-card {
+    width: 90%;
+    font-size: 12pt;
+}
+
 header {
     clear: both;
 	margin-bottom: 0px;
@@ -22,10 +27,13 @@ table {
     table-layout: fixed;
 }
 
+<<<<<<< HEAD
 .edit-data input, textarea {
     width: 100%;
 }
 
+=======
+>>>>>>> master
 input {
     border-radius: 5px;
     text-align: center;
@@ -37,6 +45,7 @@ input {
     width: 10px;
 }
 
+<<<<<<< HEAD
 ul .tagit {
     width: 90%;
 }
@@ -49,6 +58,8 @@ ul.tagit input[type="text"] {
     width: 10px;
 }
 
+=======
+>>>>>>> master
 td {
    padding: 10px;
    width: 50%;
@@ -93,11 +104,6 @@ hr {
     margin-top: 20px;
     margin: auto;
     color: #222;
-}
-
-input {
-    border-radius: 5px;
-    text-align: center;
 }
 
 #filter {
@@ -383,7 +389,7 @@ input {
 	padding: 0px;
 }
 
-#collapsed-list ul, li {
+.col-list {
 	list-style: none;
 	margin: 0px;
 	padding: 0px;
@@ -395,7 +401,7 @@ input {
     cursor: default;
 }
 
-#collapsed-list li {
+.list-item-collapse {
 	padding: 0px;
 	padding-top: 10px;
 	padding-bottom:10px;
