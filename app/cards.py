@@ -31,7 +31,7 @@ def add_comment(card_id):
                 tmpComment.comment = comment
                 db.session.add(tmpComment)
                 db.session.commit()
-            return cors_response((jsonify(comment=tmpComment.serialize),200))
+            return cors_response((jsonify(comment=tmpComment.serialize),201))
         else:
             return cors_response(('Invalid Request 1',400))
     else:
