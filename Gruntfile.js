@@ -20,10 +20,9 @@ module.exports = function(grunt) {
             'js/lib/masonry.pkgd.min.js',
             'js/lib/slidebars.min.js',
             'js/lib/underscore-min.js',
-            'js/lib/backbone-min.js'
+            'js/lib/backbone-min.js',
             'js/lib/bootbox.min.js',
-            'js/lib/tag-it.min.js',
-            'js/lib/bootstrap-tagsinput.min.js'
+            'js/lib/tag-it.min.js'
           ],
           specs: 'spec/*Spec.js',
           helpers: 'spec/*Helper.js'
