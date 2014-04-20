@@ -163,8 +163,6 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(response.status_code,400)
         self.assertEquals(response.data,"Invalid Request 1",400)
 
-
-        
     def test_delete_card_unauth(self):
         user = models.User.query.filter(models.User.email=="janedoe@email.edu").first()
         cards = models.Card.query.filter(models.Card.user_id==user.id).all()

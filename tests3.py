@@ -70,19 +70,39 @@ class APITestCase(unittest.TestCase):
         #add to card1
         response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="jane"))
         data = json.loads(response.data)
+        user = data['user']
         id = data['user'].get('id')
-        response = self.app.post('/deku/api/cards/comment/1',data=dict(comment="a comment"))
+        response = self.app.post('/deku/api/cards/1/comments',data=dict(comment="a comment"))
         self.assertEquals(response.status_code,201)
         comment = db.session.query(models.Comment).filter(models.Comment.user_id==id).filter(models.Comment.comment=="a comment").first()
         self.assertEquals(comment.comment,"a comment")
 
-        response = self.app.post('/deku/api/cards/comment/1',data=dict(comment="another comment"))
+        response = self.app.post('/deku/api/cards/1/comments',data=dict(comment="another comment"))
         self.assertEquals(response.status_code,201)
         comments = db.session.query(models.Comment).filter(models.Comment.card_id==1).all()
         self.assertEquals(len(comments),2)
+        self.assertEquals(comments[1].comment,"another comment")
         for comment in comments:
+            self.assertEquals(comment.user_id,user['id'])
+            self.assertEquals(comment.user_id,user['id'])
+            self.assertEquals(comment.card_id,1)
             print comment.serialize
+        
+    def test_add_comments_not_logged_in(self):
+        before = len(models.Comment.query.filter(models.Card.id==1).all())
+        response = self.app.post('/deku/api/cards/1/comments',data=dict(comment="this is a comment"))
+        self.assertEquals("Unauthorized Access",response.data)
+        after = len(models.Comment.query.filter(models.Card.id==1).all())
+        self.assertEquals(before,after)
 
+    def test_add_comments_invalid_card(self):
+        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="jane"))
+        before = len(models.Comment.query.filter(models.Card.id==1).all())
+        response = self.app.post('/deku/api/cards/999/comments',data=dict(comment="this is a comment"))
+        self.assertEquals("Invalid Request 1",response.data)
+        self.assertEquals(400,response.status_code)
+        after = len(models.Comment.query.filter(models.Card.id==1).all())
+        self.assertEquals(before,after)
 
 if __name__ == '__main__':
     unittest.main()

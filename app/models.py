@@ -119,6 +119,7 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     card_id = db.Column(db.Integer, db.ForeignKey('card.id'))
     comment = db.Column(db.String, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
     
     @property
     def serialize(self):
@@ -126,7 +127,8 @@ class Comment(db.Model):
             "id": self.id,
             "user_id": self.user_id,
             "card_id": self.card_id,
-            "comment": self.comment
+            "comment": self.comment,
+            "created_at": self.timestamp
         }
     
     

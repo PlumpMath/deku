@@ -18,25 +18,6 @@ def search_single_tag(tag):
         cards.append(result[1].serialize)
     return cors_response((jsonify(cards=cards),200))
 
-@app.route('/deku/api/cards/comment/<card_id>', methods=['POST'])
-def add_comment(card_id):
-    if 'user' in session:
-        card = Card.query.get(int(card_id))
-        if card:
-            comment = request.form.get('comment')
-            if comment:
-                tmpComment = models.Comment()
-                tmpComment.user_id = session['user'].get('id')
-                tmpComment.card_id = card_id
-                tmpComment.comment = comment
-                db.session.add(tmpComment)
-                db.session.commit()
-            return cors_response((jsonify(comment=tmpComment.serialize),201))
-        else:
-            return cors_response(('Invalid Request 1',400))
-    else:
-        return cors_response(("Unauthorized Access",401))
-
 class CardAPI(MethodView):
     def get(self, card_id):
         if card_id is None:
