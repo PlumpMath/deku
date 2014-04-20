@@ -174,15 +174,15 @@ app.Router = Backbone.Router.extend({
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
-      if (this.slideView === null && this.toggleView === null) {
-        // they do, so remove them and close the slidebar (only real permanent solution)
-        this.setChildren();
-      }
       $('#default').hide('medium');
       $.get("http://localhost:4568/deku/api/users/" + id, function(data) {
         var profile = new app.User(data['user']);
         // this checks the name as well. Just ID was not secure
         if (first === profile.get('firstName') && last === profile.get('lastName')) {
+          if (this.slideView === null && this.toggleView === null) {
+            // they do, so remove them and close the slidebar (only real permanent solution)
+            this.setChildren();
+          }
           $('#container').fadeOut(350, function() {that.changeView(new app.ProfileView({model: profile}))});
         } else {
           // trigger a not found page load
