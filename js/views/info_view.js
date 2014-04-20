@@ -16,6 +16,28 @@ app.InfoView = Backbone.View.extend({
   render: function() {
     var template = app.TemplateCache.get(this.template);
     this.$el.html(template).fadeIn(350);
+
+    class_list = ["CMSC 304", "CMSC 345", "CMSC 313", "CMSC 331", "CMSC 341", "STAT 355", "CMSC 201", "CMSC 202"];
+
+    /* Sets the classes field to accept tags, good for autocomplete purposes as well.
+     * Currently hardcoded in a bunch of classes. This should be coming from the database and populating an array.
+     */
+    $('#classes').tagit({
+      availableTags: class_list,
+      removeConfirmation: true,
+      allowSpaces: true,
+      beforeTagAdded: function(event, ui) {
+        // this makes sure the class you entered is a real class
+        if ($.inArray(ui.tagLabel.trim(), class_list) === -1) {
+          $('.ui-widget-content').val('')
+          .attr('placeholder', 'Enter a valid class');
+          return false;
+        } else {
+          return true;
+        }
+      }
+    });
+    $('.ui-autocomplete-input').addClass('tagit-field');
   },
 
 	formErrors: function(values) {

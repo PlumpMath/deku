@@ -17,6 +17,46 @@ header {
 	margin-bottom: 0px;
 }
 
+table {
+    width: 60%;
+    table-layout: fixed;
+}
+
+.edit-data input, textarea {
+    width: 100%;
+}
+
+input {
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.ui-autocomplete-input {
+    text-align: left;
+    width: 10px;
+}
+
+ul .tagit {
+    width: 90%;
+}
+
+ul.tagit input[type="text"] {
+    width: 10px;
+}
+
+.tagit-field {
+    width: 10px;
+}
+
+td {
+   padding: 10px;
+   width: 50%;
+   font-size: 12pt;
+   color: #222;
+   vertical-align: top;
+}
+
 a {
     text-decoration: none;
     color: #999;
@@ -34,7 +74,7 @@ hr {
     height: 2px;
 }
 
-#my-account {
+.user-account {
     color:#999;
 }
 
@@ -98,6 +138,7 @@ input {
 	position: absolute;
 	left: 0;
     overflow: hidden;
+    background-color: #000;
 }
 
 #card-author {
@@ -349,7 +390,7 @@ input {
 	padding-bottom: 10px;
 	padding-top: 10px;
 	cursor: pointer;
-	font-size: 12pt;
+	font-size: 11pt;
 	color: #000;
     cursor: default;
 }
@@ -359,7 +400,7 @@ input {
 	padding-top: 10px;
 	padding-bottom:10px;
 	padding-left: 10px;
-	font-size: 14pt;
+	font-size: 12pt;
 	color: #fff;
 	margin-top: 0px;
 	border-top: 2px solid;
@@ -380,7 +421,7 @@ input {
     .post.w2 { width: 120px; }
     .post.w3 { width: 180px; }
 
-    .post.h1 { height: 60px };
+    .post.h1 { height: 60px; }
     .post.h2 { height: 120px; }
     .post.h3 { height: 180px; }
 }

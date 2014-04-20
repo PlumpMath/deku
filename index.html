@@ -299,14 +299,6 @@
 	<script type="text/template" id="hand-view">
 	</script>
 
-	<!-- This vew handles viewing another user's profile -->
-
-
-
-	<!-- This view handles inspecting a card -->
-
-
-
 	<!-- This is the view for creating a card -->
 	<script type="text/template" id="card-create-view">
 		<form class="card-form" role="form" action="#">
@@ -320,11 +312,11 @@
 				</datalist>
 			</div>
 			<div class="form-group">
-				<input type="text" id="tags" placeholder="Enter tags">
-			</div>
-			<div class="form-group">
 				<textarea id="content" name="card" rows="5" cols="30" placeholder="Share with your university"></textarea>
 			</div>
+      <div class="form-group">
+        <input type="text" id="tags" class="create-card form-control" data-role="tagsinput" />
+      </div>
   		<button id="add" class="btn">Add new posts</button>
 		</form>
 	</script>
@@ -362,15 +354,17 @@
 
 	<!-- This is the view for my account -->
 	<script type="text/template" id="account-view">
-    <div id="user-name">User name: <%=firstName%> <%=lastName%></div>
-    <div id="user-univ">University: <%=university%></div>
-    <div id="user-major">Major: <%=major%></div>
-    <div id="user-classes">Classes: <%for (i in classes) {%>
-      <div class="user-class">&nbsp&nbsp<%= classes[i]%></div>
-      <%}%>
-    </div>
-    <div id="user-grad">Graduation Year: <%=grad_year%></div>
-    <div id="user-bio">Biography: <%=bio%></div>
+    <span class='user-account'>
+      <div id="user-name">User name: <%=firstName%> <%=lastName%></div>
+      <div id="user-univ">University: <%=university%></div>
+      <div id="user-major">Major: <%=major%></div>
+      <div id="user-classes">Classes: <%for (i in classes) {%>
+        <div class="user-class">&nbsp&nbsp<%= classes[i]%></div>
+        <%}%>
+      </div>
+      <div id="user-grad">Graduation Year: <%=grad_year%></div>
+      <div id="user-bio">Biography: <%=bio%></div>
+    </span>
     <br />
     <button id="update-account">Update your account</button>
  	</script>
@@ -379,6 +373,72 @@
 	<script type="text/template" id="preferences-view">
 		<p>User will be able to see their preferences</p>
 	</script>
+
+  <!-- This is the region for updating a user's account -->
+  <script type="text/template" id="update-view">
+    <h2>Update Account Information</h2>
+    <h4><a id="edit">Edit</a>
+      <span id='editSC'><a id="save">Save</a> | <a id="cancel">Cancel</a></span></h4>
+    <hr />
+    <br />
+    <table>
+      <tr>
+        <td>First Name</td>
+        <td><span id="fname" class='current-data'><%= firstName %></span>
+          <span id="fname-e" class='edit-data'><input type="text" placeholder="Your new first name..." id="fname-input" value="<%=firstName%>">
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>Last Name</td>
+        <td><span id="lname" class='current-data'><%= lastName %></span>
+          <span id="lname-e" class='edit-data'><input type="text" placeholder="Your new last name..." id="lname-input" value="<%=lastName%>">
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>E-mail</td>
+        <td><span id="email" class='current-data'><%= email %></span>
+          <span id="email-e" class='edit-data'><input type="text" placeholder="Your new e-mail..." id="email-input" value="<%=email%>">
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>Password</td>
+        <td><span id="password" class='current-data'>Not shown</span>
+          <span id="password-e" class='edit-data'><input type="text" placeholder="Enter current password..." id="password-pass">
+            <input type="text" placeholder="Enter new password..." id="password-input">
+            <input type="text" placeholder="Confirm new password..." id="password-confirm">
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>Major</td>
+        <td><span id="major" class='current-data'><%= major %></span>
+          <span id="major-e" class='edit-data'><input type="text" placeholder="Your new major..." id="major-input" value="<%=major%>">
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>Classes</td> <!-- TO BE IMPLEMENTED, PROBABLY USE TAG-THIS -->
+        <td><span id="classes" class='current-data'>placeholder</span></td>
+      </tr>
+      <tr>
+        <td>Graduation Year</td>
+        <td><span id="year" class='current-data'><%= grad_year %></span>
+          <span id="year-e" class='edit-data'><input type="text" placeholder="Your new grad year..." id="year-input" value="<%=grad_year%>">
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>Biography</td>
+        <td><span id="bio" class='current-data'><%= bio %></span>
+          <span id="bio-e" class='edit-data'><textarea rows='5' placeholder="Your new bio..." id="bio-input" value="<%= bio %>">
+          </span>
+        </td>
+      </tr>
+    </table>
+  </script>
 
   <!-- Script declarations at base of page so everything else loads first. -->
   <script src="js/lib/jquery.min.js"></script>
@@ -389,6 +449,9 @@
   <script src="js/lib/masonry.pkgd.min.js"></script>
   <script src="js/lib/slidebars.min.js"></script>
   <script src="js/lib/jquery.flippy.min.js"></script>
+  <script src="js/lib/bootbox.min.js"></script>
+  <script src="js/lib/tag-it.min.js"></script>
+  <script src="js/lib/bootstrap-tagsinput.min.js"></script>
   <script src="js/views/create_view.js"></script>
   <script src="js/views/info_view.js"></script>
   <script src="js/views/login_view.js"></script>

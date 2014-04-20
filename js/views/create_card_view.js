@@ -17,6 +17,12 @@ app.CreateCardView = Backbone.View.extend({
 	render: function() {
     var template = app.TemplateCache.get(this.template);
 		this.$el.html(template);
+    $('#tags').tagsinput({
+      typeahead: {
+        source: ['pies', 'breezeway', 'fire'],
+        freeInput: true
+      }
+    });
 	},
 
   formError: function(values) {
@@ -35,8 +41,8 @@ app.CreateCardView = Backbone.View.extend({
     //There must be at least 1 tag
     if (values.tags.length === 0) {
       error = true;
-      $('#tags').val('')
-      .attr('placeholder', 'Enter tags')
+      $('.ui-widget-content').val('')
+      .attr('placeholder', 'Add tags')
       .focus();
     }
 
