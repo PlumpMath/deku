@@ -9,6 +9,7 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
-import models
-import users
+import utils
+from app import models
+from app import users
 import cards

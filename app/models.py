@@ -34,7 +34,9 @@ class User(db.Model):
             "bio": self.profile.bio,
             "classes": [course.course for course in self.profile.courses],
             "grad_year": self.profile.grad_year,
-            "major": self.profile.major
+            "major": self.profile.major,
+            "role": self.role
+            
         }
         
 class Profile(db.Model):
@@ -78,7 +80,7 @@ class Card(db.Model):
     tags = db.relationship('Tag', cascade="all,delete", backref="card")
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
+    comments = db.relationship('Comment', backref = 'card', cascade='all,delete', lazy = 'dynamic')
     def __repr__(self):
         return '<Card %r>' % (self.content[:40] + "...")
 
@@ -100,8 +102,6 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
     tag = db.Column(db.String(37), nullable=False, index=True)
-    def __init__(self, tag):
-        self.tag = tag
 
     @property
     def serialize(self):
@@ -110,3 +110,17 @@ class Tag(db.Model):
         }
     def toString(self):
         return "%s"%(self.tag)
+    
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('card.id'))
+    comment = db.Column(db.String, nullable=False)
+    
+    @property
+    def serialize(self):
+        return{
+            "id": self.id,
+            "user_id": self.user_id,
+            "comment": self.comment
+        }
+    
