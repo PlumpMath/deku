@@ -20,7 +20,8 @@ app.UpdateAccountView = Backbone.View.extend({
   render: function() {
     var template = app.TemplateCache.get(this.template);
     var html = template(app.user.toJSON());
-    this.$el.prepend(html).fadeIn(350);
+    this.$el.prepend(html).fadeIn(350)
+    .css('margin-left', 'auto'); //center align content
     $('.edit-data').hide();
     $('#editSC').hide();
   },
