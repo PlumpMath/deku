@@ -170,20 +170,23 @@ app.Router = Backbone.Router.extend({
     }
   },
 
+  /* Shows the profile page of the specified user. Uses the id for the API call
+   * For security, it also checks against the given name from what is received by the API call
+   */
   profileView: function(first, last, id) {
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
-      $('#default').hide('medium');
       $.get("http://localhost:4568/deku/api/users/" + id, function(data) {
         var profile = new app.User(data['user']);
         // this checks the name as well. Just ID was not secure
         if (first === profile.get('firstName') && last === profile.get('lastName')) {
-          if (this.slideView === null && this.toggleView === null) {
-            // they do, so remove them and close the slidebar (only real permanent solution)
-            this.setChildren();
-          }
           $('#container').fadeOut(350, function() {that.changeView(new app.ProfileView({model: profile}))});
+          if (that.slideView === null && that.toggleView === null) {
+            // show the slidebars if they are not out yet
+            that.setChildren();
+          }
+          $('#default').hide('medium');
         } else {
           // trigger a not found page load
           $('#container').fadeOut(350, function() { that.navigate('user_not_found', {trigger: true})});
@@ -201,11 +204,12 @@ app.Router = Backbone.Router.extend({
     if (localStorage.getItem('deku') !== null) {
       // prevents someone from accessing the update view of another user
       if (parseInt(id) === app.user.get('id')) {
-        if (this.slideView === null && this.toggleView === null) {
+        // slidebar should not appear when the user is updating their account
+        if (this.slideView !== null && this.toggleView !== null) {
           // they do, so remove them and close the slidebar (only real permanent solution)
-          this.setChildren();
+          this.removeChildren();
+          app.$slidebars.close();
         }
-        $('#default').hide('medium');
         $('#container').fadeOut(350, function() { that.changeView(new app.UpdateAccountView()); });
       } else {
         $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});

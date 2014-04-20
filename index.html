@@ -385,69 +385,71 @@
 
   <!-- This is the region for updating a user's account -->
   <script type="text/template" id="update-view">
-    <h2>Update Account Information</h2>
-    <h4><a id="edit">Edit</a>
-      <span id='editSC'><a id="save">Save</a> | <a id="cancel">Cancel</a></span></h4>
-    <hr />
-    <br />
-    <table>
-      <tr>
-        <td>First Name</td>
-        <td><span id="fname" class='current-data'><%= firstName %></span>
-          <span id="fname-e" class='edit-data'><input type="text" placeholder="Your new first name..." id="fname-input" value="<%=firstName%>">
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td>Last Name</td>
-        <td><span id="lname" class='current-data'><%= lastName %></span>
-          <span id="lname-e" class='edit-data'><input type="text" placeholder="Your new last name..." id="lname-input" value="<%=lastName%>">
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td>E-mail</td>
-        <td><span id="email" class='current-data'><%= email %></span>
-          <span id="email-e" class='edit-data'><input type="text" placeholder="Your new e-mail..." id="email-input" value="<%=email%>">
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td>Password</td>
-        <td><span id="password" class='current-data'>Not shown</span>
-          <span id="password-e" class='edit-data'><input type="text" placeholder="Enter current password..." id="password-pass">
-            <input type="text" placeholder="Enter new password..." id="password-input">
-            <input type="text" placeholder="Confirm new password..." id="password-confirm">
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td>Major</td>
-        <td><span id="major" class='current-data'><%= major %></span>
-          <span id="major-e" class='edit-data'><input type="text" placeholder="Your new major..." id="major-input" value="<%=major%>">
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td>Classes</td> <!-- TO BE IMPLEMENTED, PROBABLY USE TAG-THIS -->
-        <td><span id="classes" class='current-data'>placeholder</span></td>
-      </tr>
-      <tr>
-        <td>Graduation Year</td>
-        <td><span id="year" class='current-data'><%= grad_year %></span>
-          <span id="year-e" class='edit-data'><input type="text" placeholder="Your new grad year..." id="year-input" value="<%=grad_year%>">
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td>Biography</td>
-        <td><span id="bio" class='current-data'><%= bio %></span>
-          <span id="bio-e" class='edit-data'><textarea rows='5' placeholder="Your new bio..." id="bio-input" value="<%= bio %>">
-          <span id="bio-e" class='edit-data'><textarea placeholder="Your new bio..." id="bio-input" value="<%= bio %>">
-          </span>
-        </td>
-      </tr>
-    </table>
+    <div id="update-section">
+      <h2>Update Account Information</h2>
+      <h4><a id="edit">Edit</a>
+        <span id='editSC'><a id="save">Save</a> | <a id="cancel">Cancel</a></span></h4>
+      <hr />
+      <br />
+      <table>
+        <tr>
+          <td>First Name</td>
+          <td><span id="fname" class='current-data'><%= firstName %></span>
+            <span id="fname-e" class='edit-data'><input type="text" placeholder="Your new first name..." id="fname-input" value="<%=firstName%>">
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>Last Name</td>
+          <td><span id="lname" class='current-data'><%= lastName %></span>
+            <span id="lname-e" class='edit-data'><input type="text" placeholder="Your new last name..." id="lname-input" value="<%=lastName%>">
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>E-mail</td>
+          <td><span id="email" class='current-data'><%= email %></span>
+            <span id="email-e" class='edit-data'><input type="text" placeholder="Your new e-mail..." id="email-input" value="<%=email%>">
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>Password</td>
+          <td><span id="password" class='current-data'>Not shown</span>
+            <span id="password-e" class='edit-data'><input type="text" placeholder="Enter current password..." id="password-pass">
+              <input type="text" placeholder="Enter new password..." id="password-input">
+              <input type="text" placeholder="Confirm new password..." id="password-confirm">
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>Major</td>
+          <td><span id="major" class='current-data'><%= major %></span>
+            <span id="major-e" class='edit-data'><input type="text" placeholder="Your new major..." id="major-input" value="<%=major%>">
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>Classes</td> <!-- TO BE IMPLEMENTED, PROBABLY USE TAG-THIS -->
+          <td><span id="classes" class='current-data'>placeholder</span></td>
+        </tr>
+        <tr>
+          <td>Graduation Year</td>
+          <td><span id="year" class='current-data'><%= grad_year %></span>
+            <span id="year-e" class='edit-data'><input type="text" placeholder="Your new grad year..." id="year-input" value="<%=grad_year%>">
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>Biography</td>
+          <td><span id="bio" class='current-data'><%= bio %></span>
+            <span id="bio-e" class='edit-data'><textarea rows='5' placeholder="Your new bio..." id="bio-input" value="<%= bio %>">
+            <span id="bio-e" class='edit-data'><textarea placeholder="Your new bio..." id="bio-input" value="<%= bio %>">
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
   </script>
 
   <!-- NotFound -->
