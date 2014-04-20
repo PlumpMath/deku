@@ -17,19 +17,11 @@ app.CreateCardView = Backbone.View.extend({
 	render: function() {
     var template = app.TemplateCache.get(this.template);
 		this.$el.html(template);
-<<<<<<< HEAD
     $('#tags').tagsinput({
       typeahead: {
         source: ['pies', 'breezeway', 'fire'],
         freeInput: true
       }
-=======
-    $('#tags').tagit({
-      availableTags: ["pies", "breezeway", "fire"],
-      caseSensitive: false,
-      autocomplete: {delay: 0, minLength: 1},
-      placeholderTest: "Enter tags"
->>>>>>> master
     });
 	},
 
