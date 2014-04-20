@@ -17,12 +17,12 @@ app.CreateCardView = Backbone.View.extend({
 	render: function() {
     var template = app.TemplateCache.get(this.template);
 		this.$el.html(template);
-    $('#tags').tagsinput({
-      typeahead: {
-        source: ['pies', 'breezeway', 'fire'],
-        freeInput: true
-      }
+    $('#tags').tagit({
+      availableTags: ['pies', 'breezeway', 'fire'],
+      removeConfirmation: true
     });
+    $('.ui-widget-content').val('')
+    .attr('placeholder', 'Add tags');
 	},
 
   formError: function(values) {
