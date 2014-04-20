@@ -22,12 +22,12 @@ class APITestCase(unittest.TestCase):
         db.create_all()
        
         # from test_post_new_valid_user_with_no_profile
-        response = self.app.post('/deku/api/users', data=dict(firstName="Jane", lastName="Doe", email="janedoe@email.edu", password="password1", university="UMBC"))
+        response = self.app.post('/deku/api/users', data=dict(firstName="Jane", lastName="Doe", email="janedoe@email.edu", password="jane", university="UMBC"))
         self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
         
         
         # from test_post_new_valid_user_with_full_profile
-        response = self.app.post('/deku/api/users', data=dict(firstName="Carrie", lastName="Hildebrand", email="carrie.hildebrand2@gmail.com", password='password', university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
+        response = self.app.post('/deku/api/users', data=dict(firstName="Carrie", lastName="Hildebrand", email="carrie.hildebrand2@gmail.com", password='carrie', university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
         self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
 
         #admin        
@@ -38,7 +38,8 @@ class APITestCase(unittest.TestCase):
         db.session.commit()
         
         #from test_add_card_valid_min
-        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="password1"))
+        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="jane"))
+        self.assertEquals(response.status_code,200)
         response = self.app.post('/deku/api/cards', data=dict(
                                                               content="cont",
                                                              category="cat",
@@ -48,7 +49,7 @@ class APITestCase(unittest.TestCase):
         
         
         #from test_add_card_valid_user_all
-        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="password1"))
+        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="jane"))
         response = self.app.post('/deku/api/cards', data=dict(
                                                               content="cont2",
                                                               category="cat2",
@@ -66,21 +67,21 @@ class APITestCase(unittest.TestCase):
         
         
     def test_login_fail(self):
-        response = self.app.post('/deku/api/users/login',data=dict(email="cArrie.hildebrand2@gmail.com",password="pAssword"))
+        response = self.app.post('/deku/api/users/login',data=dict(email="cArrie.hildebrand2@gmail.com",password="carrfeie"))
         self.assertEquals(response.status_code,401)
         response = self.app.open('/deku/api/users/check_login', method='GET')
         self.assertEquals(response.status_code,401)
         
     def test_login_success(self):
-        response = self.app.post('/deku/api/users/login',data=dict(email="caRRie.hildebrand2@gmail.com",password="password"))
+        response = self.app.post('/deku/api/users/login',data=dict(email="caRRie.hildebrand2@gmail.com",password="carrie"))
         self.assertEquals(response.status_code,200)
         response = self.app.open('/deku/api/users/check_login', method='GET')
         self.assertEquals(response.status_code,200)
         
     def test_logout(self):
-        response = self.app.post('/deku/api/users/login',data=dict(email="caRRie.hildebrand2@gmail.com",password="password"))
+        response = self.app.post('/deku/api/users/login',data=dict(email="caRRie.hildebrand2@gmail.com",password="carrie"))
         self.assertEquals(response.status_code,200)
-        response = self.app.put('/deku/api/users/logout',data=dict(email="janedoe@email.edu",password="password1"))
+        response = self.app.put('/deku/api/users/logout')
         response = self.app.get('/deku/api/users/check_login')
         self.assertEquals(response.status_code,401)
 
@@ -97,7 +98,7 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(user.profile.grad_year, None)
         self.assertEquals(user.profile.major, None)
         self.assertEquals(user.profile.bio, None)
-        self.assertTrue(bcrypt.check_password_hash(user.password, "password1"))
+        self.assertTrue(bcrypt.check_password_hash(user.password, "jane"))
         self.assertEquals(len(user.profile.courses), 0)
 
 
@@ -124,7 +125,7 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(user.profile.grad_year, "yea")
         self.assertEquals(user.profile.major, "major")
         self.assertEquals(user.profile.bio, "bio")
-        self.assertTrue(bcrypt.check_password_hash(user.password, "password"))
+        self.assertTrue(bcrypt.check_password_hash(user.password, "carrie"))
 
         course = db.session.query(models.Course, models.User).outerjoin(models.User, models.User.id == models.Course.user_id).filter(models.Course.course == "except this one").first()
         self.assertEquals(course[0].course, "except this one")
@@ -139,15 +140,13 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(course[1].firstName, "Carrie")
         
     def test_modify_own_user_fields(self):
-        response = self.app.post('/deku/api/users/login',data=dict(email="caRRie.hildebrand2@gmail.com",password="password"))
+        response = self.app.post('/deku/api/users/login',data=dict(email="caRRie.hildebrand2@gmail.com",password="carrie"))
         response = self.app.open('/deku/api/users/check_login', method='GET')
         self.assertEquals(response.status_code,200)
         # change all of carrie's fields to "a"
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').first()
         before = "" + str(user.serialize) + user.password
 
-        
-        # user and pwd are used to confirm authentication.  email and password are for changing email and password
         response = self.app.put('/deku/api/users/' + str(user.id), data=dict(firstName="a", lastName="b", university="c", email="d", password="h", grad_year="e", major="f", bio="g", classes=["aaa", "bbb", "ccc", "ddd"]))
         self.assertEquals(response.status_code,200)
         self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
@@ -196,11 +195,10 @@ class APITestCase(unittest.TestCase):
         
         
     def test_modify_other_user_fields_non_admin(self):
-        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="password1"))
+        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="jane"))
         # change all of carrie's fields to "a"
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').first()
         before = "" + str(user.serialize) + user.password
-        # user and pwd are used to confirm authentication.  email and password are for changing email and password
         response = self.app.put('/deku/api/users/' + str(user.id), data=dict(firstName="a", lastName="b", university="c", email="d", password="h", grad_year="e", major="f", bio="g", classes=["aaa", "bbb", "ccc", "ddd"]))
         self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
         self.assertEquals(response.data, "Unauthorized Access 1")
@@ -217,7 +215,6 @@ class APITestCase(unittest.TestCase):
         # change all of carrie's fields to "a"
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').first()
         before = "" + str(user.serialize) + user.password
-        # user and pwd are used to confirm authentication.  email and password are for changing email and password
         response = self.app.put('/deku/api/users/' + str(user.id), data=dict(firstName="a", lastName="b", university="c", email="d", password="h", grad_year="e", major="f", bio="g", classes=["aaa", "bbb", "ccc", "ddd"]))
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
@@ -274,7 +271,8 @@ class APITestCase(unittest.TestCase):
             self.assertEquals(check_user.serialize,user)
         
     def test_delete_self(self):
-        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="password1"))
+        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="jane"))
+        print response.data
         data = json.loads(response.data)
         id = data['user']['id']
         user = models.User.query.filter(models.User.id==id).first()
@@ -303,7 +301,7 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(response.data,"Unauthorized Access")
         
     def test_delete_other_as_non_admin(self):
-        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="password1"))
+        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="jane"))
         id = models.User.query.filter(models.User.email=="carrie.hildebrand2@gmail.com").first().id
         response = self.app.delete('/deku/api/users/'+str(id))
         self.assertEquals(response.data,"Unauthorized Access 1")

@@ -208,7 +208,21 @@ class APITestCase(unittest.TestCase):
         cards=models.Card.query.filter(models.Card.id==1).all()
         self.assertEquals(len(cards),0)
         
-
+    def test_search_all_cards_with_tag2(self):
+        #add 2 more cards that have tag2... there should be 3 total including setup
+        response = self.app.post('/deku/api/users/login',data=dict(email="janedoe@email.edu",password="jane"))
+        response = self.app.post('/deku/api/cards', data=dict(
+                                                              content="cont",
+                                                             category="cat",
+                                                              tags=['tag2']
+                                                              ))
+        response = self.app.post('/deku/api/cards', data=dict(
+                                                              content="cont2",
+                                                              category="cat2",
+                                                              tags=['tag1','tag2']))
+        response = self.app.open('/deku/api/cards/search/tag2')
+        data = json.loads(response.data)
+        self.assertEquals(len(data.get('cards')),3)
         
 #CASCADING DELETES CHECKED AT END OF TESTS.PY
 
