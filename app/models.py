@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+from flask import jsonify
 
 ROLE_USER = 0
 ROLE_MOD = 1
@@ -32,10 +33,11 @@ class User(db.Model):
             "email": self.email,
             "university": self.university,
             "bio": self.profile.bio,
-            "classes": [course.course for course in self.profile.courses],
+            "classes": [course.id for course in self.profile.courses],
             "grad_year": self.profile.grad_year,
             "major": self.profile.major,
-            "role": self.role
+            "role": self.role,
+            "cards": [card.id for card in self.cards]
             
         }
         
@@ -57,7 +59,7 @@ class Profile(db.Model):
             "user id": self.user_id,
             "grad_year": self.grad_year,
             "major": self.major,
-            "classes": [course.course for course in self.courses],
+            "classes": [course.id for course in self.courses],
             "biography": self.bio
         }
         
@@ -93,7 +95,8 @@ class Card(db.Model):
             "category": self.category,
             "created_at": self.timestamp,
             "author_id": self.user_id,
-            "tags": ",".join([tag.toString() for tag in self.tags])
+            "tags": [tag.id for tag in self.tags],
+            "comments": [comment.id for comment in self.comments]
         }
         return card
 
@@ -107,13 +110,14 @@ class Tag(db.Model):
     def serialize(self):
         return {
             "tag": self.tag,
+            "id": self.id,
+            "card_id": self.card
         }
-    def toString(self):
-        return "%s"%(self.tag)
     
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('card.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'))
     comment = db.Column(db.String, nullable=False)
     
     @property
@@ -121,6 +125,8 @@ class Comment(db.Model):
         return{
             "id": self.id,
             "user_id": self.user_id,
+            "card_id": self.card_id,
             "comment": self.comment
         }
+    
     

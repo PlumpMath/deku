@@ -7,6 +7,7 @@ from app import models
 from app.models import Card
 from utils import cors_response, authenticate
 from flask.views import MethodView
+from sqlalchemy import or_
 
 
 @app.route('/deku/api/cards/search/<tag>', methods=['GET'])
@@ -17,8 +18,6 @@ def search_single_tag(tag):
     for result in results:
         cards.append(result[1].serialize)
     return cors_response((jsonify(cards=cards),200))
-
-
 
 class CardAPI(MethodView):
     def get(self, card_id):
