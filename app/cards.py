@@ -8,6 +8,18 @@ from app.models import Card
 from utils import cors_response, authenticate
 from flask.views import MethodView
 
+
+@app.route('/deku/api/cards/search/<tag>', methods=['GET'])
+def search_single_tag(tag):
+    #results = db.session.query(models.Tag,models.Card).join(models.Card, models.Tag.card_id==models.Card.id).all()
+    results = db.session.query(models.Tag,models.Card).filter(models.Tag.tag==tag).outerjoin(models.Card, models.Tag.card_id==models.Card.id).all()
+    cards=[]
+    for result in results:
+        cards.append(result[1].serialize)
+    return cors_response((jsonify(cards=cards),200))
+
+
+
 class CardAPI(MethodView):
     def get(self, card_id):
         if card_id is None:
