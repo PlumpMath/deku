@@ -243,7 +243,7 @@
         <div class="card-tag <%=tags[tag]%>" style="width: <%=100.0/tags.length%>%" title="<%=tags[tag]%>"></div>
       <% } %>
     </div>
-    <div id="card-author"><a id="car-auth"><%= author %></a></div>
+    <div id="card-author"><a id="car-auth"><%= authorFirst %> <%=authorLast %></a></div>
 		<div id="card-content"><%= content %></div>
     <div id="card-category"><%= category %></div>
   </script>
@@ -259,7 +259,7 @@
       <% } %>
     </div>
     <div id="inspect-header">
-      <a id="ins-auth"><%= author %></a> @ <%= post_time %> on <%= post_date %>
+      <a id="ins-auth"><%= authorFirst %> <%= authorLast %></a> @ <%= post_time %> on <%= post_date %>
       <button id="flip-return" class="btn btn-success">Flip to front</button>
     </div>
     <div id="inspect-content"><%= content %>
@@ -324,7 +324,7 @@
 				<textarea id="content" name="card" rows="5" class='create-card' placeholder="Share with your university"></textarea>
 			</div>
       <div class="form-group">
-        <input type="text" id="tags" class="create-card form-control" data-role="tagsinput" />
+        <input type="text" id="tags" class="create-card form-control" />
       </div>
   		<button id="add" class="btn">Add new posts</button>
 		</form>
@@ -450,6 +450,11 @@
     </table>
   </script>
 
+  <!-- NotFound -->
+  <script type="text/template" id="not-found">
+    <h2 id="not_found">We're sorry! It looks like that page doesn't exist!</h2>
+  </script>
+
   <!-- Script declarations at base of page so everything else loads first. -->
   <script src="js/lib/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
@@ -462,7 +467,6 @@
   <script src="js/lib/jquery.flippy.min.js"></script>
   <script src="js/lib/bootbox.min.js"></script>
   <script src="js/lib/tag-it.min.js"></script>
-  <script src="js/lib/bootstrap-tagsinput.min.js"></script>
   <script src="js/views/create_view.js"></script>
   <script src="js/views/info_view.js"></script>
   <script src="js/views/login_view.js"></script>
@@ -482,6 +486,7 @@
   <script src="js/views/icon_view.js"></script>
   <script src="js/views/profile_view.js"></script>
   <script src="js/views/update_account_view.js"></script>
+  <script src="js/views/not_found_view.js"></script>
   <script src="js/models/user.js"></script>
   <script src="js/models/card.js"></script>
   <script src="js/models/filter.js"></script>

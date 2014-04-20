@@ -76,7 +76,8 @@ app.CreateCardView = Backbone.View.extend({
 			var formData = {
 				category: $('#category').val().trim(),
 				tags: tag_array,
-        author: app.user.get('firstName') + " " + app.user.get('lastName'),
+        authorFirst: app.user.get('firstName'),
+        authorLast: app.user.get('lastName'),
         author_id: app.user.get('id'),
 				content: $('#content').val().trim(),
 				//post_time: card_time,

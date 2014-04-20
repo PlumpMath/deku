@@ -111,16 +111,8 @@ app.CardView = Backbone.View.extend({
    */
   goToProfile: function(event) {
     event.preventDefault();
-    /* navigate to the route for the user's profile
-     * Cards store a user's name in one chunk, so I use this to split all the spaces into underscores for cleanness
-     */
-    profile = this.model.get('author').split(' ');
-    route = '';
-    // if someone's name has many spaces, this will replace spaces with '_'
-    for (p in profile) {
-      route += (profile[p] += '_');
-    }
-    route = route.substring(0, route.length - 1); //chop off the last '_'
-    app.router.navigate('profile/' + route + "/" + this.model.get('author_id'), {trigger: true});
+    // navigate to the route for the user's profile
+    profile = this.model.get('authorFirst') + "/" + this.model.get('authorLast') + '/' + this.model.get('author_id');
+    app.router.navigate('profile/' + profile, {trigger: true});
   }
 });

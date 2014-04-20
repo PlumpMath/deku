@@ -20,9 +20,10 @@ app.Router = Backbone.Router.extend({
     'login': 'login',
     'reset_password': 'reset_password',
     'hand': 'hand',
-    'profile/:username/:id': 'profileView',
-    'update/:username/:id': 'update',
-    'search/category/:query': 'search'
+    'profile/:first/:last/:id': 'profileView',
+    'update/:first/:last/:id': 'update',
+    'search/category/:query': 'search',
+    '*notFound': 'notFound'
   },
 
   /* This function facilitates view transitions for #container
@@ -169,7 +170,7 @@ app.Router = Backbone.Router.extend({
     }
   },
 
-  profileView: function(username, id) {
+  profileView: function(first, last, id) {
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
@@ -180,7 +181,13 @@ app.Router = Backbone.Router.extend({
       $('#default').hide('medium');
       $.get("http://localhost:4568/deku/api/users/" + id, function(data) {
         var profile = new app.User(data['user']);
-        $('#container').fadeOut(350, function() {that.changeView(new app.ProfileView({model: profile}))});
+        // this checks the name as well. Just ID was not secure
+        if (first === profile.get('firstName') && last === profile.get('lastName')) {
+          $('#container').fadeOut(350, function() {that.changeView(new app.ProfileView({model: profile}))});
+        } else {
+          // trigger a not found page load
+          $('#container').fadeOut(350, function() { that.navigate('user_not_found', {trigger: true})});
+        }
       });
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
@@ -188,7 +195,7 @@ app.Router = Backbone.Router.extend({
 	},
 
   // view for updating user's information
-  update: function(username, id) {
+  update: function(first, last, id) {
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
@@ -206,5 +213,21 @@ app.Router = Backbone.Router.extend({
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }
-  } 
+  },
+
+  // very simple 404 route. Anything that doesn't match and existing route definition goes here.
+  notFound: function(notFound) {
+    var that = this;
+    // do the slidebar and toggle button exist
+    if (this.slideView !== null && this.toggleView !== null) {
+      // they do, so remove them and close the slidebar (only real permanent solution)
+      this.removeChildren();
+      app.$slidebars.close();
+    }
+    $('#container').fadeOut(350, function() {
+      // In the case that container was shifted in hand route, undo that here
+      $(this).css('margin-left', 'auto');
+      that.changeView(new app.NotFoundView());
+  	});
+  }
 });
