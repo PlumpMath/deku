@@ -38,7 +38,6 @@ class User(db.Model):
             "major": self.profile.major,
             "role": self.role,
             "cards": [card.id for card in self.cards]
-            
         }
         
 class Profile(db.Model):
