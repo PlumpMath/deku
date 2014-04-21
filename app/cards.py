@@ -22,12 +22,13 @@ def cards():
         content = request.form.get('content')
         category = request.form.get('category')
         tags = request.form.getlist('tags')
-        author = request.form.get('author')
         author_id = request.form.get('author_id')
+        author = models.User.query.get(author_id) #get the author id from db
         if (content):
             card = models.Card(user_id = author_id,
                                content=content,
-                               user= author)
+                               userFirst = author.firstName,
+                               userLast = author.lastName)
             if (category):
                 card.category = category
             for tag in tags:

@@ -80,8 +80,6 @@ app.CreateCardView = Backbone.View.extend({
         authorLast: app.user.get('lastName'),
         author_id: app.user.get('id'),
 				content: $('#content').val().trim(),
-				//post_time: card_time,
-      	//post_date: card_day
 			};
 
     	//this checks the input for validation

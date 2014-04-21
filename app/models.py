@@ -77,7 +77,8 @@ class Card(db.Model):
     category = db.Column(db.String(MAX_CONTENT_LENGTH))
     tags = db.relationship('Tag', cascade="all,delete", backref="card")
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
-    user = db.Column(db.String(MAX_CONTENT_LENGTH))
+    userFirst = db.Column(db.String(MAX_CONTENT_LENGTH))
+    userLast = db.Column(db.String(MAX_CONTENT_LENGTH))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
@@ -91,7 +92,8 @@ class Card(db.Model):
             "content": self.content,
             "category": self.category,
             "created_at": self.timestamp,
-            "author": self.user,
+            "authorFirst": self.userFirst,
+            "authorLast": self.userLast,
             "author_id": self.user_id,
             "tags": ",".join([tag.toString() for tag in self.tags])
         }
