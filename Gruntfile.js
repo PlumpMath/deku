@@ -9,13 +9,14 @@ module.exports = function(grunt) {
           'js/models/*.js',
           'js/collections/*.js',
           'js/views/*.js',
+          'js/router.js',
           'js/app.js'
         ],
         options: {
           vendor: [
             'js/lib/jquery.min.js',
-            'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
             'js/lib/bootstrap.min.js',
+            'js/lib/jquery-ui.min.js',
             'js/lib/jquery.flippy.min.js',
             'js/lib/masonry.pkgd.min.js',
             'js/lib/slidebars.min.js',
