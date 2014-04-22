@@ -46,7 +46,6 @@ app.TemplateCache = {
     var template = this.templates[selector];
     if (!template) {
       var tmpl = $(selector).html();
-      //console.log(selector + ": " + tmpl);
       template = _.template(tmpl);
       this.templates[selector] = template;
     }
