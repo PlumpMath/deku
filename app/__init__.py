@@ -13,4 +13,3 @@ import utils
 from app import models
 from app import users
 import cards
-import comments

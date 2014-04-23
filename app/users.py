@@ -8,22 +8,22 @@ from flask import json
 from flask import jsonify
 from flask import request
 from sqlalchemy import func
-from utils import cors_response
+from utils import cors_response, validate_user
 
 @app.route('/deku/api/users',methods=['GET'])
-def getNewestUsers():
-    return cors_response((jsonify(users = [user.serialize for user in models.User.query.limit(20).all()]),200))
+def get_newest_user():
+    return cors_response((jsonify(users = [user.serialize for user in models.User.query.order_by(models.User.id.desc()).limit(20).all()]),200))
 
 @app.route('/deku/api/users/<int:user_id>',methods=['GET'])
-def getUser(user_id):
+def get_user(user_id):
     user = models.User.query.get(int(user_id))
     if (user):
         return cors_response((jsonify(user = user.serialize),200))
     else:
         return cors_response(("User Not Found",400))
-
+    
 @app.route('/deku/api/users',methods=['POST'])
-def postNewUser():
+def post_new_users():
     data = request.json
     email = data.get('email')
     user = models.User.query.filter(models.User.email==email).first()
@@ -60,75 +60,70 @@ def postNewUser():
         db.session.commit()
         return cors_response((jsonify(user = user.serialize), 201))
     else:
-        cors_response(("Missing required fields",400))
+        return cors_response(("Missing required fields",400))
         
 @app.route('/deku/api/users/<int:user_id>',methods=['DELETE'])
-def deleteUser(user_id):
+def delete_user(user_id):
     data = request.json
     user = models.User.query.filter(models.User.id==user_id).first()
-    if user is None:
+
+    if user is not None:
+        if validate_user(user_id):
+            models.User.query.filter(models.User.id==user_id).delete()
+            db.session.commit()
+            return cors_response(("User deleted",200))
+        else:
+            return cors_response(("Unauthorized Access",401))
+    else:
         return cors_response(("User Not Found,204"))
 
-#    user = models.User.query.filter(models.User.email==data.get('user')).first()
-#    if not user or not bcrypt.check_password_hash(user.password,data.get('pwd')):
-#        return cors_response(("Unauthorized Access",401))
-#    elif user.id != user_id and user.role != models.ROLE_ADMIN:
-#        return cors_response(("User is not admin",401))
-
-    models.User.query.filter(models.User.id==user_id).delete()
-    db.session.commit()
-    return cors_response(("User deleted",200))
-        
 @app.route('/deku/api/users/<int:user_id>',methods=['PUT'])
-def modifyUser(user_id):
+def modify_user(user_id):
     data = request.json
     user = models.User.query.filter(models.User.id==user_id).first()
-    if user is None:
-        return cors_response(("User Not Found",204))
-    
-#    user = models.User.query.filter(models.User.email==data.get('user')).first()
-#    if not user or not bcrypt.check_password_hash(user.password,data.get('pwd')):
-#        return cors_response(("Unauthorized Access",401))
-#    elif user.id != user_id and user.role != models.ROLE_ADMIN:
-#        return cors_response(("User is not admin",401))
 
-    #update fields
-    firstName = data.get('firstName')
-    lastName = data.get('lastName')
-    email = data.get('email')
-    password = data.get('password')
-    university = data.get('university')
-    grad_year = data.get('grad_year')
-    major = data.get('major')
-    classes = data.get('classes')
-    bio = data.get('bio')
-    if (firstName):
-        user.firstName = firstName
-    if (lastName):
-        user.lastName = lastName
-    if (email):
-        user.email = email
-    if (password):
-        user.password = bcrypt.generate_password_hash(password)
-    if (university):
-        user.university = university
-    if (grad_year):
-        user.profile.grad_year = grad_year
-    if (major):
-        user.profile.major = major
-    if isinstance(classes,list):
-        courses = models.Course.query.filter(models.Course.user_id==user_id)
-        courses.delete()
-        for each_class in classes:
-            temp = models.Course(course=each_class)
-            temp.user_id = user.id
-            temp.profile_id = user.profile.id
-            db.session.add(temp)
-    if (bio):
-        user.profile.bio = bio
-    db.session.commit()
-    return cors_response((jsonify(user = user.serialize),200))
-
+    if user is not None:
+        if validate_user(user_id):
+            #update fields
+            firstName = data.get('firstName')
+            lastName = data.get('lastName')
+            email = data.get('email')
+            password = data.get('password')
+            university = data.get('university')
+            grad_year = data.get('grad_year')
+            major = data.get('major')
+            classes = data.get('classes')
+            bio = data.get('bio')
+            if (firstName):
+                user.firstName = firstName
+            if (lastName):
+                user.lastName = lastName
+            if (email):
+                user.email = email
+            if (password):
+                user.password = bcrypt.generate_password_hash(password)
+            if (university):
+                user.university = university
+            if (grad_year):
+                user.profile.grad_year = grad_year
+            if (major):
+                user.profile.major = major
+            if isinstance(classes,list):
+                courses = models.Course.query.filter(models.Course.user_id==user_id)
+                courses.delete()
+                for each_class in classes:
+                    temp = models.Course(course=each_class)
+                    temp.user_id = user.id
+                    temp.profile_id = user.profile.id
+                    db.session.add(temp)
+            if (bio):
+                user.profile.bio = bio
+            db.session.commit()
+            return cors_response((jsonify(user = user.serialize),200))
+        else:
+            return cors_response(("Unauthorized Access",401))
+    else:
+        return cors_response(("User not found"))
 
 @app.route('/deku/api/users/login', methods=['POST'])
 def user_authentication():
@@ -142,5 +137,5 @@ def user_authentication():
                 return cors_response((jsonify(user = user.serialize),200))
     return cors_response(("Unauthorized access",401))
 
-    
+        
     

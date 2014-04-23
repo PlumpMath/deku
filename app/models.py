@@ -17,7 +17,7 @@ class User(db.Model):
     university = db.Column(db.String(128))
     created = db.Column(db.DateTime, default=datetime.utcnow)
     profile = db.relationship('Profile', uselist=False, backref='user')
-    cards = db.relationship('Card', backref = 'author', cascade='all,delete', lazy = 'dynamic')
+    cards = db.relationship('Card', backref = 'author', cascade='all,delete')
     courses = db.relationship('Course', backref='user', cascade = 'all,delete')
 
     def __repr__(self):
@@ -27,17 +27,17 @@ class User(db.Model):
     def serialize(self):
         # Return User data in a serializable format
         return {
-            "id": self.id,
-            "firstName": self.firstName,
-            "lastName": self.lastName,
-            "email": self.email,
-            "university": self.university,
-            "bio": self.profile.bio,
-            "classes": [course.id for course in self.profile.courses],
-            "grad_year": self.profile.grad_year,
-            "major": self.profile.major,
-            "role": self.role,
-            "cards": [card.id for card in self.cards]
+            u"id": self.id,
+            u"firstName": self.firstName,
+            u"lastName": self.lastName,
+            u"email": self.email,
+            u"university": self.university,
+            u"bio": self.profile.bio,
+            u"classes": [course.course for course in self.profile.courses],
+            u"grad_year": self.profile.grad_year,
+            u"major": self.profile.major,
+            u"role": self.role,
+            u"cards": [card.id for card in self.cards]
         }
         
 class Profile(db.Model):
@@ -78,10 +78,12 @@ class Card(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     content = db.Column(db.String(MAX_CONTENT_LENGTH))
     category = db.Column(db.String(MAX_CONTENT_LENGTH))
+    date = db.Column(db.String(MAX_CONTENT_LENGTH))
+    time = db.Column(db.String(MAX_CONTENT_LENGTH))
     tags = db.relationship('Tag', cascade="all,delete", backref="card")
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    comments = db.relationship('Comment', backref = 'card', cascade='all,delete', lazy = 'dynamic')
+    comments = db.relationship('Comment', backref = 'card', cascade='all,delete')
     def __repr__(self):
         return '<Card %r>' % (self.content[:40] + "...")
 
@@ -89,13 +91,16 @@ class Card(db.Model):
     def serialize(self):
         # Return Card data in a serializable format
         card= {
-            "id": self.id,
-            "content": self.content,
-            "category": self.category,
-            "created_at": self.timestamp,
-            "author_id": self.user_id,
-            "tags": [tag.id for tag in self.tags],
-            "comments": [comment.id for comment in self.comments]
+            u"id": self.id,
+            u"content": self.content,
+            u"category": self.category,
+            u"author_id": self.user_id,
+            u"authorFirst": self.author.firstName,
+            u"authorLast": self.author.lastName,
+            u"date": self.date,
+            u"time": self.time,
+            u"tags": [tag.tag for tag in self.tags],
+            u"comments": [comment.comment for comment in self.comments]
         }
         return card
 
@@ -108,9 +113,9 @@ class Tag(db.Model):
     @property
     def serialize(self):
         return {
-            "tag": self.tag,
-            "id": self.id,
-            "card_id": self.card
+            u"tag": self.tag,
+            u"id": self.id,
+            u"card_id": self.card
         }
     
 class Comment(db.Model):
@@ -123,11 +128,11 @@ class Comment(db.Model):
     @property
     def serialize(self):
         return{
-            "id": self.id,
-            "user_id": self.user_id,
-            "card_id": self.card_id,
-            "comment": self.comment,
-            "created_at": self.timestamp
+            u"id": self.id,
+            u"user_id": self.user_id,
+            u"card_id": self.card_id,
+            u"comment": self.comment,
+            u"created_at": self.timestamp
         }
     
     
