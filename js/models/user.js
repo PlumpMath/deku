@@ -4,6 +4,7 @@ app.User = Backbone.Model.extend({
     defaults: function() {
       return {
         id: -1,
+        role: -1,
         firstName: "",
         lastName: "",
         email: "",

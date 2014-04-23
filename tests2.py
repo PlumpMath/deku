@@ -7,7 +7,7 @@ from flask import json
 from config import basedir
 from app import app, db, bcrypt, session, models, users
 from app.models import User, Card
-from app.users import authenticate
+from app.users import authenticate_by_email, authenticate_by_id
 from sqlalchemy import outerjoin, desc
 
 class APITestCase(unittest.TestCase):

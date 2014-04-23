@@ -7,7 +7,7 @@ from flask import json
 from config import basedir
 from app import app, db, bcrypt, session, models, users
 from app.models import User, Card
-from app.users import authenticate
+from app.users import authenticate_by_email, authenticate_by_id
 from sqlalchemy import outerjoin
 
 class APITestCase(unittest.TestCase):
@@ -97,12 +97,12 @@ class APITestCase(unittest.TestCase):
         
     def test_authentication(self):
         user = User.query.filter(User.email == 'carrie.hildebrand2@gmail.com').first()
-        self.assertFalse(authenticate('ca@rr.ie', 'password'))
-        self.assertFalse(authenticate('carrie.hildebrand2@gmail.com', 'password1'))
-        self.assertFalse(authenticate('carrie@aewr.er', 'passwordwer'))
-        self.assertEquals(authenticate('carrie.hildebrand2@gmail.com', 'password').serialize, user.serialize)
-        self.assertEquals(authenticate('carrIE.hildebrand2@gmail.com', 'password').serialize, user.serialize)
-        self.assertEquals(authenticate('caRRie.hildebrand2@gmail.com', 'password').serialize, user.serialize)
+        self.assertFalse(authenticate_by_email('ca@rr.ie', 'password'))
+        self.assertFalse(authenticate_by_email('carrie.hildebrand2@gmail.com', 'password1'))
+        self.assertFalse(authenticate_by_email('carrie@aewr.er', 'passwordwer'))
+        self.assertEquals(authenticate_by_email('carrie.hildebrand2@gmail.com', 'password').serialize, user.serialize)
+        self.assertEquals(authenticate_by_email('carrIE.hildebrand2@gmail.com', 'password').serialize, user.serialize)
+        self.assertEquals(authenticate_by_email('caRRie.hildebrand2@gmail.com', 'password').serialize, user.serialize)
         
     def test_modify_own_user_fields(self):
         # change all of carrie's fields to "a"

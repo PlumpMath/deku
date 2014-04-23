@@ -6,11 +6,20 @@ def cors_response(response):
     resp.headers['Access-Control-Allow-Origin'] = "http://localhost:4567"
     return resp
 
-def authenticate(user_id, password):
+def authenticate_by_email(email, password):
+    if (email and password):
+        user = models.User.query.filter_by(email=email).first()
+        if (user):
+            correct_pw = bcrypt.check_password_hash(user.password, password)
+            if correct_pw:
+                return user
+    return None
+
+def authenticate_by_id(user_id, password):
     if (user_id and password):
         user = models.User.query.get(int(user_id))
         if (user):
-            correct_pw = bcrypt.check_password_hash(user.password, pwd)
+            corrent_pw = bcrypt.check_password_hash(user.password, password)
             if correct_pw:
                 return user
     return None

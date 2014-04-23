@@ -4,7 +4,7 @@ import os
 from flask import Flask, request, jsonify, abort, render_template, json
 from sqlalchemy.orm import subqueryload, contains_eager
 from app import app, db, models, bcrypt, session
-from utils import cors_response, authenticate
+from utils import cors_response, authenticate_by_email, authenticate_by_id
 from models import ROLE_USER, ROLE_MOD, ROLE_ADMIN
 
 @app.route('/deku/api/users', methods=['GET','POST'])
@@ -63,6 +63,20 @@ def users():
     else:
         pass
 
+#This is used to set a user to be an administrator. Possibly a temporary solution, I just needed some way to make this happen
+@app.route('/deku/api/users/make_admin/<int:user_id>', methods=['PUT'])
+def make_user_admin(user_id):
+    if request.method == 'PUT':
+        user = models.User.query.get(int(user_id))
+        if (user):
+            user.role = 2
+            db.session.commit()
+            return cors_response((jsonify(user = user.serialize), 200))
+        else:
+            return cors_response(("Invalid Request", 400))
+    else:
+        pass
+
 @app.route('/deku/api/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
 def user_by_id(user_id):
     if request.method == 'GET':
@@ -76,7 +90,7 @@ def user_by_id(user_id):
 
     elif request.method == 'PUT':
         password = request.form.get('confirm_password')
-        user = authenticate(user_id, password)
+        user = authenticate_by_id(user_id, password)
 
         if not isinstance(user, models.User):
             return cors_response(("Unauthorized Access",401))
@@ -142,7 +156,7 @@ def user_by_id(user_id):
 
     elif request.method == 'DELETE':
         password = request.get("password")
-        user = authenticate(user_id, password)
+        user = authenticate_by_id(user_id, password)
         if (user):
             if user.role == ROLE_ADMIN:
                 return cors_response(("Admin cannot delete own account.", 403))
@@ -157,9 +171,9 @@ def user_by_id(user_id):
 
 @app.route('/deku/api/users/login', methods=['POST', 'GET'])
 def user_authentication():
-    user = request.form.get('email')
+    email = request.form.get('email')
     password = request.form.get('password')
-    user = authenticate(user, password)
+    user = authenticate_by_email(email, password)
     if user:
         return cors_response((jsonify(user = user.serialize),200))
     else:

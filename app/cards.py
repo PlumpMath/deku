@@ -4,7 +4,7 @@ import os
 from flask import Flask, request, jsonify, abort, make_response, json
 from app import app, db, models, session
 from app.models import Card
-from utils import cors_response, authenticate
+from utils import cors_response, authenticate_by_email, authenticate_by_id
 
 @app.route('/deku/api/cards', methods=['GET', 'POST'])
 def cards():
