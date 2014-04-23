@@ -14,7 +14,6 @@ class User(db.Model):
     email = db.Column(db.String(128), index = True, unique = True)
     password = db.Column(db.LargeBinary(60))
     university = db.Column(db.String(128))
-    created = db.Column(db.DateTime, default=datetime.utcnow)
     profile = db.relationship('Profile', uselist=False, backref='user')
     cards = db.relationship('Card', backref = 'author', cascade='all,delete', lazy = 'dynamic')
     courses = db.relationship('Course', backref='user', cascade = 'all,delete')
@@ -46,7 +45,7 @@ class Profile(db.Model):
     courses = db.relationship('Course', backref='profile')
     
     def __repr__(self):
-        return '<Profile %r>' %(str(self.user.id) + " " + str(self.major))
+        return '<Profile %r>' % (str(self.user.id) + " " + str(self.major))
 
     @property
     def serialize(self):
@@ -67,7 +66,7 @@ class Course(db.Model):
     
     @property
     def serialize(self):
-        return{
+        return {
             "class": self.course
         }
 
@@ -87,7 +86,7 @@ class Card(db.Model):
     @property
     def serialize(self):
         # Return Card data in a serializable format
-        card= {
+        return {
             "id": self.id,
             "content": self.content,
             "category": self.category,
@@ -97,7 +96,6 @@ class Card(db.Model):
             "author_id": self.user_id,
             "tags": ",".join([tag.toString() for tag in self.tags])
         }
-        return card
 
 class Tag(db.Model):
     __tablename__ = 'tag'
@@ -112,5 +110,6 @@ class Tag(db.Model):
         return {
             "tag": self.tag,
         }
+
     def toString(self):
         return "%s"%(self.tag)
