@@ -15,3 +15,12 @@ def authenticate(email, pwd):
             if correct_pw:
                 return user
     return None
+
+def authenticateID(user_id, pwd):
+    if (user_id and pwd):
+        user = models.User.query.get(int(user_id))
+        if (user):
+            corrent_pw = bcrypt.check_password_hash(user.password, pwd)
+            if correct_pw:
+                return user
+    return None

@@ -27,6 +27,7 @@ class User(db.Model):
         # Return User data in a serializable format
         return {
             "id": self.id,
+            "role": self.role,
             "firstName": self.firstName,
             "lastName": self.lastName,
             "email": self.email,

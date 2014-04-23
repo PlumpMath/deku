@@ -51,6 +51,20 @@ def users():
     else:
         pass
 
+#This is used to set a user to be an administrator. Possibly a temporary solution, I just needed some way to make this happen
+@app.route('/deku/api/users/make_admin/<int:user_id>', methods=['PUT'])
+def make_user_admin(user_id):
+    if request.method == 'PUT':
+        user = models.User.query.get(int(user_id))
+        if (user):
+            user.role = 2
+            db.session.commit()
+            return cors_response((jsonify(user = user.serialize), 200))
+        else:
+            return cors_response(("Invalid Request", 400))
+    else:
+        pass
+
 @app.route('/deku/api/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
 def user_by_id(user_id):
     if request.method == 'GET':
