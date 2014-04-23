@@ -1,0 +1,5 @@
+ - Progressing well so far
+ - Placeholder code may be gotten rid of at demo/final product if not reached within time (ex. messages)
+ - All features from initial SRS may not be reached by demo/final product
+    - Shawn says this is okay. Make sure to get the complete basics down. Things like messages can try to get done but  not absolutely mandatory
+ - Goals for Spiral 3 Demo/Final Product - add features, clean up
