@@ -21,34 +21,35 @@ class APITestCase(unittest.TestCase):
         db.create_all()
        
         # from test_post_new_valid_user_with_no_profile 
-        response = self.app.post('/deku/api/users', data=json.dumps(dict(firstName="Jane", lastName="Doe", email="janedoe@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio")),content_type='application/json')
+        response = self.app.post('/deku/api/users', data=dict(firstName="Jane", lastName="Doe", email="janedoe@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
         
         # from test_post_new_valid_user_with_full_profile
-        response = self.app.post('/deku/api/users', data=json.dumps(dict(firstName="Carrie", lastName="Hildebrand", email="carrie@email.edu", password='carrie', university="UMBC", grad_year="yea", major="major", classes=["oneone", "two two"], bio="bio")),content_type='application/json')
+        response = self.app.post('/deku/api/users', data=dict(firstName="Carrie", lastName="Hildebrand", email="carrie@email.edu", password='carrie', university="UMBC", grad_year="yea", major="major", classes=["oneone", "two two"], bio="bio"))
 
         #admin
-        response=self.app.post('/deku/api/users',data=json.dumps(dict(firstName="admin", lastName="admin", email="admin@deku.com", password="admin", university="admin",grad_year="admin", major="admin",classes=["admin"],bio="bio")),content_type='application/json')
+        response=self.app.post('/deku/api/users',data=dict(firstName="admin", lastName="admin", email="admin@deku.com", password="admin", university="admin",grad_year="admin", major="admin",classes=["admin"],bio="bio"))
 #        self.assertEquals(response.headers['Access-Control-Allow-Origin'], "http://localhost:4567")
         user = models.User.query.filter(models.User.email=="admin@deku.com").first()
+
         user.role=models.ROLE_ADMIN
         db.session.commit()
 
         #from test_add_card_valid_min
-        response = self.app.post('/deku/api/cards', data=json.dumps(dict(
+        response = self.app.post('/deku/api/cards', data=dict(
                                                         user="janedoe@email.edu",
                                                         pwd="jane",
                                                         content="content1",
                                                         category="cat",
                                                         tags=["one","two"],
-                                                        comments=['','comment 2','comment 3'])),content_type='application/json')
+                                                        comments=['','comment 2','comment 3']))
         
         
-        response = self.app.post('/deku/api/cards', data=json.dumps(dict(
+        response = self.app.post('/deku/api/cards', data=dict(
                                                         user="janedoe@email.edu",
                                                         pwd="jane",
                                                         content="content2",
                                                         category="cat",
-                                                        tags=["one"])),content_type='application/json')
+                                                        tags=["one"]))
 
     def tearDown(self):
         db.session.remove()
@@ -68,13 +69,13 @@ class APITestCase(unittest.TestCase):
     def test_user_delete(self):
         id = models.User.query.filter(models.User.email=="janedoe@email.edu").first().id
         #make sure its there
-        response = self.app.post('/deku/api/users', data=json.dumps(dict(firstName="Jane", lastName="Doe", email="janedoe@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio")),content_type='application/json')
+        response = self.app.post('/deku/api/users', data=dict(firstName="Jane", lastName="Doe", email="janedoe@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
         self.assertEquals(response.data,"Email already registered")
         #delete
-        response = self.app.delete('/deku/api/users/'+str(id), data=json.dumps(dict(user="janedoe@email.edu",pwd="jane")),content_type='application/json')
+        response = self.app.post('/deku/api/users/delete/'+str(id), data=dict(user="janedoe@email.edu",pwd="jane"))
         self.assertEquals(response.data,"User deleted")
         #add
-        response = self.app.post('/deku/api/users', data=json.dumps(dict(firstName="Jane", lastName="Doe", email="janedoe@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio")),content_type='application/json')
+        response = self.app.post('/deku/api/users', data=dict(firstName="Jane", lastName="Doe", email="janedoe@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
         self.assertEquals(response.status_code,201)        
         
     
@@ -93,7 +94,7 @@ class APITestCase(unittest.TestCase):
 
     def test_all_fields_user_put(self):
         id = models.User.query.filter(models.User.email=="carrie@email.edu").first().id
-        response = self.app.put('/deku/api/users/'+str(id), data=json.dumps(dict(user="carrie@email.edu", pwd="carrie",firstName="Jane", lastName="Doe", email="janedoee@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio")),content_type='application/json')
+        response = self.app.post('/deku/api/users/edit/'+str(id), data=dict(user="carrie@email.edu", pwd="carrie",firstName="Jane", lastName="Doe", email="janedoee@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
         user = models.User.query.filter(models.User.id==id).first()
         self.assertEquals("Jane",user.firstName)
         self.assertEquals("Doe",user.lastName)
@@ -108,19 +109,20 @@ class APITestCase(unittest.TestCase):
     def test_validate_user_method_for_isADMIN(self):
         #edit another user as admin should change name
         id = models.User.query.filter(models.User.email=="carrie@email.edu").first().id
-        response = self.app.put('/deku/api/users/'+str(id), data=json.dumps(dict(user="admin@deku.com", pwd="admin",firstName="Jane", lastName="Doe", email="janedoee@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio")),content_type='application/json')
+        response = self.app.post('/deku/api/users/edit/'+str(id), data=dict(user="admin@deku.com", pwd="admin",firstName="Jane", lastName="Doe", email="janedoee@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
+        print response
         user = models.User.query.filter(models.User.id==id).first()
         self.assertEquals("Jane",user.firstName)
         
     def test_validate_user_method_for_notADMIN(self):
         #edit another user as non-admin should not change name
         id = models.User.query.filter(models.User.email=="carrie@email.edu").first().id
-        response = self.app.put('/deku/api/users/'+str(id), data=json.dumps(dict(user="jane@emailedu", pwd="jane",firstName="Jane", lastName="Doe", email="janedoee@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio")),content_type='application/json')
+        response = self.app.put('/deku/api/users/'+str(id), data=dict(user="jane@emailedu", pwd="jane",firstName="Jane", lastName="Doe", email="janedoee@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
         user = models.User.query.filter(models.User.id==id).first()
         self.assertNotEquals("Jane",user.firstName)
         
     def test_post_card(self):
-        response = self.app.post('/deku/api/cards', data=json.dumps(dict(
+        response = self.app.post('/deku/api/cards', data=dict(
                                                         user="janedoe@email.edu",
                                                         pwd="jane",
                                                         content="lesrigfjlaerjf",
@@ -128,7 +130,7 @@ class APITestCase(unittest.TestCase):
                                                         tags=["one","two"],
                                                         time="time",
                                                         date="date",
-                                                        comments=['comment 1','comment 2','comment 3'])),content_type='application/json')
+                                                        comments=['comment 1','comment 2','comment 3']))
         card = models.Card.query.filter(models.Card.content=="lesrigfjlaerjf").first()
         self.assertEquals(card.user_id, db.session.query(models.User.id).filter(models.User.id==card.user_id).first().id)
         self.assertEquals(card.content,"lesrigfjlaerjf")
@@ -142,7 +144,7 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(card.comments[2].comment,"comment 3")
         
     def test_put_card(self):
-        response = self.app.put('/deku/api/cards/1', data=json.dumps(dict(
+        response = self.app.put('/deku/api/cards/1', data=dict(
                                                         user="janedoe@email.edu",
                                                         pwd="jane",
                                                         content="asdf",
@@ -150,7 +152,7 @@ class APITestCase(unittest.TestCase):
                                                         tags=["dfgh","fghj"],
                                                         time="ime",
                                                         date="ate",
-                                                        comments=['ghjk 1','hjkl 2','jkl; 3'])),content_type='application/json')
+                                                        comments=['ghjk 1','hjkl 2','jkl; 3']))
         card = models.Card.query.filter(models.Card.id==1).first()
         self.assertEquals(card.user_id, db.session.query(models.User.id).filter(models.User.id==card.user_id).first().id)
         self.assertEquals(card.content,"asdf")
@@ -164,9 +166,9 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(card.comments[2].comment,"jkl; 3")
         
     def test_delete_card(self):
-        response = self.app.delete('/deku/api/cards/1', data=json.dumps(dict(user="janedoe@email.edu",pwd="jane")),content_type='application/json')
+        print '----deleete'
+        response = self.app.post('/deku/api/cards/delete/1', data=dict(user="janedoe@email.edu",pwd="jane"))
         self.assertEquals(models.Card.query.get(1),None)
-        
         
     def test_get_cards(self):
         cards = Card.query.order_by(models.Card.id.desc()).limit(20).all()
@@ -180,12 +182,42 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(json.loads(response.data)['card'],card.serialize)
 
     def test_search_by_tag_last20(self):
-        response = self.app.get('/deku/api/cards/search/one')
+        response = self.app.get('/deku/api/cards/search/tag/one')
         data = json.loads(response.data)
         self.assertEquals(len(data['cards']),2)
-        response = self.app.get('/deku/api/cards/search/two')
+        response = self.app.get('/deku/api/cards/search/tag/two')
         data = json.loads(response.data)
         self.assertEquals(len(data['cards']),1)
+        
+    def test_search_by_user_last20(self):
+        id = models.User.query.filter(models.User.email=="carrie@email.edu").first().id
+        response = self.app.get('/deku/api/cards/search/user/'+str(id))
+        print response.data
+        data = json.loads(response.data)
+        self.assertEquals(len(data['cards']),0)
+        id = models.User.query.filter(models.User.email=="janedoe@email.edu").first().id
+        response = self.app.get('/deku/api/cards/search/user/'+str(id))
+        print response.data
+        data = json.loads(response.data)
+        self.assertEquals(len(data['cards']),2)
+        
+    def test_mark(self):
+        #add jane's first mark to comment 1
+        response = self.app.put('/deku/api/cards/1/mark', data=dict(user="janedoe@email.edu",pwd="jane"))
+        print response.data
+        #add jane's first mark to comment 1 should be an error already exists
+        response = self.app.put('/deku/api/cards/1/mark', data=dict(user="janedoe@email.edu",pwd="jane"))
+        print response.data
+        #add carrie's first mark to comment 1
+        response = self.app.put('/deku/api/cards/1/mark', data=dict(user="carrie@email.edu",pwd="carrie"))
+        print response.data
+        #add jane's first mark to comment 2
+        response = self.app.post('/deku/api/cards/2/mark', data=dict(user="janedoe@email.edu",pwd="jane"))
+        print response.data
+        
+    def test_unmark(self):
+        response = self.app.put('/deku/api/cards/1/unmark', data=dict(user="janedoe@email.edu",pwd="jane"))
+        
         
 if __name__ == '__main__':
     unittest.main()

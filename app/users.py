@@ -24,7 +24,7 @@ def get_user(user_id):
     
 @app.route('/deku/api/users',methods=['POST'])
 def post_new_users():
-    data = request.json
+    data = request.form
     email = data.get('email')
     user = models.User.query.filter(models.User.email==email).first()
     if user:
@@ -35,7 +35,7 @@ def post_new_users():
     university = data.get('university')
     grad_year = data.get('grad_year')
     major = data.get('major')
-    classes = data.get('classes')
+    classes = data.getlist('classes')
     bio = data.get('bio')
     if firstName and lastName and password and university and email:
         user = models.User(firstName = firstName,
@@ -62,9 +62,9 @@ def post_new_users():
     else:
         return cors_response(("Missing required fields",400))
         
-@app.route('/deku/api/users/<int:user_id>',methods=['DELETE'])
+@app.route('/deku/api/users/delete/<int:user_id>',methods=['POST'])
 def delete_user(user_id):
-    data = request.json
+    data = request.form
     user = models.User.query.filter(models.User.id==user_id).first()
 
     if user is not None:
@@ -77,9 +77,10 @@ def delete_user(user_id):
     else:
         return cors_response(("User Not Found,204"))
 
+@app.route('/deku/api/users/edit/<int:user_id>',methods=['POST'])
 @app.route('/deku/api/users/<int:user_id>',methods=['PUT'])
 def modify_user(user_id):
-    data = request.json
+    data = request.form
     user = models.User.query.filter(models.User.id==user_id).first()
 
     if user is not None:
@@ -92,7 +93,7 @@ def modify_user(user_id):
             university = data.get('university')
             grad_year = data.get('grad_year')
             major = data.get('major')
-            classes = data.get('classes')
+            classes = data.getlist('classes')
             bio = data.get('bio')
             if (firstName):
                 user.firstName = firstName
@@ -127,14 +128,20 @@ def modify_user(user_id):
 
 @app.route('/deku/api/users/login', methods=['POST'])
 def user_authentication():
-    user = request.json.get('user')
-    pwd = request.json.get('pwd')
+    print request.form
+    user = request.form.get('user')
+    pwd = request.form.get('pwd')
     if user and pwd:
+        print user
+        print pwd
         user = models.User.query.filter(func.lower(models.User.email)==func.lower(user)).first()
         if (user):
+            print 'got user'
             correct_pw = bcrypt.check_password_hash(user.password, pwd)
             if correct_pw:
+                print 'good password'
                 return cors_response((jsonify(user = user.serialize),200))
+            print 'bad password'
     return cors_response(("Unauthorized access",401))
 
         

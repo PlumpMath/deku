@@ -25,8 +25,8 @@ def cors_response(response):
 #if no user_id is sent in, valid user/pwd combination returns: user id of that user/pwd combination
 #if user_id is sent in, valid user/pwd and [(user_id matches id of user/pwd combo) or (user is an admin))]: user_id sent in 
 def validate_user(user_id=None):
-    user = request.json.get('user')
-    pwd = request.json.get('pwd')
+    user = request.form.get('user')
+    pwd = request.form.get('pwd')
     #user = db.session.query(models.User.id, models.User.role, models.User.password).filter(func.lower(models.User.email)==func.lower(user)).first()
     user = db.session.query(models.User.firstName,models.User.id, models.User.role, models.User.password).filter(func.lower(models.User.email)==func.lower(user)).first()
     if user:
@@ -36,4 +36,3 @@ def validate_user(user_id=None):
             if user.id==user_id or user.role==models.ROLE_ADMIN:
                 return user_id
     return None
-    

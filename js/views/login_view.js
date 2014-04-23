@@ -57,9 +57,13 @@ app.LoginView = Backbone.View.extend({
 			email: this.$emailInput.val().trim(),
 			password: this.$passwordInput.val().trim()
 		};
-
     if (!this.formError(loginValues)) {
-        $.post(url, loginValues, function( data, textStatus, jqXHR ) {
+    	var values={
+    	    user: loginValues.email,
+    	    pwd: loginValues.password
+    	}
+    	$.values = values;
+        $.post(url, values, function( data, textStatus, jqXHR ) {
             // Store that user in localStorage for persistent user state.
             localStorage.setItem('deku', JSON.stringify(data['user']));
             app.user.set(data['user']);

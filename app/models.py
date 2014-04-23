@@ -84,6 +84,7 @@ class Card(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     comments = db.relationship('Comment', backref = 'card', cascade='all,delete')
+    marks = db.relationship('Mark', backref = 'card', cascade='all,delete')
     def __repr__(self):
         return '<Card %r>' % (self.content[:40] + "...")
 
@@ -134,5 +135,13 @@ class Comment(db.Model):
             u"comment": self.comment,
             u"created_at": self.timestamp
         }
-    
-    
+
+class Mark(db.Model):
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True, nullable=False,autoincrement=False)
+    card_id=db.Column(db.Integer, db.ForeignKey('card.id'), primary_key=True, nullable=False,autoincrement=False)
+    @property
+    def serialize(self):
+        return{
+            u"user_id": self.user_id,
+            u"card_id":self.card_id
+        }
