@@ -131,8 +131,7 @@ def user_by_id(user_id):
             user.profile.major = major
 
         if isinstance(classes,list):
-            result = db.session.query(models.Course)
-                .filter(models.Course.user_id == user.profile.user_id).all()
+            result = db.session.query(models.Course).filter(models.Course.user_id == user.profile.user_id).all()
             existing_courses = [] 
             
             for course in user.courses:
