@@ -68,7 +68,6 @@ def update_fields(card):
     content = request.form.get('content')
     category = request.form.get('category')
     tags = request.form.getlist('tags[]')
-    print tags
     comments = request.form.getlist('comments')
     date = request.form.get('date')
     time = request.form.get('time')
@@ -103,8 +102,6 @@ class CardAPI(MethodView):
     #modify user info
     #email, password, firstName, lastName, university, grad_year, major, classes[], bio
     def post(self):
-        print request.form
-        print request.form
         id = validate_user()
         if id:
             card = models.Card(user_id = id)
