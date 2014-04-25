@@ -67,7 +67,8 @@ def delete_card(card_id):
 def update_fields(card):
     content = request.form.get('content')
     category = request.form.get('category')
-    tags = request.form.getlist('tags')
+    tags = request.form.getlist('tags[]')
+    print tags
     comments = request.form.getlist('comments')
     date = request.form.get('date')
     time = request.form.get('time')
