@@ -35,7 +35,7 @@ def post_new_users():
     university = data.get('university')
     grad_year = data.get('grad_year')
     major = data.get('major')
-    classes = data.getlist('classes')
+    classes = data.getlist('classes[]')
     bio = data.get('bio')
     if firstName and lastName and password and university and email:
         user = models.User(firstName = firstName,
@@ -93,7 +93,7 @@ def modify_user(user_id):
             university = data.get('university')
             grad_year = data.get('grad_year')
             major = data.get('major')
-            classes = data.getlist('classes')
+            classes = data.getlist('classes[]')
             bio = data.get('bio')
             if (firstName):
                 user.firstName = firstName
