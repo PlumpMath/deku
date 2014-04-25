@@ -80,6 +80,7 @@ class Card(db.Model):
     category = db.Column(db.String(MAX_CONTENT_LENGTH))
     date = db.Column(db.String(MAX_CONTENT_LENGTH))
     time = db.Column(db.String(MAX_CONTENT_LENGTH))
+    tags2 = db.Column(db.String())
     tags = db.relationship('Tag', cascade="all,delete", backref="card")
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -91,6 +92,10 @@ class Card(db.Model):
     @property
     def serialize(self):
         # Return Card data in a serializable format
+        if isinstance(self.tags2,basestring):
+            tags=self.tags2.split(",")
+        else:
+            tags=[]
         card= {
             u"id": self.id,
             u"content": self.content,
@@ -100,7 +105,7 @@ class Card(db.Model):
             u"authorLast": self.author.lastName,
             u"date": self.date,
             u"time": self.time,
-            u"tags": [tag.tag for tag in self.tags],
+            u"tags": tags,
             u"comments": [comment.comment for comment in self.comments]
         }
         return card
@@ -143,5 +148,5 @@ class Mark(db.Model):
     def serialize(self):
         return{
             u"user_id": self.user_id,
-            u"card_id":self.card_id
+            u"card_id": self.card_id
         }

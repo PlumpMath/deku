@@ -128,21 +128,15 @@ def modify_user(user_id):
 
 @app.route('/deku/api/users/login', methods=['POST'])
 def user_authentication():
-    print request.form
     user = request.form.get('user')
     pwd = request.form.get('pwd')
     if user and pwd:
-        print user
-        print pwd
         user = models.User.query.filter(func.lower(models.User.email)==func.lower(user)).first()
         if (user):
-            print 'got user'
             correct_pw = bcrypt.check_password_hash(user.password, pwd)
             if correct_pw:
-                print 'good password'
                 return cors_response((jsonify(user = user.serialize),200))
-            print 'bad password'
     return cors_response(("Unauthorized access",401))
 
-        
-    
+
+

@@ -13,5 +13,6 @@ app.CardList = Backbone.Collection.extend({
         that.reset(data['cards']);
       }
     });
+
   },
 });

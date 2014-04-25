@@ -79,17 +79,28 @@ app.CreateCardView = Backbone.View.extend({
         authorFirst: app.user.get('firstName'),
         authorLast: app.user.get('lastName'),
         author_id: app.user.get('id'),
+        user:$.storedUSER,
+        pwd:$.storedPWD,
 				content: $('#content').val().trim(),
 				//post_time: card_time,
       	//post_date: card_day
 			};
-
     	//this checks the input for validation
     	if (!this.formError(formData)) {
 	  		app.Deck.create(formData);
   			$('#category').val('');
   			$('#tags').tagit('removeAll');
   			$('#content').val('');
+//don't know how the frontend works so i'm just going to throw it in here
+            $.post(url, values, function( formData, textStatus, jqXHR ) {
+            })
+            .fail(function() {
+                bootbox.alert("some sort of post fail.");
+                that.$emailInput.val("");
+                that.$passwordInput.val("");
+                that.$emailInput.focus();
+            });
+
     	}
       // check the first piece of the fragment for search
     } else if (Backbone.history.fragment.substring(0,6) === 'search') {

@@ -110,7 +110,6 @@ class APITestCase(unittest.TestCase):
         #edit another user as admin should change name
         id = models.User.query.filter(models.User.email=="carrie@email.edu").first().id
         response = self.app.post('/deku/api/users/edit/'+str(id), data=dict(user="admin@deku.com", pwd="admin",firstName="Jane", lastName="Doe", email="janedoee@email.edu", password="jane", university="UMBC", grad_year="yea", major="major", classes=["no courses", "except this one","bbb"], bio="bio"))
-        print response
         user = models.User.query.filter(models.User.id==id).first()
         self.assertEquals("Jane",user.firstName)
         
@@ -139,6 +138,7 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(card.date,"date")
         self.assertEquals(card.tags[0].tag,"one")
         self.assertEquals(card.tags[1].tag,"two")
+        self.assertEquals(card.tags2,"one,two")
         self.assertEquals(card.comments[0].comment,"comment 1")
         self.assertEquals(card.comments[1].comment,"comment 2")
         self.assertEquals(card.comments[2].comment,"comment 3")
@@ -161,18 +161,19 @@ class APITestCase(unittest.TestCase):
         self.assertEquals(card.date,"ate")
         self.assertEquals(card.tags[0].tag,"dfgh")
         self.assertEquals(card.tags[1].tag,"fghj")
+        self.assertEquals(card.tags2,"dfgh,fghj")
         self.assertEquals(card.comments[0].comment,"ghjk 1")
         self.assertEquals(card.comments[1].comment,"hjkl 2")
         self.assertEquals(card.comments[2].comment,"jkl; 3")
         
     def test_delete_card(self):
-        print '----deleete'
         response = self.app.post('/deku/api/cards/delete/1', data=dict(user="janedoe@email.edu",pwd="jane"))
         self.assertEquals(models.Card.query.get(1),None)
         
     def test_get_cards(self):
         cards = Card.query.order_by(models.Card.id.desc()).limit(20).all()
         response = self.app.get('/deku/api/cards')
+        print response.data
         cards=[card.serialize for card in cards]
         self.assertEquals(json.loads(response.data)['cards'],cards)
         
@@ -192,32 +193,32 @@ class APITestCase(unittest.TestCase):
     def test_search_by_user_last20(self):
         id = models.User.query.filter(models.User.email=="carrie@email.edu").first().id
         response = self.app.get('/deku/api/cards/search/user/'+str(id))
-        print response.data
         data = json.loads(response.data)
         self.assertEquals(len(data['cards']),0)
         id = models.User.query.filter(models.User.email=="janedoe@email.edu").first().id
         response = self.app.get('/deku/api/cards/search/user/'+str(id))
-        print response.data
         data = json.loads(response.data)
         self.assertEquals(len(data['cards']),2)
         
     def test_mark(self):
         #add jane's first mark to comment 1
         response = self.app.put('/deku/api/cards/1/mark', data=dict(user="janedoe@email.edu",pwd="jane"))
-        print response.data
         #add jane's first mark to comment 1 should be an error already exists
         response = self.app.put('/deku/api/cards/1/mark', data=dict(user="janedoe@email.edu",pwd="jane"))
-        print response.data
         #add carrie's first mark to comment 1
         response = self.app.put('/deku/api/cards/1/mark', data=dict(user="carrie@email.edu",pwd="carrie"))
-        print response.data
         #add jane's first mark to comment 2
         response = self.app.post('/deku/api/cards/2/mark', data=dict(user="janedoe@email.edu",pwd="jane"))
-        print response.data
         
     def test_unmark(self):
         response = self.app.put('/deku/api/cards/1/unmark', data=dict(user="janedoe@email.edu",pwd="jane"))
-        
-        
+
+    def test_tags_match(self):
+        cards = models.Card.query.all()
+        for card in cards:
+            newtags = card.tags2.split(",")
+            oldtags = [tag.tag for tag in card.tags]
+            self.assertEquals(newtags,oldtags)
+
 if __name__ == '__main__':
     unittest.main()
