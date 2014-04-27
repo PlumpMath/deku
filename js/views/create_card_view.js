@@ -72,23 +72,28 @@ app.CreateCardView = Backbone.View.extend({
       //This array will have all the tags the user provided. uses tagit, still lowercases
       var tag_array = $('#tags').tagit('assignedTags');
       tag_array = _.map(tag_array, function(tag) {return tag.toLowerCase()});
-			
+		
+      console.log(tag_array);
+	
       var date = new Date();
     	var card_time = date.toLocaleTimeString();
     	var card_day = date.toDateString();
     	//this is the data in a JSON packet
 			var formData = {
 				category: $('#category').val().trim(),
-				tags: tag_array,
+				tags: JSON.stringify(tag_array),
         authorFirst: app.user.get('firstName'),
         authorLast: app.user.get('lastName'),
         author_id: app.user.get('id'),
 				content: $('#content').val().trim(),
 			};
 
+      console.log(formData);
+
     	//this checks the input for validation
     	if (!this.formError(formData)) {
 	  		app.Deck.create(formData);
+        console.log(formData);
   			$('#category').val('');
   			$('#tags').tagit('removeAll');
   			$('#content').val('');

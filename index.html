@@ -431,8 +431,14 @@
           </td>
         </tr>
         <tr>
-          <td>Classes</td> <!-- TO BE IMPLEMENTED, PROBABLY USE TAG-THIS -->
-          <td><span id="classes" class='current-data'>placeholder</span></td>
+          <td>Classes</td> 
+          <td><span id="classes" class='current-data'> <%for (i in classes) {%>
+            <div class="user-class"><%= classes[i]%></div>
+            <%}%>
+            </span>
+            <span id="classes-e" class='edit-data'><input type="text" id="classes-input" />
+            </span>
+          </td>
         </tr>
         <tr>
           <td>Graduation Year</td>
