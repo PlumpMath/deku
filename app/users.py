@@ -9,9 +9,11 @@ from models import ROLE_USER, ROLE_MOD, ROLE_ADMIN
 
 @app.route('/deku/api/users', methods=['GET','POST'])
 def users():
+    """ GET REQUEST """
     if request.method == 'GET':
         return cors_response((jsonify(users = [user.serialize for user in models.User.query.all()]),200))
-
+    
+    """ POST REQUEST """
     if request.method == 'POST':
         email = request.form.get('email')
         user = models.User.query.filter(models.User.email==email).first()
@@ -35,7 +37,7 @@ def users():
             profile = models.Profile()
             grad_year = request.form.get('grad_year')
             major = request.form.get('major')
-            classes = request.form.getlist('classes')
+            courses = request.form.getlist('classes')
             bio = request.form.get('bio')
 
             if (grad_year):
@@ -44,11 +46,8 @@ def users():
             if (major):
                 profile.major = major
 
-            if isinstance(classes,list):
-                for course in classes:
-                    temp = models.Course(course=course)
-                    profile.courses.append(temp)
-                    user.courses.append(temp)
+            if isinstance(courses, list):
+                user.courses = ",".join(courses)
 
             if (bio):
                 profile.bio = bio
@@ -106,7 +105,7 @@ def user_by_id(user_id):
         university = request.form.get('university')
         grad_year = request.form.get('grad_year')
         major = request.form.get('major')
-        classes = request.form.getlist('classes')
+        courses = request.form.getlist('classes')
         bio = request.form.get('bio')
 
         if (firstName):
@@ -130,23 +129,9 @@ def user_by_id(user_id):
         if (major):
             user.profile.major = major
 
-        if isinstance(classes,list):
-            result = db.session.query(models.Course).filter(models.Course.user_id == user.profile.user_id).all()
-            existing_courses = [] 
-            
-            for course in user.courses:
-                if course.course not in classes:
-                    db.session.delete(course)
-                else:
-                    existing_courses.append(course.course)
+        if isinstance(courses, list):
+            user.courses = ",".join(courses)
 
-            for course in classes:
-                if course not in existing_courses:
-                    temp = models.Course(course = course)
-                    temp.user_id = user.id
-                    temp.profile_id = user.profile.id
-                    db.session.add(temp)
-        
         if (bio):
             user.profile.bio = bio
 

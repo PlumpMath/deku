@@ -16,7 +16,7 @@ class User(db.Model):
     university = db.Column(db.String(128))
     profile = db.relationship('Profile', uselist=False, backref='user')
     cards = db.relationship('Card', backref = 'author', cascade='all,delete', lazy = 'dynamic')
-    courses = db.relationship('Course', backref='user', cascade = 'all,delete')
+    courses = db.Column(db.String(MAX_CONTENT_LENGTH))
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)
@@ -32,7 +32,7 @@ class User(db.Model):
             "email": self.email,
             "university": self.university,
             "bio": self.profile.bio,
-            "classes": [course.course for course in self.profile.courses],
+            "classes": [self.courses.split(",")],
             "grad_year": self.profile.grad_year,
             "major": self.profile.major
         }
@@ -43,7 +43,6 @@ class Profile(db.Model):
     grad_year = db.Column(db.String(5))
     major = db.Column(db.String(17))
     bio = db.Column(db.String(77))
-    courses = db.relationship('Course', backref='profile')
     
     def __repr__(self):
         return '<Profile %r>' % (str(self.user.id) + " " + str(self.major))
@@ -55,20 +54,7 @@ class Profile(db.Model):
             "user id": self.user_id,
             "grad_year": self.grad_year,
             "major": self.major,
-            "classes": [course.course for course in self.courses],
             "biography": self.bio
-        }
-        
-class Course(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
-    course = db.Column(db.String(50))
-    
-    @property
-    def serialize(self):
-        return {
-            "class": self.course
         }
 
 class Card(db.Model):
