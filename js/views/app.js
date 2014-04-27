@@ -4,13 +4,6 @@ app.AppView = Backbone.View.extend({
   el: "#main",
 
   initialize: function() {
-    var container = $("#container");
-    app.msnry = new Masonry( container[0], {
-      // Masonry options
-      columnWidth: 60,
-      itemSelector: ".post",
-      gutter: 10
-    });
     new app.HeaderView();
     new app.IconView();
     //When the app loads we want to pull from this id in localStorage.
