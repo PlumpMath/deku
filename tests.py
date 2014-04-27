@@ -5,10 +5,9 @@ import urllib2
 
 from flask import json
 from config import basedir
-from app import app, db, bcrypt, session, models, users
-from app.models import User, Card, Profile
+from app import app, db, bcrypt, models, users
+from app.models import User, Card, Profile, ROLE_ADMIN
 from app.users import authenticate_by_email, authenticate_by_id
-from sqlalchemy import outerjoin
 
 class APITestCase(unittest.TestCase):
 
@@ -25,6 +24,7 @@ class APITestCase(unittest.TestCase):
                        email = "johndoe@umbc.edu",
                        password = bcrypt.generate_password_hash("password1"),
                        university = "UMBC",
+                       role = ROLE_ADMIN,
                        courses = ",".join(["CMSC 304", "CMSC 345", "CMSC 331", "STAT 355"]))
         johndoe.profile = Profile(grad_year = "2015",
                                   major = "Computer Science",
@@ -97,7 +97,20 @@ class APITestCase(unittest.TestCase):
 
     def test_put_user_by_id_invalid_password(self):
         response = self.app.put('/deku/api/users/1', data = dict(confirm_password="wrongpassword"))
-        self.assertEquals(response.status_code, 401) 
+        self.assertEquals(response.status_code, 401)
+
+    def test_put_user_by_id_success(self):
+        response = self.app.put('/deku/api/users/1', data = dict(confirm_password="password1",
+                                                                 bio = "I'm a somebody."))
+        assert "I'm a somebody." in response.data
+
+    def test_delete_user_by_id_user_is_admin_cannot_delete_own_account(self):
+        response = self.app.delete('/deku/api/users/1', data = dict(password="password1"))
+        self.assertEquals(response.status_code, 403)
+
+    def test_delete_user_by_id_success(self):
+        response = self.app.delete('/deku/api/users/2', data = dict(password="password2"))
+        self.assertEquals(response.status_code, 200) 
       
 if __name__ == '__main__':
     unittest.main()

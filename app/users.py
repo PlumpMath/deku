@@ -138,13 +138,14 @@ def user_by_id(user_id):
         return cors_response((jsonify(user = user.serialize), 200))
 
     elif request.method == 'DELETE':
-        password = request.get("password")
+        password = request.form.get('password')
         user = authenticate_by_id(user_id, password)
-        if (user):
+        if (user is not None):
             if user.role == ROLE_ADMIN:
                 return cors_response(("Admin cannot delete own account.", 403))
             else:
                 db.session.delete(user)
+                db.session.commit()
                 return cors_response(("User deleted", 200))
         else:
             return cors_response(("User not found.", 404))
