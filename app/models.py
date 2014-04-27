@@ -81,6 +81,6 @@ class Card(db.Model):
             "authorFirst": self.userFirst,
             "authorLast": self.userLast,
             "author_id": self.user_id,
-            "tags": [tags.split(",")]
+            "tags": tags.split(",")
         }
 
