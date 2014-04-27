@@ -101,14 +101,15 @@ app.InfoView = Backbone.View.extend({
 		values = {
 			grad_year: $('#grad-year').val(),
 			major: $('#major-list').val(),
-			classes: class_array,
+			classes: JSON.stringify(class_array),
 			bio: $('#bio').val().trim()
 		};
 
-    console.log(values.classes);
+    console.log(values);
 
 		if (!this.formErrors(values)) {
       app.user.set(values);
+      console.log(values);
       // app.user holds all the data we need, send a JSON packet of that to the server
       $.post(url, app.user.toJSON(), function(data, textStatus, jqXHR) {
         // navigate to the profile route, clear the user since we don't need it anymore until login
