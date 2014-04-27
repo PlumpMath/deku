@@ -417,16 +417,22 @@
         <tr>
           <td>Password</td>
           <td><span id="password" class='current-data'>Not shown</span>
-            <span id="password-e" class='edit-data'><input type="text" placeholder="Enter current password..." id="password-pass">
-              <input type="text" placeholder="Enter new password..." id="password-input">
-              <input type="text" placeholder="Confirm new password..." id="password-confirm">
+            <span id="password-e" class='edit-data'>
+              <input type="password" placeholder="Enter new password..." id="password-input">
+              <input type="password" placeholder="Confirm new password..." id="password-confirm">
             </span>
           </td>
         </tr>
         <tr>
           <td>Major</td>
           <td><span id="major" class='current-data'><%= major %></span>
-            <span id="major-e" class='edit-data'><input type="text" placeholder="Your new major..." id="major-input" value="<%=major%>">
+            <span id="major-e" class='edit-data'><input list="major-list" placeholder="Your new major..." id="major-input" value="<%=major%>">
+              <datalist id="major-list">
+                <option value="Computer Science">
+                <option value="Computer Engineering">
+                <option value="Economics">
+                <option value="Mathematics">
+              </datalist>
             </span>
           </td>
         </tr>
@@ -443,7 +449,12 @@
         <tr>
           <td>Graduation Year</td>
           <td><span id="year" class='current-data'><%= grad_year %></span>
-            <span id="year-e" class='edit-data'><input type="text" placeholder="Your new grad year..." id="year-input" value="<%=grad_year%>">
+            <span id="year-e" class='edit-data'><input list="year-list" placeholder="Your new grad year..." id="year-input" value="<%=grad_year%>">
+              <datalist id="year-list">
+                <option value="2014">
+                <option value="2015">
+                <option value="2016">
+              </datalist>
             </span>
           </td>
         </tr>
