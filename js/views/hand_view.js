@@ -7,7 +7,13 @@ app.HandView = Backbone.View.extend({
   initialize: function() { 
     //this will remove the login view that existed before, or anything else that was present
     this.$el.empty();
-    this.$el.fadeIn(350);
+    this.$el.show();
+    app.msnry = new Masonry( this.$el[0], {
+      // Masonry options
+      columnWidth: 60,
+      itemSelector: ".post",
+      gutter: 10
+    });
     app.Deck = new app.CardList();
     this.listenTo(app.Deck, 'add', this.renderCard);
     this.listenTo(app.Deck, 'reset', this.render);
