@@ -118,10 +118,11 @@
       </h4>
       <hr />
       <h4>Studies <%= major %> at <%= university %> | Year of <%= grad_year %></h4>
-      <ul><h4>Enrolled in:</h4><%for (c in classes) {%>
+      <div><h4>Enrolled in:</h4><ul><%for (c in classes) {%>
 			  <li><h5><%=classes[c]%></h5></li>
         <%}%>
-      </ul>
+        </ul>
+      </div>
       <h4>About <%= firstName %> </h4>
       <h5><%= bio %> </h5>
     </div>

@@ -10,7 +10,9 @@ Backbone.sync = function(method, model, options) {
         type: 'POST',
         url: app.Deck.url,
         data: model.toJSON(),
-        success: function(data) {},
+        success: function(data) {
+          console.log('card posted');
+        },
         fail: function(data) {}
       });
     } else if (model instanceof app.User) {

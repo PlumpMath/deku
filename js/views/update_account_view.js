@@ -160,7 +160,6 @@ app.UpdateAccountView = Backbone.View.extend({
       bootbox.prompt("Enter password to save your changes. If you changed your password, enter your old password.", function(result) {
         if (result !== null) {
           updateValues.confirm_password = result;
-          console.log('update');
           var url = "http://localhost:4568/deku/api/users/" + app.user.get('id');
           // PUT LOGIC HERE TO HANDLE THE GET REQUEST
           $.ajax({
