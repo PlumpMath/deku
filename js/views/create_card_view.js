@@ -92,6 +92,7 @@ app.CreateCardView = Backbone.View.extend({
 
     	//this checks the input for validation
     	if (!this.formError(formData)) {
+        formData.tags = tag_array;
 	  		app.Deck.create(formData);
         console.log(formData);
   			$('#category').val('');

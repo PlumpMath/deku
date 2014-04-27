@@ -45,7 +45,10 @@ app.UpdateAccountView = Backbone.View.extend({
     $('#lname-input').val(app.user.get('lastName'));
     $('#email-input').val(app.user.get('email'));
     $('#major-input').val(app.user.get('major'));
-    $('#classes-input').tagit();
+    $('#classes-input').tagit({
+      removeConfirmation: true,
+      allowSpaces: true
+    });
     classes = app.user.get('classes');
     for (c in classes) {
       console.log(classes[c]);
