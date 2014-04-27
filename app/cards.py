@@ -9,12 +9,12 @@ from utils import cors_response, authenticate_by_email, authenticate_by_id
 @app.route('/deku/api/cards', methods=['GET', 'POST'])
 def cards():
     if request.method == 'GET':
-        return cors_response((jsonify(cards = [card.serialize for card in Card.query.all()]), 200))
+        return cors_response((jsonify(cards = [card.serialize for card in models.Card.query.all()]), 200))
 
     elif request.method == 'POST':         
         content = request.form.get('content')
         category = request.form.get('category')
-        tags = request.form.getlist('tags')
+        tags = request.form.get('tags')
         author_id = request.form.get('author_id')
         author = models.User.query.get(author_id) #get the author id from db
         if (content):
@@ -24,8 +24,10 @@ def cards():
                                userLast = author.lastName)
             if (category):
                 card.category = category
-            if isinstance(tags, list):
-                card.tags = ",".join(tags)
+
+            if (tags):
+                tagList = json.loads(tags)
+                card.tags = ",".join(tagList)
 
             db.session.add(card)
             db.session.commit()

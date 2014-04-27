@@ -42,7 +42,7 @@ class Profile(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     grad_year = db.Column(db.String(5))
     major = db.Column(db.String(17))
-    bio = db.Column(db.String(77))
+    bio = db.Column(db.String(MAX_CONTENT_LENGTH))
     
     def __repr__(self):
         return '<Profile %r>' % (str(self.user.id) + " " + str(self.major))
@@ -81,6 +81,6 @@ class Card(db.Model):
             "authorFirst": self.userFirst,
             "authorLast": self.userLast,
             "author_id": self.user_id,
-            "tags": tags.split(",")
+            "tags": self.tags.split(",")
         }
 

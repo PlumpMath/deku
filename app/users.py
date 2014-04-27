@@ -37,7 +37,7 @@ def users():
             profile = models.Profile()
             grad_year = request.form.get('grad_year')
             major = request.form.get('major')
-            courses = request.form.getlist('classes')
+            courses = request.form.get('classes')
             bio = request.form.get('bio')
 
             if (grad_year):
@@ -47,7 +47,8 @@ def users():
                 profile.major = major
 
             if (courses):
-                user.courses = ",".join(courses)
+                courseList = json.loads(courses)
+                user.courses = ",".join(courseList)
 
             if (bio):
                 profile.bio = bio
@@ -129,8 +130,9 @@ def user_by_id(user_id):
         if (major):
             user.profile.major = major
 
-        if (courses):
-            user.courses = ",".join(courses)
+        if isinstance(courses, list):
+            # user.courses = ",".join(courses)
+            pass
 
         if (bio):
             user.profile.bio = bio
