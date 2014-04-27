@@ -73,7 +73,7 @@ def make_user_admin(user_id):
             db.session.commit()
             return cors_response((jsonify(user = user.serialize), 200))
         else:
-            return cors_response(("Invalid Request", 400))
+            return cors_response(("User not found.", 404))
     else:
         pass
 
@@ -83,16 +83,16 @@ def user_by_id(user_id):
         user = models.User.query.get(int(user_id))
         
         if (user):
-            return cors_response((jsonify(user = user.serialize),200))
+            return cors_response((jsonify(user = user.serialize), 200))
 
         else:
-            return cors_response(("Invalid Request",400))
+            return cors_response(("User not found.", 404))
 
     elif request.method == 'PUT':
         password = request.form.get('confirm_password')
         user = authenticate_by_id(user_id, password)
 
-        if not isinstance(user, models.User):
+        if not user:
             return cors_response(("Unauthorized Access",401))
         
         if user is None:

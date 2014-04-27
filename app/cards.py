@@ -67,3 +67,20 @@ def card_by_id(card_id):
     else:
         pass
 
+@app.route('/deku/api/cards/search/category/<category>', methods=['GET'])
+def search_by_category(category):
+    if request.method == 'GET':
+        matches = models.Card.query.filter_by(category=category).all()
+        if len(matches) == 0:
+            return cors_response(("No matching cards.", 204))
+        return cors_response((jsonify(card.serialize for card in matches), 200))
+    else:
+        pass
+
+@app.route('/deku/api/cards/search/tag/<tag>', methods=['GET'])
+def search_by_tag(tag):
+    pass
+
+@app.route('/deku/api/cards/search/author/<author>', methods=['GET'])
+def search_by_author(author):
+    pass

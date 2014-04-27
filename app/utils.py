@@ -19,7 +19,7 @@ def authenticate_by_id(user_id, password):
     if (user_id and password):
         user = models.User.query.get(int(user_id))
         if (user):
-            corrent_pw = bcrypt.check_password_hash(user.password, password)
+            correct_pw = bcrypt.check_password_hash(user.password, password)
             if correct_pw:
                 return user
     return None
