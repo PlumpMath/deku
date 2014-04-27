@@ -30,40 +30,40 @@ app.CreateView = Backbone.View.extend({
     // a password must be at least eight characters, and must match the confirm password
 		if (values.password.length < 8 || values.password !== $('#passwordConfirm').val()) {
 			error = true;
-			$('#password').val('');
-      $('#passwordConfirm').val('');
-			$('#password').attr('placeholder', 'Your password must be at least 8 characters long');
-      $('#passwordConfirm').attr('placeholder', 'Confirm your password');
-      $('#password').focus();
+			$('#password').val('')
+			.attr('placeholder', 'Your password must be at least 8 characters long')
+      .focus();
+      $('#passwordConfirm').val('')
+      .attr('placeholder', 'Confirm your password');
 		}
 	 
   	if (values.university === '' || $.inArray(values.university, univ_list) === -1) {
 	    error = true;
-		$('#univ').val('');
-		$('#univ').attr('placeholder', 'Please select your university from the list');
-        $('#univ').focus();
+		  $('#univ').val('')
+		  .attr('placeholder', 'Please select your university from the list')
+      .focus();
 	}
 
 		//test if the email is valid
 		if (!email_reg.test(values.email)) {
 			error = true;
-			$('#email').val('');
-			$('#email').attr('placeholder', 'Enter a valid .edu email address');
-      $('#email').focus();
+			$('#email').val('')
+			.attr('placeholder', 'Enter a valid .edu email address')
+      .focus();
 		}
 
 		if (values.lastName === '') {
 			error = true;
-			$('#lastname').val('');
-			$('#lastname').attr('placeholder', 'Please enter your last name');
-      $('#lastname').focus();
+			$('#lastname').val('')
+			.attr('placeholder', 'Please enter your last name')
+      .focus();
 		}
 
 		if (values.firstName === '') {
 			error = true;
-			$('#firstname').val('');
-			$('#firstname').attr('placeholder', 'Please enter your first name');
-      $('#firstname').focus();
+			$('#firstname').val('')
+			.attr('placeholder', 'Please enter your first name')
+      .focus();
 		}
 
 		return error;

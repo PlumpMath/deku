@@ -92,8 +92,8 @@ def user_by_id(user_id):
         password = request.form.get('confirm_password')
         user = authenticate_by_id(user_id, password)
 
-        if not isinstance(user, models.User):
-            return cors_response(("Unauthorized Access",401))
+        #if not isinstance(user, models.User):
+        #    return cors_response(("Unauthorized Access",401))
         
         if user is None:
             return cors_response(("User Not Found",204))
@@ -106,7 +106,7 @@ def user_by_id(user_id):
         university = request.form.get('university')
         grad_year = request.form.get('grad_year')
         major = request.form.get('major')
-        courses = request.form.getlist('classes')
+        courses = request.form.get('classes')
         bio = request.form.get('bio')
 
         if (firstName):
@@ -130,9 +130,9 @@ def user_by_id(user_id):
         if (major):
             user.profile.major = major
 
-        if isinstance(courses, list):
-            # user.courses = ",".join(courses)
-            pass
+        if (courses):
+            courseList = json.loads(courses)
+            user.courses = ",".join(courseList)
 
         if (bio):
             user.profile.bio = bio

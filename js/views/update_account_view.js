@@ -39,6 +39,8 @@ app.UpdateAccountView = Backbone.View.extend({
     $('#editSC').show();
     $('.current-data').hide();
     $('.edit-data').show();
+
+    class_list = ["CMSC 304", "CMSC 345", "CMSC 313", "CMSC 331", "CMSC 341", "STAT 355", "CMSC 201", "CMSC 202"];
     
     // reset data in the input fields, just for safety
     $('#fname-input').val(app.user.get('firstName'));
@@ -46,16 +48,91 @@ app.UpdateAccountView = Backbone.View.extend({
     $('#email-input').val(app.user.get('email'));
     $('#major-input').val(app.user.get('major'));
     $('#classes-input').tagit({
+      availableTags: class_list,
       removeConfirmation: true,
-      allowSpaces: true
+      allowSpaces: true,
+      tagLimit: 8,
+      beforeTagAdded: function(event, ui) {
+        // this makes sure the class you entered is a real class
+        if ($.inArray(ui.tagLabel.trim(), class_list) === -1) {
+          $('.ui-widget-content').val('')
+          .attr('placeholder', 'Enter a valid class');
+          return false;
+        } else {
+          return true;
+        }
+      },
+      onTagLimitExceeded: function(event, ui) {
+        $('.ui-widget-content').val('');
+      }
     });
+    $('.ui-autocomplete-input').addClass('tagit-field');
     classes = app.user.get('classes');
     for (c in classes) {
-      console.log(classes[c]);
       $('#classes-input').tagit('createTag', classes[c]);
     }
     $('#year-input').val(app.user.get('grad_year'));
     $('#bio-input').val(app.user.get('bio'));
+  },
+
+  /* Check all the values in the form to see if they are passing expected values
+   */
+  formError: function(values) {
+    error = false;
+    major_list = $('#major-list').children().map(function() { return this.value;}).get();
+    year_list = $('#year-list').children().map(function() { return this.value;}).get();
+		email_reg = /^\w+([-_.]\w+)*@\w+.edu$/;
+
+    if (values.bio === '') {
+      error = true;
+      $('#bio-input').val(app.user.get('bio'));
+    }
+
+		if (values.grad_year === '' || $.inArray(values.grad_year, year_list) === -1){
+      error = true;
+      $('#year-input').val(app.user.get('grad_year'));
+    }
+
+    if (values.classes.length === 0) {
+      error = true;
+      $('#classes-input').tagit('removeAll');
+      classes = app.user.get('classes');
+      for (c in classes) {
+        $('#classes-input').tagit('createTag', classes[c]);
+      }
+    }
+
+		if (values.major === '' || $.inArray(values.major, major_list) === -1) {
+      error = true;
+      $('#major-input').val(app.user.get('major'));
+    }
+
+		if (values.password.length < 8 || values.password !== $('#password-confirm').val()) {
+      if (values.password.length !== 0 && $("#password-confirm").val().length !== 0) {
+        error = true;
+        $('#password-input').val('')
+        .attr('placeholder', 'Enter new password...');
+        $('#password-confirm').val('')
+        .attr('placeholder', 'Confirm new password...');
+      }
+    }
+    
+    if (!email_reg.test(values.email)) {
+      error = true;
+      $('#emain-input').val(app.user.get('email'));
+    }
+
+    if (values.lastName === '') {
+      error = true;
+      $('#lname-input').val(app.user.get('lastName'));
+    }
+ 
+    if (values.firstName === '') {
+      error = true;
+      $('#fname-input').val(app.user.get('firstName'));
+    }
+
+    return error;
   },
 
   /* This will take all of the data from the document and bundle it in a JSON packet.
@@ -63,13 +140,46 @@ app.UpdateAccountView = Backbone.View.extend({
    */
   save: function(event) {
     event.preventDefault();
-    bootbox.prompt("Enter password to save your changes. If you changed your password, enter your old password.", function(result) {
-      if (result !== null) {
-        // PUT LOGIC HERE TO HANDLE THE GET REQUEST
-      }
-    });
-    // little bit of a cheeky hack to make the prompt input take a password field instead of straight text.
-    $('.bootbox-input-text').attr('type', 'password');
+
+    var class_array = $('#classes-input').tagit('assignedTags');
+    updateValues = {
+      firstName: $("#fname-input").val(),
+      lastName: $("#lname-input").val(),
+      email: $("#email-input").val(),
+      password: $("#password-input").val(),
+      major: $("#major-input").val(),
+      classes: JSON.stringify(class_array),
+      grad_year: $("#year-input").val(),
+      bio: $("#bio-input").val(),
+      confirm_password: ''
+    }
+
+    var that = this;
+
+    if (!this.formError(updateValues)) {
+      bootbox.prompt("Enter password to save your changes. If you changed your password, enter your old password.", function(result) {
+        if (result !== null) {
+          updateValues.confirm_password = result;
+          console.log('update');
+          var url = "http://localhost:4568/deku/api/users/" + app.user.get('id');
+          // PUT LOGIC HERE TO HANDLE THE GET REQUEST
+          $.ajax({
+            type: 'PUT',
+            url: url,
+            data: updateValues,
+            success: function(data) {
+              console.log('success');
+              app.user.set(data['user']);
+            },
+            fail: function(data) {
+              console.log('fail');
+            }
+          });
+        }
+      });
+      // little bit of a cheeky hack to make the prompt input take a password field instead of straight text.
+      $('.bootbox-input-text').attr('type', 'password');
+    }
   },
 
   // cancel the edit
