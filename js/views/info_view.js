@@ -26,6 +26,7 @@ app.InfoView = Backbone.View.extend({
       availableTags: class_list,
       removeConfirmation: true,
       allowSpaces: true,
+      tagLimit: 8,
       beforeTagAdded: function(event, ui) {
         // this makes sure the class you entered is a real class
         if ($.inArray(ui.tagLabel.trim(), class_list) === -1) {
@@ -35,6 +36,9 @@ app.InfoView = Backbone.View.extend({
         } else {
           return true;
         }
+      }
+      onTagLimitExceeded: function(event, ui) {
+        $('.ui-widget-content').val('');
       }
     });
     $('.ui-autocomplete-input').addClass('tagit-field');
