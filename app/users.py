@@ -46,7 +46,7 @@ def users():
             if (major):
                 profile.major = major
 
-            if isinstance(courses, list):
+            if (courses):
                 user.courses = ",".join(courses)
 
             if (bio):
@@ -129,7 +129,7 @@ def user_by_id(user_id):
         if (major):
             user.profile.major = major
 
-        if isinstance(courses, list):
+        if (courses):
             user.courses = ",".join(courses)
 
         if (bio):
