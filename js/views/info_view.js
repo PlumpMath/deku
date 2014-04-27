@@ -36,7 +36,7 @@ app.InfoView = Backbone.View.extend({
         } else {
           return true;
         }
-      }
+      },
       onTagLimitExceeded: function(event, ui) {
         $('.ui-widget-content').val('');
       }
@@ -104,6 +104,8 @@ app.InfoView = Backbone.View.extend({
 			classes: class_array,
 			bio: $('#bio').val().trim()
 		};
+
+    console.log(values.classes);
 
 		if (!this.formErrors(values)) {
       app.user.set(values);

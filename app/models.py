@@ -32,7 +32,7 @@ class User(db.Model):
             "email": self.email,
             "university": self.university,
             "bio": self.profile.bio,
-            "classes": [self.courses.split(",")],
+            "classes": self.courses.split(","),
             "grad_year": self.profile.grad_year,
             "major": self.profile.major
         }
