@@ -61,7 +61,7 @@ class Card(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     content = db.Column(db.String(MAX_CONTENT_LENGTH))
     category = db.Column(db.String(MAX_CONTENT_LENGTH))
-    tags = db.relationship('Tag', cascade="all,delete", backref="card")
+    tags = db.Column(db.String(MAX_CONTENT_LENGTH))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
     userFirst = db.Column(db.String(MAX_CONTENT_LENGTH))
     userLast = db.Column(db.String(MAX_CONTENT_LENGTH))
@@ -81,22 +81,6 @@ class Card(db.Model):
             "authorFirst": self.userFirst,
             "authorLast": self.userLast,
             "author_id": self.user_id,
-            "tags": ",".join([tag.toString() for tag in self.tags])
+            "tags": [tags.split(",")]
         }
 
-class Tag(db.Model):
-    __tablename__ = 'tag'
-    id = db.Column(db.Integer, primary_key=True)
-    card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
-    tag = db.Column(db.String(37), nullable=False, index=True)
-    def __init__(self, tag):
-        self.tag = tag
-
-    @property
-    def serialize(self):
-        return {
-            "tag": self.tag,
-        }
-
-    def toString(self):
-        return "%s"%(self.tag)

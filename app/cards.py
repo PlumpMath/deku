@@ -10,15 +10,8 @@ from utils import cors_response, authenticate_by_email, authenticate_by_id
 def cards():
     if request.method == 'GET':
         return cors_response((jsonify(cards = [card.serialize for card in Card.query.all()]), 200))
-    elif request.method == 'POST':
-        #authenticate
-        #The user is not going to give their password each time they post a card
-        #user = request.form.get('user')
-        #pwd = request.form.get('password')
-        #user = authenticate(user, pwd)
-        #if not isinstance(user, models.User):
-        #    return cors_response(("Unauthorized Access. Login to post a card",401))
-        
+
+    elif request.method == 'POST':         
         content = request.form.get('content')
         category = request.form.get('category')
         tags = request.form.getlist('tags')
@@ -31,8 +24,9 @@ def cards():
                                userLast = author.lastName)
             if (category):
                 card.category = category
-            for tag in tags:
-                card.tags.append(models.Tag(tag))
+            if isinstance(tags, list):
+                card.tags = ",".join(tags)
+
             db.session.add(card)
             db.session.commit()
             return cors_response((jsonify(card = card.serialize), 201))
