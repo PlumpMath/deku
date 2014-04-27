@@ -65,6 +65,22 @@ app.ProfileView = Backbone.View.extend({
   // Sends request to make this user a moderator
   makeModerator: function(event) {
     event.preventDefault();
-    // placeholder. make put request to /deku/api/admin/make_moderator/this.model.get('id'), pass in admin id and password (get from bootbox.prompt)
+		
+    var url = 'http://localhost:4568/deku/api/admin/make_moderator/' + this.model.get('id');
+    
+    bootbox.prompt("To confirm that you want to make " + this.model.get('firstName') + " " + this.model.get('lastName') + " a moderator, please enter your password", function(result) {
+      if (result !== null) {
+        values = {
+          admin_id: app.user.get('id'),
+          admin_password: result
+        }
+        // PUT LOGIC HERE TO HANDLE THE POST REQUEST
+        $.post(url, values, function( data, textStatus, jqXHR ) {
+          console.log('sent request to make moderator');
+        });
+      }
+    });
+    // little bit of a cheeky hack to make the prompt input take a password field instead of straight text.
+    $('.bootbox-input-text').attr('type', 'password');
   }
 });
