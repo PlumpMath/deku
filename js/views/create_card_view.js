@@ -88,13 +88,9 @@ app.CreateCardView = Backbone.View.extend({
 				content: $('#content').val().trim(),
 			};
 
-      console.log(formData);
-
     	//this checks the input for validation
     	if (!this.formError(formData)) {
-        formData.tags = tag_array;
 	  		app.Deck.create(formData);
-        console.log(formData);
   			$('#category').val('');
   			$('#tags').tagit('removeAll');
   			$('#content').val('');
