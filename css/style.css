@@ -32,6 +32,13 @@ header {
     margin-right: auto;
 }
 
+#avatar {
+    height: 40px;
+    width: 40px;
+    background: white;
+    margin-right: 10px;
+}
+
 table {
     width: 60%;
     table-layout: fixed;

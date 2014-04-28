@@ -36,6 +36,10 @@ class User(db.Model):
             "grad_year": self.profile.grad_year,
             "major": self.profile.major
         }
+
+    @property
+    def get_avatar(self):
+        return self.profile.avatar
         
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -43,6 +47,7 @@ class Profile(db.Model):
     grad_year = db.Column(db.String(5))
     major = db.Column(db.String(17))
     bio = db.Column(db.String(MAX_CONTENT_LENGTH))
+    avatar = db.Column(db.LargeBinary())
     
     def __repr__(self):
         return '<Profile %r>' % (str(self.user.id) + " " + str(self.major))
