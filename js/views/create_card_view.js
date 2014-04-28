@@ -88,7 +88,8 @@ app.CreateCardView = Backbone.View.extend({
 
     	//this checks the input for validation
     	if (!this.formError(formData)) {
-	  		app.Deck.create(formData);
+        // add card to database and post it to hand
+	  		app.Deck.sync('create', formData);
   			$('#category').val('');
   			$('#tags').tagit('removeAll');
   			$('#content').val('');

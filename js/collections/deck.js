@@ -25,5 +25,27 @@ app.CardList = Backbone.Collection.extend({
         that.reset(data['cards']);
       }
     });
+  },
+ 
+  /* sync for cards 
+   * When a card is created or updated, it will pull that new data straight from the server.
+   */
+  sync: function(method, model, options) {
+    var that = this;
+    if (method === 'create') { // HTTP POST
+      $.ajax({
+        type: 'POST',
+        url: this.url,
+        data: model,
+        success: function(data) {
+          // if it saved to database fine, then add card to view using returned data
+          that.add(data['card']);
+        },
+        fail: function(data) {}
+      });
+    } else if (method === 'read') { // HTTP GET
+    } else if (method === 'update') { // HTTP PUT
+    } else if (method === 'delete') { // HTTP DELETE
+    }
   }
 });

@@ -14,6 +14,7 @@ app.SearchView = Backbone.View.extend({
   },
 
 	initialize: function() {
+    var origin;
 		this.render(); // render the view
 	},
 
@@ -25,6 +26,10 @@ app.SearchView = Backbone.View.extend({
   // search by category
   searchCategory: function(event) {
     event.preventDefault();
+    // if you aren't searching, then store the current route
+    if (Backbone.history.fragment.substring(0,6) !== 'search') {
+      this.origin = Backbone.history.fragment;
+    }
     search = $('#s-category').val().trim(); //our filter for category
     category_list = $('#categories').children().map(function() { return this.value;}).get(); //possible categories
     if (search !== '' && $.inArray(search, category_list) !== -1) {
@@ -42,6 +47,10 @@ app.SearchView = Backbone.View.extend({
   // search by tag
   searchTag: function(event) {
     event.preventDefault();
+    // if you aren't searching, then store the current route
+    if (Backbone.history.fragment.substring(0,6) !== 'search') {
+      this.origin = Backbone.history.fragment;
+    }
     search = $('#s-tag').val().trim(); //our filter for category
     if (search !== '') {
       // Change the URL to match search
@@ -58,6 +67,10 @@ app.SearchView = Backbone.View.extend({
   // search by author
   searchAuthor: function(event) {
     event.preventDefault();
+    // if you aren't searching, then store the current route
+    if (Backbone.history.fragment.substring(0,6) !== 'search') {
+      this.origin = Backbone.history.fragment;
+    }
     search = $('#s-author').val().trim(); //our filter for category
     if (search !== '') {
       $('#filter-by').html('Searching for ' + search);
@@ -75,7 +88,8 @@ app.SearchView = Backbone.View.extend({
   //Clear all of the searches
   searchClear: function(event) {
     event.preventDefault();
-    app.router.navigate('hand', {trigger: true});
+    // always return to the route you started on
+    app.router.navigate(this.origin, {trigger: true});
     $('#filter-by').html('No active search');
   }
 });

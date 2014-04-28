@@ -12,6 +12,7 @@ Backbone.sync = function(method, model, options) {
         data: model.toJSON(),
         success: function(data) {
           console.log('card posted');
+          app.Deck.add(data['card']);
         },
         fail: function(data) {}
       });
