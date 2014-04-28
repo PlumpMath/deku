@@ -131,7 +131,10 @@ hr {
 }
 
 #filter-by {
+    text-align: center;
     width: 100%;
+    color: #CCC;
+    font-size: 12pt;
     position: relative;
 }
 

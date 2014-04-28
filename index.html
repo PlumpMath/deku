@@ -298,15 +298,7 @@
     </div>
   </script>
 
- 
-  <!-- This view contains data about search criteria -->
-
-  <script type="text/template" id="filter-view">
-    <div id="filter-by" class="<%=field%>"><%= filter %></div>
-  </script>
-
 	<!-- This view handles the hand view -->
-
 	<script type="text/template" id="hand-view">
 	</script>
 
@@ -319,7 +311,7 @@
 					<option value="Administrative">
 					<option value="Club">
 					<option value="School Event">
-					<option value="other">
+					<option value="Other">
 				</datalist>
 			</div>
 			<div class="form-group">
@@ -336,7 +328,7 @@
 	<script type="text/template" id="search-view">
 		<form class="search-form" role="form" action="#">
 			<div class="form-group">
-				<input type="text" id="s-tag" name="search-tags" placeholder="Search by tags">
+				<input type="text" id="s-tag" name="search-tags" placeholder="Search by tag">
         <button id="search-tag" class="btn">Search</button>
 			</div>
 			<div class="form-group">
@@ -344,11 +336,20 @@
         <button id="search-author" class="btn">Search</button>
 			</div>
 			<div class="form-group">
-				<input type="text" id="s-category" name="search-category" placeholder="Search by category">
+				<input list="categories" id="s-category" name="search-category" placeholder="Search by category">
+			  	<datalist id="categories">
+			  		<option value="Administrative">
+			  		<option value="Club">
+			  		<option value="School Event">
+			  		<option value="Other">
+			  	</datalist>
         <button id="search-category" class="btn">Search</button>
 			</div>
       <div class="form-group">
         <button id="search-clear" class="btn">Clear Search</button><div id="filter"></div>
+      </div>
+      <div class="form-group">
+        <p id="filter-by">No active search</p>
       </div>
 		</form>
 	</script>
@@ -502,7 +503,6 @@
   <script src="js/views/header_view.js"></script>
   <script src="js/views/preferences_view.js"></script>
   <script src="js/views/app.js"></script>
-  <script src="js/views/filter_view.js"></script>
   <script src="js/views/toggle_view.js"></script>
   <script src="js/views/icon_view.js"></script>
   <script src="js/views/profile_view.js"></script>
@@ -510,9 +510,7 @@
   <script src="js/views/not_found_view.js"></script>
   <script src="js/models/user.js"></script>
   <script src="js/models/card.js"></script>
-  <script src="js/models/filter.js"></script>
   <script src="js/collections/deck.js"></script>
-  <script src="js/collections/filter_collection.js"></script>
   <script src="js/views/card_view.js"></script>
   <script src="js/router.js"></script>
   <script src="js/app.js"></script>

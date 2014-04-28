@@ -22,7 +22,7 @@ app.Router = Backbone.Router.extend({
     'hand': 'hand',
     'profile/:first/:last/:id': 'profileView',
     'update/:first/:last/:id': 'update',
-    'search/category/:query': 'search',
+    'search/:field/:query': 'search',
     '*notFound': 'notFound'
   },
 
@@ -154,7 +154,7 @@ app.Router = Backbone.Router.extend({
     }
   },
 
-  search: function(query) {
+  search: function(field, query) {
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {

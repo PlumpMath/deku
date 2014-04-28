@@ -74,7 +74,7 @@ app.ProfileView = Backbone.View.extend({
           admin_id: app.user.get('id'),
           admin_password: result
         }
-        // PUT LOGIC HERE TO HANDLE THE POST REQUEST
+        // POST LOGIC HERE TO HANDLE THE POST REQUEST
         $.post(url, values, function( data, textStatus, jqXHR ) {
           console.log('sent request to make moderator');
         });
