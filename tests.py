@@ -38,7 +38,6 @@ class APITestCase(unittest.TestCase):
         janedoe.profile = Profile(grad_year = "2016",
                                   major = "Computer Science",
                                   bio = "I'm nobody's sister.")
-                    
  
         db.session.add(johndoe)
         db.session.add(janedoe)
