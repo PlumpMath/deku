@@ -70,20 +70,20 @@ def card_by_id(card_id):
 @app.route('/deku/api/cards/search/category/<category>', methods=['GET'])
 def search_by_category(category):
     if request.method == 'GET':
-        matches = models.Card.query.filter_by(category=category).all()
+        matches = Card.query.filter_by(category=category).all()
         if len(matches) == 0:
             return cors_response(("No matching cards.", 204))
-        return cors_response((jsonify(card.serialize for card in matches), 200))
+        return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
     else:
         pass
 
 @app.route('/deku/api/cards/search/tag/<tag>', methods=['GET'])
 def search_by_tag(tag):
     if request.method == 'GET':
-        matches = models.Card.query.filter(models.Card.tags.contains(tag)).all()
+        matches = Card.query.filter(models.Card.tags.contains(tag)).all()
         if len(matches) == 0:
             return cors_response(("No matching cards.", 204))
-        return cors_response((jsonify(card.serialize for card in matches), 200))
+        return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
     else:
         pass
 
@@ -91,10 +91,10 @@ def search_by_tag(tag):
 def search_by_author(author):
     if request.method == 'GET':
         firstName, lastName = author.split(",")
-        matches = models.Card.query.filter_by(userFirst == firstName and userLast == lastName).all()
+        matches = Card.query.filter(Card.userFirst == firstName and Card.userLast == lastName).all()
         if len(matches) == 0:
             return cors_response(("No matching cards.", 204))
-        return cors_response((jsonify(card.serialize for card in matches), 200))
+        return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
     else:
         pass
     

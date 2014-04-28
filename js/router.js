@@ -165,6 +165,23 @@ app.Router = Backbone.Router.extend({
     	}
       // hides the ability to create while not in hand route
     	$('#default').hide('medium');
+      
+      /* This logic will clear the existing masonry elements
+       * Every new search should clear the hand and show the new stuff
+       */
+      msnry_items = app.msnry.getItemElements();
+      app.msnry.remove(msnry_items);
+      app.msnry.layout();
+      
+      // confirm values exist
+      if (field === '' || query === '') {
+        app.router.navigate('hand', {trigger: true});
+      } else {
+        if (field === 'author') {
+          query = query.replace('_', ',');
+        }
+        app.Deck.searchBy(field + '/' + query);
+      }
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }

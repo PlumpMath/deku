@@ -22,6 +22,7 @@ app.SearchView = Backbone.View.extend({
 		this.$el.html(template);
 	},
 
+  // search by category
   searchCategory: function(event) {
     event.preventDefault();
     search = $('#s-category').val().trim(); //our filter for category
@@ -38,6 +39,7 @@ app.SearchView = Backbone.View.extend({
     }
   },
 
+  // search by tag
   searchTag: function(event) {
     event.preventDefault();
     search = $('#s-tag').val().trim(); //our filter for category
@@ -53,6 +55,7 @@ app.SearchView = Backbone.View.extend({
     }
   },
 
+  // search by author
   searchAuthor: function(event) {
     event.preventDefault();
     search = $('#s-author').val().trim(); //our filter for category

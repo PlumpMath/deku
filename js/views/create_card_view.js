@@ -72,8 +72,6 @@ app.CreateCardView = Backbone.View.extend({
       //This array will have all the tags the user provided. uses tagit, still lowercases
       var tag_array = $('#tags').tagit('assignedTags');
       tag_array = _.map(tag_array, function(tag) {return tag.toLowerCase()});
-		
-      console.log(tag_array);
 	
       var date = new Date();
     	var card_time = date.toLocaleTimeString();
