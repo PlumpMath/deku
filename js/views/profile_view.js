@@ -19,7 +19,7 @@ app.ProfileView = Backbone.View.extend({
   render: function() {
     var template = app.TemplateCache.get(this.template);
     var html = template(this.model.toJSON());
-    this.$el.prepend(html).fadeIn(350);
+    this.$el.prepend(html).show();
     // A user can't follow themselves, but they can update their account
     if (this.model.get('id') === app.user.get('id')) {
       $('#follow-btn').hide();

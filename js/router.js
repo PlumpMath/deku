@@ -198,7 +198,7 @@ app.Router = Backbone.Router.extend({
         var profile = new app.User(data['user']);
         // this checks the name as well. Just ID was not secure
         if (first === profile.get('firstName') && last === profile.get('lastName')) {
-          $('#container').fadeOut(350, function() {that.changeView(new app.ProfileView({model: profile}))});
+          $('#container').fadeOut(0, function() {that.changeView(new app.ProfileView({model: profile}))});
           if (that.slideView === null && that.toggleView === null) {
             // show the slidebars if they are not out yet
             that.setChildren();
@@ -227,9 +227,9 @@ app.Router = Backbone.Router.extend({
           this.removeChildren();
           app.$slidebars.close();
         }
-        $('#container').fadeOut(350, function() { that.changeView(new app.UpdateAccountView()); });
+        $('#container').fadeOut(0, function() { that.changeView(new app.UpdateAccountView()); });
       } else {
-        $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
+        $('#container').fadeOut(0, function() { that.navigate('hand', {trigger: true})});
       }
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});

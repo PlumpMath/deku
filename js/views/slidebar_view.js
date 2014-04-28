@@ -53,18 +53,21 @@ app.SlidebarView = Backbone.View.extend({
       $("#toggle-bars").hide();
       app.$slidebars.open('right');
       // move the content over to the left when permanently open
-      $('#container').animate({
-        marginLeft: '80'
-      }, 500
-      );
+      window_width = window.innerWidth;
+      slidebar_width = $('.sb-slidebar').width();
+      container_width = window_width - slidebar_width;
+      $('#container').css("width", container_width)
+      .animate({
+        marginLeft: '0'
+      });
     } else {
       //if it is less, use the toggle button
       $("#toggle-bars").show();
       app.$slidebars.close();
-      $('#container').animate({
+      $('#container').css("width", '100%')
+      .animate({
         marginLeft: 'auto'
-      }, 500
-      );
+      });
     }
   },
 
