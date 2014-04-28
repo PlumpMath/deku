@@ -169,6 +169,16 @@ app.UpdateAccountView = Backbone.View.extend({
             success: function(data) {
               console.log('success');
               app.user.set(data['user']);
+              // after the user model is updated, refresh that page for the user to reflect changes
+              profile = app.user.get('firstName') + "/" + app.user.get('lastName') + '/' + app.user.get('id');
+              // if the name didn't change, the route is still the same
+              if (Backbone.history.fragment === "update/" + profile) {
+                // so just use history to reload the view
+                Backbone.history.loadUrl(Backbone.history.fragment);
+              } else {
+                // if name changed than go to the new route
+                app.router.navigate('update/' + profile, {trigger: true});
+              }
             },
             fail: function(data) {
               console.log('fail');
