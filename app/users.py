@@ -1,9 +1,8 @@
 #!.venv/bin/python
 
 import os
-from flask import Flask, request, jsonify, abort, render_template, json
-from sqlalchemy.orm import subqueryload, contains_eager
-from app import app, db, models, bcrypt, session
+from flask import Flask, request, jsonify, json
+from app import app, db, models, bcrypt, generator
 from utils import cors_response, authenticate_by_email, authenticate_by_id
 from models import ROLE_USER, ROLE_MOD, ROLE_ADMIN
 
@@ -39,6 +38,7 @@ def users():
             major = request.form.get('major')
             courses = request.form.get('classes')
             bio = request.form.get('bio')
+            avatar = generator.generate(firstName + lastName, 240, 240, output_format="png")
 
             if (grad_year):
                 profile.grad_year = grad_year
@@ -52,6 +52,8 @@ def users():
 
             if (bio):
                 profile.bio = bio
+            
+            profile.avatar = avatar
 
             user.profile = profile
             db.session.add(user)
