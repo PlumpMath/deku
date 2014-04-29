@@ -19,6 +19,7 @@ class User(db.Model):
     profile = db.relationship('Profile', uselist=False, backref='user')
     cards = db.relationship('Card', backref = 'author', cascade='all,delete', lazy = 'dynamic')
     courses = db.Column(db.String(MAX_CONTENT_LENGTH))
+    comments = db.relationship('Comment', backref='author')
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)
@@ -74,6 +75,7 @@ class Card(db.Model):
     userFirst = db.Column(db.String(MAX_CONTENT_LENGTH))
     userLast = db.Column(db.String(MAX_CONTENT_LENGTH))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comments = db.relationship('Comment', backref='card', cascade='all,delete', lazy='dynamic')
 
     def __repr__(self):
         return '<Card %r>' % (self.content[:40] + "...")
@@ -104,11 +106,28 @@ class Message(db.Model):
     def serialize(self):
         fr = User.query.filter(User.id==self.from_id).first()
         to = User.query.filter(User.id==self.to_id).first()
-        return{
+        return {
             "to_id": self.to_id,
             "to": to.firstName + " " + to.lastName,
             "from_id": self.from_id,
             "from": fr.firstName + " " + fr.lastName,
             "message": self.message,
+            "timestamp": self.timestamp
+        }
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'))
+    content = db.Column(db.String(MAX_CONTENT_LENGTH))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+
+    @property
+    def serialize(self):
+        author = models.User.query.get(int(self.author_id))
+        return {
+            "author_first": author.firstName,
+            "author_last": author.lastName, 
+            "content": self.content,
             "timestamp": self.timestamp
         }
