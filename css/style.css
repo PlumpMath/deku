@@ -39,6 +39,14 @@ header {
     margin-right: 10px;
 }
 
+#avatar_profile {
+    height: 70px;
+    width: 70px;
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 table {
     width: 60%;
     table-layout: fixed;
