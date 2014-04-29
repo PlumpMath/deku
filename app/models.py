@@ -1,5 +1,8 @@
 from app import db
 from datetime import datetime
+from PIL import Image
+import StringIO
+import base64
 
 ROLE_USER = 0
 ROLE_MOD = 1
@@ -39,7 +42,8 @@ class User(db.Model):
 
     @property
     def get_avatar(self):
-        return self.profile.avatar
+        image = base64.b64encode(self.profile.avatar)
+        return image
         
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key = True)

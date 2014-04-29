@@ -164,3 +164,12 @@ def user_authentication():
         return cors_response((jsonify(user = user.serialize),200))
     else:
         return cors_response(("Unauthorized access",401))
+
+@app.route('/deku/api/users/get_avatar/<int:user_id>', methods=['GET'])
+def get_user_avatar(user_id):
+    user = models.User.query.get(int(user_id))
+    if user:
+        # Returns a base64 encoded string - can be used as the src in img tag.
+        return user.get_avatar
+    else:
+        pass
