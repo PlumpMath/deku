@@ -377,30 +377,40 @@ hr {
 @media(max-width:480px) {
     .container-wrapper-width {
         width: 95%;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
 @media(min-width:481px) {
     .container-wrapper-width {
         width: 85%;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
 @media(min-width:768px) {
     .container-wrapper-width {
         width: 80%;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
 @media(min-width:992px) {
     .container-wrapper-width {
         width: 70%;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
 @media(min-width:1200px) {
     .container-wrapper-width {
         width: 60%;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
