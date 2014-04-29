@@ -8,6 +8,17 @@ ROLE_MOD = 1
 ROLE_ADMIN = 2
 MAX_CONTENT_LENGTH = 256
 
+
+marked = db.Table('marked',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
+)
+
+added = db.Table('added',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
+)
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     firstName = db.Column(db.String(64), index = True, unique = False)
@@ -20,8 +31,8 @@ class User(db.Model):
     cards = db.relationship('Card', backref = 'author', cascade='all,delete', lazy = 'dynamic')
     courses = db.Column(db.String(MAX_CONTENT_LENGTH))
     comments = db.relationship('Comment', backref='author')
-    marked = db.relationship('Card', secondary=marked, backref="user")
-    added = db.relationship('Card', secondary=added, backref="user")
+    markedCards = db.relationship('Card', secondary="marked", backref="marker")
+    addedCards = db.relationship('Card', secondary="added", backref="adder")
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)
@@ -46,16 +57,6 @@ class User(db.Model):
     @property
     def get_avatar(self):
         return base64.b64encode(self.profile.avatar)
-
-marked = db.Table('marked',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
-)
-
-added = db.Table('added',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
-)
 
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key = True)
