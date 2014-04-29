@@ -48,6 +48,7 @@ app.Router = Backbone.Router.extend({
     }
     this.slideView = new app.SlidebarView();
     this.toggleView = new app.ToggleView();
+    $('#filter-by').html('No active search');
   },
 
 	// delete the children of the HandView
@@ -142,12 +143,13 @@ app.Router = Backbone.Router.extend({
        * from being able to get back to the main site.
        */
 
-      $('#container').fadeOut(0, function() { that.changeView(new app.HandView());});
+      $('#container').fadeOut(0, function() { that.changeView(new app.HandView({"use": "hand"}));});
       //The handView's children must be visible. If the page refreshed they would disappear. This combats that
       if (this.slideView === null && this.toggleView === null) {
         // they do, so remove them and close the slidebar (only real permanent solution)
         this.setChildren();
       }
+      $('#filter-by').html('No active search');
       if (!$('#default').is(":visible")) {
         $('#default').show('medium');
       }
@@ -164,21 +166,23 @@ app.Router = Backbone.Router.extend({
 			if (this.slideView === null && this.toggleView === null) {
 			// they do, so remove them and close the slidebar (only real permanent solution)
       	this.setChildren();
+      	$('#default').hide(); // don't ever show the create card option
     	}
       // hides the ability to create while not in hand route
     	$('#default').hide('medium');
-     
-      app.Deck = app.Deck || new app.CardList();
-  
+      // search should open by default
+      if (!$('#search-default').hasClass('expanded')) {
+        $('.collapsed').removeClass('expanded')
+        .children().hide('medium');
+        $('#search-default').toggleClass('expanded')
+		 		.children('ul').toggle('medium');
+      }
+
       /* This logic will clear the existing masonry elements
        * Every new search should clear the hand and show the new stuff
+       * Always load hand view for searching, this gives access to app.Deck and app.msnry
        */
-      app.msnry = app.msnry || new Masonry( $('#container')[0], {
-        // Masonry options
-        columnWidth: 60,
-        itemSelector: ".post",
-        gutter: 10
-      });
+      $('#container').fadeOut(0, function() { that.changeView(new app.HandView({"use": "search"}));});
       msnry_items = app.msnry.getItemElements();
       app.msnry.remove(msnry_items);
       app.msnry.layout();
@@ -191,6 +195,7 @@ app.Router = Backbone.Router.extend({
           query = query.replace('_', ',');
         }
         app.Deck.searchBy(field + '/' + query);
+        $('#filter-by').html('Searching for ' + query.replace(',', ' '));
       }
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
@@ -213,6 +218,7 @@ app.Router = Backbone.Router.extend({
             // show the slidebars if they are not out yet
             that.setChildren();
           }
+          $('#filter-by').html('No active search');
           $('#default').hide('medium');
         } else {
           // trigger a not found page load

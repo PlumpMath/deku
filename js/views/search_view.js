@@ -35,7 +35,6 @@ app.SearchView = Backbone.View.extend({
     if (search !== '' && $.inArray(search, category_list) !== -1) {
       // Change the URL to match search
       app.router.navigate('search/category/' + search, {trigger: true});
-      $('#filter-by').html('Searching for ' + search);
       $('#s-category').val('');
     } else
     {
@@ -55,7 +54,6 @@ app.SearchView = Backbone.View.extend({
     if (search !== '') {
       // Change the URL to match search
       app.router.navigate('search/tag/' + search, {trigger: true});
-      $('#filter-by').html('Searching for ' + search);
       $('#s-tag').val('');
     } else
     {
@@ -73,7 +71,6 @@ app.SearchView = Backbone.View.extend({
     }
     search = $('#s-author').val().trim(); //our filter for category
     if (search !== '') {
-      $('#filter-by').html('Searching for ' + search);
       $('#s-author').val('');
       // Change the URL to match search
       search = search.replace(" ", "_");

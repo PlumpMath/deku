@@ -378,9 +378,9 @@ hr {
     width: 70%;
     margin: auto;
     padding: 20px;
-    color: #CCC;
-    background-color: #444;
-    border-radius: 5px;
+    color: #999;
+    background-color: #222;
+    border-radius: 10px;
 }
 
 #logout {
