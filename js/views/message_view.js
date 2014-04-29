@@ -6,7 +6,9 @@ app.MessageView = Backbone.View.extend({
     "click #searchUsers": "searchuser",
     "click #refreshmgs": "getMSGS",
   },
-
+  getMSGS: function(){
+    document.getMSGS();
+  },
   template: "#message-view",
 
 	initialize: function() {
