@@ -38,14 +38,14 @@ class User(db.Model):
             "bio": self.profile.bio,
             "classes": self.courses.split(","),
             "grad_year": self.profile.grad_year,
-            "major": self.profile.major
+            "major": self.profile.major,
+            "avatar": base64.b64encode(self.profile.avatar)
         }
 
     @property
     def get_avatar(self):
-        image = base64.b64encode(self.profile.avatar)
-        return image
-        
+        return base64.b64encode(self.profile.avatar)
+
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -64,7 +64,7 @@ class Profile(db.Model):
             "user id": self.user_id,
             "grad_year": self.grad_year,
             "major": self.major,
-            "biography": self.bio
+            "biography": self.bio,
         }
 
 class Card(db.Model):
