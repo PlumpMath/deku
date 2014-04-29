@@ -59,6 +59,8 @@ app.Router = Backbone.Router.extend({
     this.toggleView.stopListening();
     this.slideView = null;
     this.toggleView = null;
+    $('#container').css("width", "100%");
+    $('#container').css('marginLeft', 'auto');
   },
 
   // Route on main load. Checks log in state and decides what to do
