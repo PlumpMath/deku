@@ -22,6 +22,8 @@ app.CardList = Backbone.Collection.extend({
       type: 'GET',
       url: this.url_search + route,
       success: function(data) {
+        console.log('reset for search');
+        console.log(data['cards']);
         that.reset(data['cards']);
       }
     });

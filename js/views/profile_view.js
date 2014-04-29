@@ -20,6 +20,14 @@ app.ProfileView = Backbone.View.extend({
     var template = app.TemplateCache.get(this.template);
     var html = template(this.model.toJSON());
     this.$el.prepend(html).show();
+    var stampElem = $('#user-profile');
+    app.msnry = app.msnry || new Masonry( this.$el[0], {
+      // Masonry options
+      columnWidth: 60,
+      itemSelector: ".post",
+      gutter: 10
+    });
+    app.msnry.stamp(stampElem);
     // A user can't follow themselves, but they can update their account
     if (this.model.get('id') === app.user.get('id')) {
       $('#follow-btn').hide();

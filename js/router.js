@@ -167,10 +167,18 @@ app.Router = Backbone.Router.extend({
     	}
       // hides the ability to create while not in hand route
     	$('#default').hide('medium');
-      
+     
+      app.Deck = app.Deck || new app.CardList();
+  
       /* This logic will clear the existing masonry elements
        * Every new search should clear the hand and show the new stuff
        */
+      app.msnry = app.msnry || new Masonry( $('#container')[0], {
+        // Masonry options
+        columnWidth: 60,
+        itemSelector: ".post",
+        gutter: 10
+      });
       msnry_items = app.msnry.getItemElements();
       app.msnry.remove(msnry_items);
       app.msnry.layout();
