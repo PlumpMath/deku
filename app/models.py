@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+import time
 
 ROLE_USER = 0
 ROLE_MOD = 1
@@ -89,3 +90,23 @@ class Card(db.Model):
             "tags": self.tags.split(",")
         }
 
+
+#hacked together
+class Message(db.Model):
+    id= db.Column(db.Integer, primary_key=True)
+    from_id = db.Column(db.Integer)
+    to_id = db.Column(db.Integer)
+    message = db.Column(db.String)
+    timestamp = db.Column(db.String(), default=time.ctime())
+    @property
+    def serialize(self):
+        fr = User.query.filter(User.id==self.from_id).first()
+        to = User.query.filter(User.id==self.to_id).first()
+        return{
+            "to_id": self.to_id,
+            "to": to.firstName + " " + to.lastName,
+            "from_id": self.from_id,
+            "from": fr.firstName + " " + to.lastName,
+            "message": self.message,
+            "timestamp": self.timestamp
+        }
