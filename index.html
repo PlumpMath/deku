@@ -134,108 +134,116 @@
 
 	<!-- This template handles the first stage of creating an account -->
   <script type="text/template" id="create-form">
-    <h1>Create account</h1>
-    <form role="form" action="" id="create">
-      <div class="form-group">
-        <label for="firstname">First Name</label>
-        <input type="text" id="firstname" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="lastname">Last Name</label>
-        <input type="text" id="lastname" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="text" id="email" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="university">University</label>
-        <input id="univ" list="university" class="form-control">
-        <datalist id="university">
-          <option value="UMBC">
-        </datalist>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="passwordConfirm">Confirm Password</label>
-        <input type="password" id="passwordConfirm" class="form-control">
-      </div>
-      <button type="submit" class="btn btn-success">Sign up for Dek&#363</button>
-    </form>
+    <div class="container-wrapper">
+      <h1>Create account</h1>
+      <form role="form" action="" id="create">
+        <div class="form-group">
+          <label for="firstname">First Name</label>
+          <input type="text" id="firstname" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="lastname">Last Name</label>
+          <input type="text" id="lastname" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" id="email" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="university">University</label>
+          <input id="univ" list="university" class="form-control">
+          <datalist id="university">
+            <option value="UMBC">
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="passwordConfirm">Confirm Password</label>
+          <input type="password" id="passwordConfirm" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success">Sign up for Dek&#363</button>
+      </form>
+    </div>
   </script>
 
 	<!-- This next view gets more specific user account information -->
   <script type="text/template" id="info-form">
-    <h1>Complete your Profile</h1>
-    <form role="form" action="" id="info">
-    <div class="form-group">
-      <label for="year">Graduation Year</label>
-      <input list="year" id="grad-year" class="form-control">
-      <datalist id="year">
-        <option value="2014">
-        <option value="2015">
-        <option value="2016">
-      </datalist>
-    </div>
+    <div class="container-wrapper">
+      <h1>Complete your Profile</h1>
+      <form role="form" action="" id="info">
+      <div class="form-group">
+        <label for="year">Graduation Year</label>
+        <input list="year" id="grad-year" class="form-control">
+        <datalist id="year">
+          <option value="2014">
+          <option value="2015">
+          <option value="2016">
+        </datalist>
+      </div>
 
-    <div class="form-group">
-      <label for="major">Major</label>
-      <input list="major" id="major-list" class="form-control">
-      <datalist id="major">
-        <option value="Computer Science">
-        <option value="Computer Engineering">
-        <option value="Economics">
-        <option value="Mathematics">
-      </datalist>
-    </div>
+      <div class="form-group">
+        <label for="major">Major</label>
+        <input list="major" id="major-list" class="form-control">
+        <datalist id="major">
+          <option value="Computer Science">
+          <option value="Computer Engineering">
+          <option value="Economics">
+          <option value="Mathematics">
+        </datalist>
+      </div>
 
-    <div class="form-group">
-      <label for="classes">Classes</label>
-      <input type="text" id="classes" class="form-control tagit-hidden-field">
-    </div>
+      <div class="form-group">
+        <label for="classes">Classes</label>
+        <input type="text" id="classes" class="form-control tagit-hidden-field">
+      </div>
 
-    <div class="form-group">
-      <label for="bio">Biography</label>
-      <textarea id="bio" class="form-control"></textarea>
+      <div class="form-group">
+        <label for="bio">Biography</label>
+        <textarea id="bio" class="form-control"></textarea>
+      </div>
+	  
+	  	<!-- At this point the user's profile would be sent to the server and saved -->
+      <button id="submit" class="btn btn-success">Done</button>
     </div>
-	
-		<!-- At this point the user's profile would be sent to the server and saved -->
-    <button id="submit" class="btn btn-success">Done</button>
   </script>
 
   <!-- This will let the user login. This is defaulted after the account is created -->
 	<script type="text/template" id="login-form">
-		<h1>Login</h1>
-		<form role="form" action="login" method="post" id="login">
-			<div class="form-group">
-				<label for="lemail">E-mail</label>
-				<input type="text" name='username' id="lemail" class="form-control">
-			</div>
-			<div class="form-group">
-				<label for="lpassword">Password</label>
-				<input type="password" name='password' id="lpassword" class="form-control">
-			</div>
-			<!-- this button should send the username/password to the server for authentication -->
-			<button type="submit" class="btn btn-success" id="login-button">Login</button>
-
-			<!-- This lets the user reset their password -->
-			<button type="reset" class="btn btn-success" id="reset-pass">Forgot your password?</button>
-		</form>
+    <div class="container-wrapper">
+  		<h1>Login</h1>
+  		<form role="form" action="login" method="post" id="login">
+  			<div class="form-group">
+  				<label for="lemail">E-mail</label>
+  				<input type="text" name='username' id="lemail" class="form-control">
+  			</div>
+  			<div class="form-group">
+  				<label for="lpassword">Password</label>
+  				<input type="password" name='password' id="lpassword" class="form-control">
+  			</div>
+  			<!-- this button should send the username/password to the server for authentication -->
+  			<button type="submit" class="btn btn-success" id="login-button">Login</button>
+  
+  			<!-- This lets the user reset their password -->
+  			<button type="reset" class="btn btn-success" id="reset-pass">Forgot your password?</button>
+  		</form>
+    </div>
 	</script>
 
 	<!-- this view handles password reseting -->
 	<script type="text/template" id="password-reset-form">
-		<h1>Reset my password</h1>
-		<form role="form" action="" id="password-reset">
-			<div class="form-group">
-				<label for="remail">Enter your e-mail</label>
-				<input type="text" id="remail" class="form-control">
-			</div>
-			<button id="reset-password-button" type="submit" class="btn btn-success">Send me my new password</button>
-		</form>
+    <div class="container-wrapper">
+		  <h1>Reset my password</h1>
+		  <form role="form" action="" id="password-reset">
+		  	<div class="form-group">
+		  		<label for="remail">Enter your e-mail</label>
+		  		<input type="text" id="remail" class="form-control">
+		  	</div>
+		  	<button id="reset-password-button" type="submit" class="btn btn-success">Send me my new password</button>
+		  </form>
+    </div>
 	</script>
 
 

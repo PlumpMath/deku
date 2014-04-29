@@ -369,8 +369,18 @@ hr {
 }
 
 #container {
+    width: 100%;
     margin-top: 50px;
     padding-top: 50px;
+}
+
+.container-wrapper {
+    width: 70%;
+    margin: auto;
+    padding: 20px;
+    color: #CCC;
+    background-color: #444;
+    border-radius: 5px;
 }
 
 #logout {
