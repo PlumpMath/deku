@@ -56,18 +56,26 @@ app.SlidebarView = Backbone.View.extend({
       window_width = window.innerWidth;
       slidebar_width = $('.sb-slidebar').width();
       container_width = window_width - slidebar_width;
-      $('#container').css("width", container_width)
-      .animate({
-        marginLeft: '0'
-      });
+      styles = {
+        "width": container_width,
+        "marginLeft": '0px'
+      }
+      $('#container').css(styles);
+      if (app.msnry) {
+        app.msnry.layout();
+      }
     } else {
       //if it is less, use the toggle button
       $("#toggle-bars").show();
       app.$slidebars.close();
-      $('#container').css("width", '100%')
-      .animate({
-        marginLeft: 'auto'
-      });
+      styles = {
+        "width": '100%',
+        "marginLeft": 'auto'
+      }
+      $('#container').css(styles);
+      if (app.msnry) {
+        app.msnry.layout();
+      }
     }
   },
 
