@@ -79,7 +79,7 @@ def make_user_admin(user_id):
     else:
         pass
 
-@app.route('/deku/api/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/deku/api/users/<int:user_id>', methods=['GET', 'DELETE'])
 def user_by_id(user_id):
     if request.method == 'GET':
         user = models.User.query.get(int(user_id))
@@ -90,7 +90,25 @@ def user_by_id(user_id):
         else:
             return cors_response(("User not found.", 404))
 
-    elif request.method == 'PUT':
+    elif request.method == 'DELETE':
+        password = request.form.get('password')
+        user = authenticate_by_id(user_id, password)
+        if (user is not None):
+            if user.role == ROLE_ADMIN:
+                return cors_response(("Admin cannot delete own account.", 403))
+            else:
+                db.session.delete(user)
+                db.session.commit()
+                return cors_response(("User deleted", 200))
+        else:
+            return cors_response(("User not found.", 404))
+            
+    else:
+        pass
+
+@app.route('/deku/api/users/update/<int:user_id>', methods=['POST'])
+def update_user_by_id(user_id):
+    if request.method == 'POST':
         password = request.form.get('confirm_password')
         user = authenticate_by_id(user_id, password)
 
@@ -138,20 +156,6 @@ def user_by_id(user_id):
 
         db.session.commit()
         return cors_response((jsonify(user = user.serialize), 200))
-
-    elif request.method == 'DELETE':
-        password = request.form.get('password')
-        user = authenticate_by_id(user_id, password)
-        if (user is not None):
-            if user.role == ROLE_ADMIN:
-                return cors_response(("Admin cannot delete own account.", 403))
-            else:
-                db.session.delete(user)
-                db.session.commit()
-                return cors_response(("User deleted", 200))
-        else:
-            return cors_response(("User not found.", 404))
-            
     else:
         pass
 

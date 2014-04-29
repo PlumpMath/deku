@@ -160,19 +160,22 @@ app.UpdateAccountView = Backbone.View.extend({
       bootbox.prompt("Enter password to save your changes. If you changed your password, enter your old password.", function(result) {
         if (result !== null) {
           updateValues.confirm_password = result;
-          var url = "http://localhost:4568/deku/api/users/" + app.user.get('id');
-          // PUT LOGIC HERE TO HANDLE THE GET REQUEST
-          $.ajax({
-            type: 'PUT',
-            url: url,
-            data: updateValues,
-            success: function(data) {
-              console.log('success');
+          var url = "http://localhost:4568/deku/api/users/update/" + app.user.get('id');
+          $.post(url, updateValues, function( data, textStatus, jqXHR ) {
+              // Store that user in localStorage for persistent user state.
+              localStorage.setItem('deku', JSON.stringify(data['user']));
               app.user.set(data['user']);
-            },
-            fail: function(data) {
-              console.log('fail');
-            }
+              route = "update/" + app.user.get('firstName') + "/" + app.user.get('lastName') + '/' + app.user.get('id');
+              // if name didn't change, reset the url
+              if (Backbone.history.fragment === route) {
+                Backbone.history.loadUrl(Backbone.history.fragment);
+              } else {
+                // otherwise refresh the view with the new route
+                app.router.navigate(route, {trigger: true});
+              }
+          })
+          .fail(function() {
+              bootbox.alert("Sorry, your password didn't match.");
           });
         }
       });
