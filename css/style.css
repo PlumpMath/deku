@@ -374,10 +374,39 @@ hr {
     padding-top: 50px;
 }
 
+@media(max-width:480px) {
+    .container-wrapper-width {
+        width: 95%;
+    }
+}
+
+@media(min-width:481px) {
+    .container-wrapper-width {
+        width: 85%;
+    }
+}
+
+@media(min-width:768px) {
+    .container-wrapper-width {
+        width: 80%;
+    }
+}
+
+@media(min-width:992px) {
+    .container-wrapper-width {
+        width: 70%;
+    }
+}
+
+@media(min-width:1200px) {
+    .container-wrapper-width {
+        width: 60%;
+    }
+}
+
 .container-wrapper {
-    width: 70%;
     margin: auto;
-    padding: 20px;
+    padding: 20px 40px;
     color: #999;
     background-color: #222;
     border-radius: 10px;
