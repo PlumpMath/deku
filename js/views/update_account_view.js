@@ -93,7 +93,7 @@ app.UpdateAccountView = Backbone.View.extend({
       $('#year-input').val(app.user.get('grad_year'));
     }
 
-    if (values.classes.length === 0) {
+    if (values.classes === '[]') {
       error = true;
       $('#classes-input').tagit('removeAll');
       classes = app.user.get('classes');

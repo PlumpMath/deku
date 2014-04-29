@@ -43,7 +43,7 @@ app.CreateCardView = Backbone.View.extend({
     }
 
     //There must be at least 1 tag
-    if (values.tags.length === 0) {
+    if (values.tags === '[]') {
       error = true;
       $('.ui-widget-content').val('')
       .attr('placeholder', 'Add tags')

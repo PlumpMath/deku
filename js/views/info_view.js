@@ -56,8 +56,8 @@ app.InfoView = Backbone.View.extend({
       .focus();
 		}
 
-    // Make sure the user enters at least one class.		
-    if (values.classes.length === 0) {
+    // Make sure the user enters at least one class.
+    if (values.classes === '[]') {
 			error = true;
       $('.ui-widget-content').val('')
       .attr('placeholder', 'Enter a valid class')
