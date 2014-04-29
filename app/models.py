@@ -20,6 +20,8 @@ class User(db.Model):
     cards = db.relationship('Card', backref = 'author', cascade='all,delete', lazy = 'dynamic')
     courses = db.Column(db.String(MAX_CONTENT_LENGTH))
     comments = db.relationship('Comment', backref='author')
+    marked = db.relationship('Card', secondary=marked, backref="user")
+    added = db.relationship('Card', secondary=added, backref="user")
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)
@@ -44,6 +46,16 @@ class User(db.Model):
     @property
     def get_avatar(self):
         return base64.b64encode(self.profile.avatar)
+
+marked = db.Table('marked',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
+)
+
+added = db.Table('added',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
+)
 
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -76,6 +88,7 @@ class Card(db.Model):
     userLast = db.Column(db.String(MAX_CONTENT_LENGTH))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     comments = db.relationship('Comment', backref='card', cascade='all,delete', lazy='dynamic')
+    popularity = db.Column(db.Integer)
 
     def __repr__(self):
         return '<Card %r>' % (self.content[:40] + "...")
