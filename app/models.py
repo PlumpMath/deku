@@ -1,7 +1,5 @@
 from app import db
 from datetime import datetime
-from PIL import Image
-import StringIO
 import base64
 import time
 
@@ -95,13 +93,12 @@ class Card(db.Model):
         }
 
 
-#hacked together
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     from_id = db.Column(db.Integer)
     to_id = db.Column(db.Integer)
     message = db.Column(db.String)
-    timestamp = db.Column(db.String(), default=time.ctime())
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
     
     @property
     def serialize(self):
@@ -111,7 +108,7 @@ class Message(db.Model):
             "to_id": self.to_id,
             "to": to.firstName + " " + to.lastName,
             "from_id": self.from_id,
-            "from": fr.firstName + " " + to.lastName,
+            "from": fr.firstName + " " + fr.lastName,
             "message": self.message,
             "timestamp": self.timestamp
         }

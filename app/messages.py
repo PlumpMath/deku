@@ -1,24 +1,27 @@
 #!.venv/bin/python
 
 import os
-from flask import Flask, request, jsonify, abort, make_response, json
-from app import app, db, models, session
+from flask import Flask, request, jsonify, make_response, json
+from app import app, db, models
 from app.models import Card
-from utils import cors_response, authenticate_by_email, authenticate_by_id
-import time
+from utils import cors_response
+from datetime import datetime
 
-#UNAUTHENTICATED AND USERS' EXISTENCE UNCHECKED
-@app.route('/deku/api/messages/<id>', methods=['GET', 'POST'])
-def messages(id):
+@app.route('/deku/api/messages/<user_id>', methods=['GET', 'POST'])
+def messages(user_id):
     if request.method == 'GET':
-        if id:
+        user = models.User.query.get(int(user_id))
+        if user:
             return cors_response((jsonify(messages=[message.serialize for message in models.Message.query.filter(models.Message.to_id==id).all()]),200))
-        return cors_response(("error",400))
+        return cors_response(("User not found.", 400))
 
     elif request.method == 'POST':         
         poster_id = request.form.get('poster_id')
         message = request.form.get('message')
-        message = models.Message(to_id=id, from_id=poster_id, message=message,timestamp=time.ctime())
+        message = models.Message(to_id=user_id,
+                                 from_id=poster_id,
+                                 message=message,
+                                 timestamp=datetime.utcnow())
 
         db.session.add(message)
         db.session.commit()
