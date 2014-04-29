@@ -104,7 +104,7 @@ app.Router = Backbone.Router.extend({
     if (localStorage.getItem('deku') === null) {
       $('#container').fadeOut(350, function() {that.changeView(new app.LoginView());});
     } else {
-      $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
+      $('#container').fadeOut(0, function() { that.navigate('hand', {trigger: true})});
     }
   },
 
@@ -140,7 +140,7 @@ app.Router = Backbone.Router.extend({
        * from being able to get back to the main site.
        */
 
-      $('#container').fadeOut(350, function() { that.changeView(new app.HandView());});
+      $('#container').fadeOut(0, function() { that.changeView(new app.HandView());});
       //The handView's children must be visible. If the page refreshed they would disappear. This combats that
       if (this.slideView === null && this.toggleView === null) {
         // they do, so remove them and close the slidebar (only real permanent solution)
