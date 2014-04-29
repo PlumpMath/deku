@@ -13,7 +13,7 @@ app.User = Backbone.Model.extend({
         classes: new Array(),
         grad_year: "",
         major: "",
-        avatar: new Image()
+        avatar: ""
       }
     }
 });
