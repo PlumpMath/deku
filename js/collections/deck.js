@@ -3,8 +3,12 @@ var app = app || {};
 app.CardList = Backbone.Collection.extend({
   model: app.Card,
   url: 'http://localhost:4568/deku/api/cards',
+  
+  url_profile: 'http://localhost:4568/deku/api/cards/profile/',
+  
   url_search: 'http://localhost:4568/deku/api/cards/search/',
 
+  // general fetch to get all the cards
   fetch: function() {
     var that = this;
     $.ajax({
@@ -16,14 +20,25 @@ app.CardList = Backbone.Collection.extend({
     });
   },
 
+  // fetch by a specific search filter
   searchBy: function(route) {
     var that = this;
     $.ajax({
       type: 'GET',
       url: this.url_search + route,
       success: function(data) {
-        console.log('reset for search');
-        console.log(data['cards']);
+        that.reset(data['cards']);
+      }
+    });
+  },
+
+  // fetch for a user's profile
+  fetchProfile: function(id) {
+    var that = this;
+    $.ajax({
+      type: 'GET',
+      url: this.url_profile + id,
+      success: function(data) {
         that.reset(data['cards']);
       }
     });

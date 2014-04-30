@@ -20,8 +20,9 @@ app.CardView = Backbone.View.extend({
   },
 
 	initialize: function() {
-    this.listenTo(this.model, "change", this.render());
-    this.render();
+    // this code shouldn't run, render is called in hand and on updates, it was causing duplicates
+    //this.listenTo(this.model, "change", this.render());
+    //this.render();
   },
 
   render: function() {

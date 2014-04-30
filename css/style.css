@@ -107,6 +107,10 @@ hr {
     color:#999;
 }
 
+#profile-wrapper {
+    margin-bottom: 10px;
+}
+
 #user-profile {
     width: 70%;
     background: #222;
@@ -371,16 +375,55 @@ hr {
 #container {
     width: 100%;
     margin-top: 50px;
-    padding-top: 50px;
+    padding: 50px;
+}
+
+@media(max-width:480px) {
+    .container-wrapper-width {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media(min-width:481px) {
+    .container-wrapper-width {
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media(min-width:768px) {
+    .container-wrapper-width {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media(min-width:992px) {
+    .container-wrapper-width {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media(min-width:1200px) {
+    .container-wrapper-width {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 .container-wrapper {
-    width: 70%;
     margin: auto;
-    padding: 20px;
-    color: #CCC;
-    background-color: #444;
-    border-radius: 5px;
+    padding: 20px 40px;
+    color: #999;
+    background-color: #222;
+    border-radius: 10px;
 }
 
 #logout {
