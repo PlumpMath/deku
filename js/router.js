@@ -10,7 +10,7 @@ app.Router = Backbone.Router.extend({
 
   toggleView: null,
 
-  profileView: null,
+  profile_view: null,
 
   // a list of all the existing routes
   routes: {
@@ -181,7 +181,7 @@ app.Router = Backbone.Router.extend({
        * Every new search should clear the hand and show the new stuff
        * Always load hand view for searching, this gives access to app.Deck and app.msnry
        */
-      $('#container').fadeOut(0, function() { that.changeView(new app.HandView({"use": "search"}));});
+      this.changeView(new app.HandView({'use': 'search'}));
       msnry_items = app.msnry.getItemElements();
       app.msnry.remove(msnry_items);
       app.msnry.layout();
@@ -216,6 +216,10 @@ app.Router = Backbone.Router.extend({
             // show the slidebars if they are not out yet
             that.setChildren();
           }
+          if (that.profile_view !== null) {
+            that.profile_view.undelegateEvents();
+            that.profile_view.stopListening();
+          } 
           $('#filter-by').html('No active search');
           $('#default').hide('medium');
           // reside on the hand view to have access to deck and msnry
@@ -226,12 +230,12 @@ app.Router = Backbone.Router.extend({
           app.msnry.layout();
           
           var el = '#container';
-          var profileView = new app.ProfileView({
+          that.profile_view = new app.ProfileView({
             model: profile
           });
           
           //this is the cards content
-          var elem = profileView.render();
+          var elem = that.profile_view.render();
           $(el).prepend(elem); //add to the container
           var stampElem = $('#profile-wrapper');
           app.msnry.stamp(stampElem);

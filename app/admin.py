@@ -6,7 +6,7 @@ from app import app, db, models, bcrypt
 from utils import cors_response, authenticate_by_email, authenticate_by_id
 from models import ROLE_MOD
 
-@app.route('deku/api/admin/users/make_moderator/<int:user_id>', methods=['POST'])
+@app.route('/deku/api/admin/users/make_moderator/<int:user_id>', methods=['POST'])
 def makeModerator(user_id):
     if request.method == 'POST':
         user = models.User.query.get(int(user_id))
@@ -29,7 +29,7 @@ def makeModerator(user_id):
         pass 
                     
 
-@app.route('deku/api/admin/users/delete/<int:user_id>', methods=['DELETE'])
+@app.route('/deku/api/admin/users/delete/<int:user_id>', methods=['DELETE'])
 def deleteUser(user_id):
     if request.method == 'DELETE':
         user = models.User.query.get(int(user_id))

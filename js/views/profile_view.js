@@ -66,9 +66,10 @@ app.ProfileView = Backbone.View.extend({
 
   // Sends request to make this user a moderator
   makeModerator: function(event) {
+    console.log('make mod');
     event.preventDefault();
-		
-    var url = 'http://localhost:4568/deku/api/admin/make_moderator/' + this.model.get('id');
+
+    var url = 'http://localhost:4568/deku/api/admin/users/make_moderator/' + this.model.get('id');
     
     bootbox.prompt("To confirm that you want to make " + this.model.get('firstName') + " " + this.model.get('lastName') + " a moderator, please enter your password", function(result) {
       if (result !== null) {
