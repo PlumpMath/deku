@@ -28,7 +28,8 @@ class APITestCase(unittest.TestCase):
                        courses = ",".join(["CMSC 304", "CMSC 345", "CMSC 331", "STAT 355"]))
         johndoe.profile = Profile(grad_year = "2015",
                                   major = "Computer Science",
-                                  bio = "I'm a nobody.")
+                                  bio = "I'm a nobody.",
+                                  avatar = "")
 
         janedoe = User(firstName = "Jane",
                        lastName = "Doe",
@@ -37,7 +38,8 @@ class APITestCase(unittest.TestCase):
                        courses = ",".join(["CMSC 304", "CMSC 341", "CMSC 313", "STAT 355"]))
         janedoe.profile = Profile(grad_year = "2016",
                                   major = "Computer Science",
-                                  bio = "I'm nobody's sister.")
+                                  bio = "I'm nobody's sister.",
+                                  avatar = "")
  
         db.session.add(johndoe)
         db.session.add(janedoe)
