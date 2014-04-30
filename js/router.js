@@ -224,6 +224,10 @@ app.Router = Backbone.Router.extend({
           // trigger a not found page load
           $('#container').fadeOut(350, function() { that.navigate('user_not_found', {trigger: true})});
         }
+      })
+      .fail(function() {
+        // trigger a not found page load
+        $('#container').fadeOut(350, function() { that.navigate('user_not_found', {trigger: true})});
       });
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
