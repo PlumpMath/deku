@@ -16,7 +16,8 @@ app.CardView = Backbone.View.extend({
     "click #post-comment": "postComment",
     "click #comment-btn": "goToComment",
     "click #marks-btn": "markCard",
-    "click #adds-btn": "addCard"
+    "click #adds-btn": "addCard",
+    "click #delete-card": "deleteCard"
   },
 
 	initialize: function() {
@@ -77,12 +78,19 @@ app.CardView = Backbone.View.extend({
       //switch the templates
       this.template = _.template($('#inspect-template').html());
       var elem = this.template(this.model.toJSON());
+      var that = this;
       this.$el.flippy({
         duration: "1000",
         light: "0",
         depth: "0",
         verso: elem,
         onAnimation: function() {
+          // really bad way to do it, but flippy doesn't seem to let DOM manip until done
+          if (that.model.get('author_id') !== app.user.get('id')) {
+            if ($('#delete-card').is(':visible')) {
+              $('#delete-card').hide();
+            }
+          }
           app.msnry.layout();
         }
       });
@@ -115,5 +123,31 @@ app.CardView = Backbone.View.extend({
     // navigate to the route for the user's profile
     profile = this.model.get('authorFirst') + "/" + this.model.get('authorLast') + '/' + this.model.get('author_id');
     app.router.navigate('profile/' + profile, {trigger: true});
+  },
+
+  // this lets the author of a card to delete their own card
+  deleteCard: function(event) {
+    event.preventDefault();
+    var that = this;
+    // validate with password
+    bootbox.prompt("To delete this card, enter your password. Be sure you want to do this as you cannot undo this action.", function(result) {
+      if (result !== null) {
+        value = {
+          'password': result
+        };
+        var url = "http://localhost:4568/deku/api/cards/delete/" + that.model.get('id');
+        $.post(url, value, function(data, textStatus, jqXHR) {
+          // card is deleted, remove it.
+          that.undelegateEvents();
+          that.stopListening();
+          app.msnry.layout();
+          Backbone.history.loadUrl(Backbone.history.fragment);
+        })
+        .fail(function() {
+          bootbox.alert("Sorry, your password didn't match.");
+        });
+      }
+    });
+    $('.bootbox-input-text').attr('type', 'password');
   }
 });

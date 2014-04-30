@@ -276,6 +276,7 @@
     <div id="inspect-header">
       <a id="ins-auth"><%= authorFirst %> <%= authorLast %></a> @ <%= created_at %>
       <button id="flip-return" class="btn btn-success">Flip to front</button>
+      <a id="delete-card" class="btn btn-success">Delete your card</a>
     </div>
     <div id="inspect-content"><%= content %>
       <div id="card-category"><%= category %></div>
@@ -328,7 +329,7 @@
 				</datalist>
 			</div>
 			<div class="form-group">
-				<textarea id="content" name="card" rows="5" class='create-card' placeholder="Share with your university"></textarea>
+				<textarea id="content" name="card" rows="5" class='create-card' placeholder="Share with your university" maxlength="140"></textarea>
 			</div>
       <div class="form-group">
         <input type="text" id="tags" class="create-card form-control" />
