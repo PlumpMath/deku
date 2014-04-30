@@ -41,12 +41,12 @@ app.CardView = Backbone.View.extend({
     if (index === -1) {
       marks_list.push(app.user.get('email'));
       this.model.save({"marks": marks_list});
-      this.render();
+      //this.render();
     } else {
       //else remove their mark
       marks_list.splice(index,1);
       this.model.save({"marks": marks_list});
-      this.render();
+      //this.render();
     }
   },
 
@@ -63,7 +63,7 @@ app.CardView = Backbone.View.extend({
     var comment_list = this.model.get('comments');
     comment_list.push({"author": app.user.get('firstName'), "comment": text});
     this.model.save({"comments": comment_list});
-    this.render();
+    //this.render();
   },
 
   //this controls the flipping of the card to inspect
@@ -76,8 +76,8 @@ app.CardView = Backbone.View.extend({
       //use jQuery UI switchClass for smooth resize
       this.$el.switchClass('card', 'inspect', 1000);
       //switch the templates
-      this.template = _.template($('#inspect-template').html());
-      var elem = this.template(this.model.toJSON());
+      var template = app.TemplateCache.get('#inspect-template');
+      var elem = template(this.model.toJSON());
       var that = this;
       this.$el.flippy({
         duration: "1000",
@@ -87,8 +87,10 @@ app.CardView = Backbone.View.extend({
         onAnimation: function() {
           // really bad way to do it, but flippy doesn't seem to let DOM manip until done
           if (that.model.get('author_id') !== app.user.get('id')) {
-            if ($('#delete-card').is(':visible')) {
-              $('#delete-card').hide();
+            if (app.user.get('role') !== 2) {
+              if ($('#delete-card').is(':visible')) {
+                $('#delete-card').remove();
+              }
             }
           }
           app.msnry.layout();
