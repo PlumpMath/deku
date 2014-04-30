@@ -9,7 +9,8 @@ app.UpdateAccountView = Backbone.View.extend({
   events: {
     'click #edit': 'edit',
     'click #cancel': 'cancel',
-    'click #save': 'save'
+    'click #save': 'save',
+    'click #delete': 'deleteAccount'
   },
 
   initialize: function() {
@@ -182,6 +183,29 @@ app.UpdateAccountView = Backbone.View.extend({
       // little bit of a cheeky hack to make the prompt input take a password field instead of straight text.
       $('.bootbox-input-text').attr('type', 'password');
     }
+  },
+
+  // code to handle account deletion
+  deleteAccount: function(event) {
+    event.preventDefault();
+    bootbox.prompt("To delete your account, enter your password. Be sure you want to do this as all your account information will be gone.", function(result) {
+      if (result !== null) {
+        value = {
+          'password': result
+        };
+        var url = "http://localhost:4568/deku/api/users/delete/" + app.user.get('id');
+        $.post(url, value, function(data, textStatus, jqXHR) {
+          // user is delete, so log out.
+          localStorage.removeItem('deku');
+          app.user.set(app.user.defaults());
+          app.router.navigate('register', {trigger: true});
+        })
+        .fail(function() {
+          bootbox.alert("Sorry, your password didn't match.");
+        });
+      }
+    });
+    $('.bootbox-input-text').attr('type', 'password');
   },
 
   // cancel the edit
