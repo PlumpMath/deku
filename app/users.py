@@ -47,7 +47,6 @@ def users():
                 profile.major = major
 
             if (courses):
-                print courses
                 courseList = json.loads(courses)
                 user.courses = ",".join(courseList)
 
