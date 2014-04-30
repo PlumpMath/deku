@@ -27,7 +27,16 @@ Backbone.sync = function(method, model, options) {
     }
   } else if (method === 'update') { // HTTP PUT
     if (model instanceof app.Card) {
-    
+      console.log('update card');
+      $.ajax({
+        type: 'POST',
+        url: app.Deck.url + '/update/' + model.get('id'),
+        data: model.toJSON(),
+        success: function(data) {
+          console.log('card updated');
+        },
+        fail: function(data) {}
+      });
     } else if (model instanceof app.User) {
     
     }

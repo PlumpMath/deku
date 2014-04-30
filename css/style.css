@@ -332,13 +332,14 @@ hr {
 }
 
 .card-comment {
-    background-color: #6AD66A;
+    background-color: #222;
     border-radius: 3px;
     width: 90%;
     padding: 10px;
     margin: 10px 5px;
     left: 20px;
     font-size: 12pt;
+    color: #999;
 }
 
 #delete-card {

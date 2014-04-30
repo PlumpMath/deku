@@ -37,7 +37,7 @@ def cards():
     else:
         pass
 
-@app.route('/deku/api/cards/<int:card_id>', methods=['GET', 'PUT'])
+@app.route('/deku/api/cards/<int:card_id>', methods=['GET'])
 def card_by_id(card_id):
     if request.method == 'GET':
         card = Card.query.get(int(card_id))
@@ -45,14 +45,19 @@ def card_by_id(card_id):
             return jsonify(card = card.serialize)
         else:
             return abort(404)
-    elif request.method == 'PUT':
+    else:
+        pass
+
+@app.route('/deku/api/cards/update/<int:card_id>', methods=['POST'])
+def update_card(card_id):
+    if request.method == 'POST':
         card = Card.query.get(int(card_id))
         content = request.form.get('content')
         if (card):
             if (content):
                 card.content = content
             db.session.commit()
-            return make_response(("Card modified.", 200, None))
+            return cors_response(("Card modified.", 200, None))
         else:
             return abort(404)
     else:
