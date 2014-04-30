@@ -230,7 +230,7 @@ hr {
     padding: 15px;
     margin: 15px;
     border-radius: 7px;
-    width: 85%;
+    width: 75%;
     height: 400px;
     overflow: hidden;
 }
@@ -332,13 +332,22 @@ hr {
 }
 
 .card-comment {
-    background-color: #6AD66A;
     border-radius: 3px;
     width: 90%;
-    padding: 10px;
     margin: 10px 5px;
     left: 20px;
     font-size: 12pt;
+    color: #222;
+}
+
+.card-comment a:hover {
+    color: #000;
+    text-decoration: none;
+}
+
+#delete-card {
+    float: right;
+    margin-right: 15px;
 }
 
 #flip-return {

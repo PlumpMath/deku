@@ -7,7 +7,9 @@ app.HandView = Backbone.View.extend({
   // this extra packet called use is very helpful to prevent duplicate fetching of data
   initialize: function(use) { 
     //this will remove the login view that existed before, or anything else that was present
-    this.$el.empty();
+    if (use.use !== 'search') {
+      this.$el.empty();
+    }
     this.$el.show();
     app.msnry = new Masonry( this.$el[0], {
       // Masonry options

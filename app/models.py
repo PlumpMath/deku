@@ -140,6 +140,7 @@ class Comment(db.Model):
     def serialize(self):
         author = models.User.query.get(int(self.author_id))
         return {
+            "author_id": self.author_id,
             "author_first": author.firstName,
             "author_last": author.lastName, 
             "content": self.content,

@@ -32,4 +32,5 @@ generator = pydenticon.Generator(5, 5, digest=hashlib.sha1,
 import models
 import users
 import cards
+import admin
 import messages

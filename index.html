@@ -117,7 +117,8 @@
         <h2><%= firstName %> <%= lastName %> <span id="user-role"><%= role %></span>
           <button id="follow-btn" class="btn">Follow <%= firstName %></button>
           <button id="update-btn" class='btn'>Update Account</button>
-          <button id="make-mod" class='btn'>Make Moderator</button>
+          <button id="change-role" class='btn'>Make Moderator</button>
+          <button id="delete" class="btn">Delete Account</button>
         </h4>
         <hr />
         <h4>Studies <%= major %> at <%= university %> | Year of <%= grad_year %></h4>
@@ -257,6 +258,7 @@
         <div class="card-tag <%=tags[tag]%>" style="width: <%=100.0/tags.length%>%" title="<%=tags[tag]%>"></div>
       <% } %>
     </div>
+    <!-- <span class="avatar"><a id="card-author-avatar"><img src="data:image/png;base64,<%= avatar %>" id="avatar-card"></a></span> -->
     <div id="card-author"><a id="car-auth"><%= authorFirst %> <%=authorLast %></a></div>
 		<div id="card-content"><%= content %></div>
     <div id="card-category"><%= category %></div>
@@ -275,31 +277,32 @@
     <div id="inspect-header">
       <a id="ins-auth"><%= authorFirst %> <%= authorLast %></a> @ <%= created_at %>
       <button id="flip-return" class="btn btn-success">Flip to front</button>
+      <a id="delete-card" class="btn btn-success">Delete card</a>
     </div>
     <div id="inspect-content"><%= content %>
       <div id="card-category"><%= category %></div>
     </div>
     <div id="inspect-footer">
       <div id="inspect-marks" class="inspect-footer-elem">
-        <button id="marks-btn" class="btn btn-success"><%= marks.length %> People marked this</button>
+        <button id="marks-btn" class="btn btn-success"><%= marks.length %> marks</button>
       </div>
       <div id="inspect-adds" class="inspect-footer-elem">
-        <button id="adds-btn" class="btn btn-success"><%= adds.length %> People added this</button>
+        <button id="adds-btn" class="btn btn-success"><%= adds.length %> adds</button>
       </div>
       <div id="inspect-comments" class="inspect-footer-elem">
         <button id="comment-btn" class="btn btn-success"><%= comments.length %> Comments</button>
       </div>
       <div id="inspect-joker" class="inspect-footer-elem">
-        <button id="report-joker" class="btn btn-success">Report Card as Joker</button>
+        <button id="report-joker" class="btn btn-success">Joker</button>
       </div>
       <div id="inspect-hide" class="inspect-footer-elem">
-        <button id="hide-card" class="btn btn-success">Hide card from Hand</button>
+        <button id="hide-card" class="btn btn-success">Hide</button>
       </div>
     </div>
     <div id="inspect-comment">
       <div id="inspect-comment-list">
         <% for (var comment in comments) { %>
-          <div class="card-comment"><%=comments[comment].author%>: <%=comments[comment].comment%>
+          <div class="card-comment"><a id="user-profile-comment" name=<%=comments[comment].author_first%>/<%=comments[comment].author_last%>/<%=comments[comment].author_id%>><%=comments[comment].author_first%> <%=comments[comment].author_last%></a>: <%=comments[comment].comment%>
           </div>
         <% } %>
       </div>
@@ -327,7 +330,7 @@
 				</datalist>
 			</div>
 			<div class="form-group">
-				<textarea id="content" name="card" rows="5" class='create-card' placeholder="Share with your university"></textarea>
+				<textarea id="content" name="card" rows="5" class='create-card' placeholder="Share with your university" maxlength="140"></textarea>
 			</div>
       <div class="form-group">
         <input type="text" id="tags" class="create-card form-control" />
@@ -404,7 +407,7 @@
     <div id="update-section">
       <h2>Update Account Information</h2>
       <h4><a id="edit">Edit</a>
-        <span id='editSC'><a id="save">Save</a> | <a id="cancel">Cancel</a></span></h4>
+        <span id='editSC'><a id="save">Save</a> | <a id="cancel">Cancel</a></span> | <a id="delete">Delete Account</a></h4>
       <hr />
       <br />
       <table>

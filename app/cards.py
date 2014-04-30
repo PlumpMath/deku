@@ -37,7 +37,7 @@ def cards():
     else:
         pass
 
-@app.route('/deku/api/cards/<int:card_id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/deku/api/cards/<int:card_id>', methods=['GET'])
 def card_by_id(card_id):
     if request.method == 'GET':
         card = Card.query.get(int(card_id))
@@ -45,25 +45,41 @@ def card_by_id(card_id):
             return jsonify(card = card.serialize)
         else:
             return abort(404)
-    elif request.method == 'PUT':
+    else:
+        pass
+
+@app.route('/deku/api/cards/update/<int:card_id>', methods=['POST'])
+def update_card(card_id):
+    if request.method == 'POST':
         card = Card.query.get(int(card_id))
         content = request.form.get('content')
         if (card):
             if (content):
                 card.content = content
             db.session.commit()
-            return make_response(("Card modified.", 200, None))
+            return cors_response(("Card modified.", 200, None))
         else:
             return abort(404)
+    else:
+        pass
 
-    elif request.method == 'DELETE':
+@app.route('/deku/api/cards/delete/<int:card_id>', methods=['POST'])
+def delete_card(card_id):
+    if request.method == 'POST':
         card = Card.query.get(int(card_id))
-        if (card):
-            db.session.delete(card)
-            db.session.commit()
-            return make_response(("Card deleted.", 200, None))
-        elif (card is None):
-            return make_response(("No card found.", 204, None))
+        author_id = card.user_id
+        author = models.User.query.get(author_id) #get the author id from db
+        password = request.form.get('password') # get password that was passed back
+        user = authenticate_by_id(author_id, password) # just make sure the user is good
+        if (user):
+            if (card):
+                db.session.delete(card)
+                db.session.commit()
+                return cors_response(("Card deleted.", 200, None))
+            elif (card is None):
+                return cors_response(("No card found.", 204, None))
+        else:
+            return cors_response(("Unauthorized access", 401))
     else:
         pass
 

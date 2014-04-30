@@ -20,7 +20,7 @@ app.SearchView = Backbone.View.extend({
 
 	render: function() {
     var template = app.TemplateCache.get(this.template);
-		this.$el.html(template);
+		this.$el.append(template);
 	},
 
   // search by category

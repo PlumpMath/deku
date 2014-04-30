@@ -4,8 +4,9 @@ app.Card = Backbone.Model.extend({
   // define as a function because one field is an array
   defaults: function() {
     return {
+      id: -1,
       category: "",
-	  tags: new Array(),
+      tags: new Array(),
       content: "",
       authorFirst: "first",
       authorLast: "last",

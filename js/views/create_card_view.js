@@ -18,7 +18,7 @@ app.CreateCardView = Backbone.View.extend({
     var template = app.TemplateCache.get(this.template);
 		this.$el.html(template);
     $('#tags').tagit({
-      availableTags: ['pies', 'breezeway', 'fire'],
+      availableTags: ['pies', 'breezeway', 'fire', 'commons', 'parking', 'aciv','science', 'quad', 'erickson', 'squirrels', 'rac', 'deku', 'umbc'],
       removeConfirmation: true,
       tagLimit: 4,
       onTagLimitExceeded: function(event, ui) {
