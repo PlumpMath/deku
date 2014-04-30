@@ -73,3 +73,27 @@ def deleteUser(user_id):
             return cors_response(("User not found.", 404))
     else:
         pass
+
+
+@app.route('/deku/api/admin/cards/delete/<int:card_id>', methods=['POST'])
+def deleteCard(card_id):
+    if request.method == 'POST':
+        print "admin delete card"
+        card = models.Card.query.get(int(card_id))
+        if (card):
+            admin_id = request.form.get("admin_id")
+            admin_password = request.form.get("admin_password")
+            if (admin_id and admin_password):
+                admin = authenticate_by_id(admin_id, admin_password)
+                if (admin):
+                    db.session.delete(card)
+                    db.session.commit()
+                    return cors_response(("Card deleted.", 200))
+                else:
+                    return cors_response(("Unauthorized.", 403))
+            else:
+                return cors_response(("Bad Request.", 400))
+        else:
+            return cors_response(("Card not found.", 404))
+    else:
+        pass

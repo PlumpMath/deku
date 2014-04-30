@@ -134,20 +134,39 @@ app.CardView = Backbone.View.extend({
     // validate with password
     bootbox.prompt("To delete this card, enter your password. Be sure you want to do this as you cannot undo this action.", function(result) {
       if (result !== null) {
-        value = {
-          'password': result
-        };
-        var url = "http://localhost:4568/deku/api/cards/delete/" + that.model.get('id');
-        $.post(url, value, function(data, textStatus, jqXHR) {
-          // card is deleted, remove it.
-          that.undelegateEvents();
-          that.stopListening();
-          app.msnry.layout();
-          Backbone.history.loadUrl(Backbone.history.fragment);
-        })
-        .fail(function() {
-          bootbox.alert("Sorry, your password didn't match.");
-        });
+        if (app.user.get('id') === that.model.get('author_id')) {
+          value = {
+            'password': result
+          };
+          var url = "http://localhost:4568/deku/api/cards/delete/" + that.model.get('id');
+          $.post(url, value, function(data, textStatus, jqXHR) {
+            // card is deleted, remove it.
+            that.undelegateEvents();
+            that.stopListening();
+            app.msnry.layout();
+            Backbone.history.loadUrl(Backbone.history.fragment);
+          })
+          .fail(function() {
+            bootbox.alert("Sorry, your password didn't match.");
+          });
+        } else if (app.user.get('role') === 2) {
+          values = {
+            'admin_id': app.user.get('id'),
+            'admin_password': result
+          };
+          // route for admin to delete a card
+          var url = "http://localhost:4568/deku/api/admin/cards/delete/" + that.model.get('id');
+          $.post(url, values, function(data, textStatus, jqXHR) {
+            // card is deleted, remove it.
+            that.undelegateEvents();
+            that.stopListening();
+            app.msnry.layout();
+            Backbone.history.loadUrl(Backbone.history.fragment);
+          })
+          .fail(function() {
+            bootbox.alert("Sorry, your password didn't match.");
+          });
+        }
       }
     });
     $('.bootbox-input-text').attr('type', 'password');
