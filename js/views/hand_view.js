@@ -33,7 +33,9 @@ app.HandView = Backbone.View.extend({
     var cardView = new app.CardView({
       model: item
     });
-    //this is the cards content
+    /* This is the cards content
+     * This is where the card is rendered, not with its own init
+     */
     var elem = cardView.render().el;
     this.$el.prepend(elem); //add to the container
     app.msnry.prepended(elem); //add to masonry

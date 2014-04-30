@@ -107,6 +107,10 @@ hr {
     color:#999;
 }
 
+#profile-wrapper {
+    margin-bottom: 10px;
+}
+
 #user-profile {
     width: 70%;
     background: #222;

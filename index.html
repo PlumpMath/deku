@@ -110,26 +110,28 @@
   </script>
 
   <script type="text/template" id="profile_view">
-    <div id="user-profile">
-      <!-- PROFILE PICTURE WILL GO HERE SOMEWHERE -->
-      <span class="avatar"><img src="data:image/png;base64,<%= avatar %>" id="avatar_profile"></span>
-      <h2><%= firstName %> <%= lastName %> <span id="user-role"><%= role %></span>
-        <button id="follow-btn" class="btn">Follow <%= firstName %></button>
-        <button id="update-btn" class='btn'>Update Account</button>
-        <button id="make-mod" class='btn'>Make Moderator</button>
-      </h4>
-      <hr />
-      <h4>Studies <%= major %> at <%= university %> | Year of <%= grad_year %></h4>
-      <div><h4>Enrolled in:</h4><ul><%for (c in classes) {%>
-			  <li><h5><%=classes[c]%></h5></li>
-        <%}%>
-        </ul>
+    <div id="profile-wrapper">
+      <div id="user-profile">
+        <!-- PROFILE PICTURE WILL GO HERE SOMEWHERE -->
+        <span class="avatar"><img src="data:image/png;base64,<%= avatar %>" id="avatar_profile"></span>
+        <h2><%= firstName %> <%= lastName %> <span id="user-role"><%= role %></span>
+          <button id="follow-btn" class="btn">Follow <%= firstName %></button>
+          <button id="update-btn" class='btn'>Update Account</button>
+          <button id="make-mod" class='btn'>Make Moderator</button>
+        </h4>
+        <hr />
+        <h4>Studies <%= major %> at <%= university %> | Year of <%= grad_year %></h4>
+        <div><h4>Enrolled in:</h4><ul><%for (c in classes) {%>
+		  	  <li><h5><%=classes[c]%></h5></li>
+          <%}%>
+          </ul>
+        </div>
+        <h4>About <%= firstName %> </h4>
+        <h5><%= bio %> </h5>
       </div>
-      <h4>About <%= firstName %> </h4>
-      <h5><%= bio %> </h5>
+      <br />
+      <h4 id='end-of-profile'>Here is what <%= firstName %> has shared with <%= university %></h4>
     </div>
-    <br />
-    <h4 id='end-of-profile'>Here is what <%= firstName %> has shared with <%= university %></h4>
   </script>
 
 	<!-- This template handles the first stage of creating an account -->

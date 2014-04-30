@@ -67,6 +67,16 @@ def card_by_id(card_id):
     else:
         pass
 
+@app.route('/deku/api/cards/profile/<int:user_id>', methods=['GET'])
+def get_users_cards(user_id):
+    if request.method == 'GET':
+        hand = Card.query.filter_by(user_id=user_id).all()
+        if len(hand) == 0:
+            return cors_response(("No cards from user.", 204))
+        return cors_response((jsonify(cards = [card.serialize for card in hand]), 200))
+    else:
+        pass
+
 @app.route('/deku/api/cards/search/category/<category>', methods=['GET'])
 def search_by_category(category):
     if request.method == 'GET':

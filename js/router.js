@@ -142,7 +142,6 @@ app.Router = Backbone.Router.extend({
        * This is partly a protection against a user that logged out from using the back button
        * from being able to get back to the main site.
        */
-
       $('#container').fadeOut(0, function() { that.changeView(new app.HandView({"use": "hand"}));});
       //The handView's children must be visible. If the page refreshed they would disappear. This combats that
       if (this.slideView === null && this.toggleView === null) {
@@ -213,13 +212,38 @@ app.Router = Backbone.Router.extend({
         var profile = new app.User(data['user']);
         // this checks the name as well. Just ID was not secure
         if (first === profile.get('firstName') && last === profile.get('lastName')) {
-          $('#container').fadeOut(0, function() {that.changeView(new app.ProfileView({model: profile}))});
           if (that.slideView === null && that.toggleView === null) {
             // show the slidebars if they are not out yet
             that.setChildren();
           }
           $('#filter-by').html('No active search');
           $('#default').hide('medium');
+          // reside on the hand view to have access to deck and msnry
+          $('#container').fadeOut(0, function() {that.changeView(new app.HandView({'use': 'profile'}))});
+          // clear previous masonry objects
+          msnry_items = app.msnry.getItemElements();
+          app.msnry.remove(msnry_items);
+          app.msnry.layout();
+          
+          var el = '#container';
+          var profileView = new app.ProfileView({
+            model: profile
+          });
+          
+          //this is the cards content
+          var elem = profileView.render();
+          $(el).prepend(elem); //add to the container
+          var stampElem = $('#profile-wrapper');
+          app.msnry.stamp(stampElem);
+         
+          // if the user doesn't exist
+          if (id === -1) {
+            // go to hand if it's faulty
+            app.router.navigate('hand', {trigger: true});
+          } else {
+            // make the API GET call
+            app.Deck.fetchProfile(id);
+          }
         } else {
           // trigger a not found page load
           $('#container').fadeOut(350, function() { that.navigate('user_not_found', {trigger: true})});
