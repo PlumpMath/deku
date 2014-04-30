@@ -71,22 +71,22 @@
           <ul class="col-list">
             <div id="messages"></div>
           </ul>
-        </li>
+        </li> <!--
         <li class="list-item-collapse collapsed">Notifications
           <ul class="col-list">
             <div id="notifications"></div>
           </ul>
-        </li>
+        </li> -->
         <li class="list-item-collapse collapsed">My Account
           <ul class="col-list">
             <div id="my-account"></div>
           </ul>
-        </li>
+        </li> <!--
         <li class="list-item-collapse collapsed">My Preferences
           <ul class="col-list">
             <div id="my-preferences"></div>
           </ul>
-        </li>
+        </li> -->
       </ul>
     </div>
   </script>
@@ -115,7 +115,7 @@
         <!-- PROFILE PICTURE WILL GO HERE SOMEWHERE -->
         <span class="avatar"><img src="data:image/png;base64,<%= avatar %>" id="avatar_profile"></span>
         <h2><%= firstName %> <%= lastName %> <span id="user-role"><%= role %></span>
-          <button id="follow-btn" class="btn">Follow <%= firstName %></button>
+          <!-- <button id="follow-btn" class="btn">Follow <%= firstName %></button> -->
           <button id="update-btn" class='btn'>Update Account</button>
           <button id="change-role" class='btn'>Make Moderator</button>
           <button id="delete" class="btn">Delete Account</button>
@@ -371,8 +371,7 @@
 
 	<!-- This is the view for messages -->
 	<script type="text/template" id="message-view">
-            <div id="msgs"></div>
-		<p>User will be able to see messages here</p>
+    <div id="msgs"></div>
 	</script>
 
 	<!-- This is the view for notifications -->

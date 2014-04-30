@@ -29,18 +29,18 @@ app.ProfileView = Backbone.View.extend({
     if (this.model.get('id') === app.user.get('id')) {
       $('#follow-btn').remove();
       $('#update-btn').show();
+      $('#delete').show();
     } else {
       $('#follow-btn').show();
       $('#update-btn').remove();
+      $('#delete').hide();
     }
     // hide the make mod button by default
     $('#change-role').hide();
-    $('#delete').hide();
     // only mods and admins can see someone's role
     if (app.user.get('role') === 0) {
       $('#user-role').remove();
       $("#change-role").remove();
-      $('#delete').remove();
     } else {
       // go through possible roles of the user being viewed
       switch(this.model.get('role')) {
@@ -66,6 +66,7 @@ app.ProfileView = Backbone.View.extend({
           // Admin is admin, they can't do anything to their role
           $('#user-role').html('| Administrator');
           $('#change-role').remove();
+          $('#delete').remove();
           break;
       }
     }
