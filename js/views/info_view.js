@@ -26,6 +26,7 @@ app.InfoView = Backbone.View.extend({
       availableTags: class_list,
       removeConfirmation: true,
       allowSpaces: true,
+      tagLimit: 8,
       beforeTagAdded: function(event, ui) {
         // this makes sure the class you entered is a real class
         if ($.inArray(ui.tagLabel.trim(), class_list) === -1) {
@@ -35,6 +36,9 @@ app.InfoView = Backbone.View.extend({
         } else {
           return true;
         }
+      },
+      onTagLimitExceeded: function(event, ui) {
+        $('.ui-widget-content').val('');
       }
     });
     $('.ui-autocomplete-input').addClass('tagit-field');
@@ -52,8 +56,8 @@ app.InfoView = Backbone.View.extend({
       .focus();
 		}
 
-    // Make sure the user enters at least one class.		
-    if (values.classes.length === 0) {
+    // Make sure the user enters at least one class.
+    if (values.classes === '[]') {
 			error = true;
       $('.ui-widget-content').val('')
       .attr('placeholder', 'Enter a valid class')
@@ -97,7 +101,7 @@ app.InfoView = Backbone.View.extend({
 		values = {
 			grad_year: $('#grad-year').val(),
 			major: $('#major-list').val(),
-			classes: class_array,
+			classes: JSON.stringify(class_array),
 			bio: $('#bio').val().trim()
 		};
 

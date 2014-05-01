@@ -18,8 +18,12 @@ app.CreateCardView = Backbone.View.extend({
     var template = app.TemplateCache.get(this.template);
 		this.$el.html(template);
     $('#tags').tagit({
-      availableTags: ['pies', 'breezeway', 'fire'],
-      removeConfirmation: true
+      availableTags: ['pies', 'breezeway', 'fire', 'commons', 'parking', 'aciv','science', 'quad', 'erickson', 'squirrels', 'rac', 'deku', 'umbc'],
+      removeConfirmation: true,
+      tagLimit: 4,
+      onTagLimitExceeded: function(event, ui) {
+        $('.ui-widget-content').val('');
+      }
     });
     $('.ui-widget-content').val('')
     .attr('placeholder', 'Add tags');
@@ -39,7 +43,7 @@ app.CreateCardView = Backbone.View.extend({
     }
 
     //There must be at least 1 tag
-    if (values.tags.length === 0) {
+    if (values.tags === '[]') {
       error = true;
       $('.ui-widget-content').val('')
       .attr('placeholder', 'Add tags')
@@ -68,39 +72,26 @@ app.CreateCardView = Backbone.View.extend({
       //This array will have all the tags the user provided. uses tagit, still lowercases
       var tag_array = $('#tags').tagit('assignedTags');
       tag_array = _.map(tag_array, function(tag) {return tag.toLowerCase()});
-			
+	
       var date = new Date();
     	var card_time = date.toLocaleTimeString();
     	var card_day = date.toDateString();
     	//this is the data in a JSON packet
 			var formData = {
 				category: $('#category').val().trim(),
-				tags: tag_array,
+				tags: JSON.stringify(tag_array),
         authorFirst: app.user.get('firstName'),
         authorLast: app.user.get('lastName'),
         author_id: app.user.get('id'),
-        user:$.storedUSER,
-        pwd:$.storedPWD,
 				content: $('#content').val().trim(),
-				//post_time: card_time,
-      	//post_date: card_day
 			};
     	//this checks the input for validation
     	if (!this.formError(formData)) {
-	  		app.Deck.create(formData);
-  			$('#category').val('');
-  			$('#tags').tagit('removeAll');
-  			$('#content').val('');
-//don't know how the frontend works so i'm just going to throw it in here
-            $.post(url, values, function( formData, textStatus, jqXHR ) {
-            })
-            .fail(function() {
-                bootbox.alert("some sort of post fail.");
-                that.$emailInput.val("");
-                that.$passwordInput.val("");
-                that.$emailInput.focus();
-            });
-
+        // add card to database and post it to hand
+        app.Deck.sync('create', formData);
+        $('#category').val('');
+        $('#tags').tagit('removeAll');
+        $('#content').val('');
     	}
       // check the first piece of the fragment for search
     } else if (Backbone.history.fragment.substring(0,6) === 'search') {

@@ -12,7 +12,8 @@ app.HeaderView = Backbone.View.extend({
   events: {
     'click #login-button': 'login',
     'click #logout': 'logout',
-    'click #user-profile-name': 'goToProfile'
+    'click #user-profile-name': 'goToProfile',
+    'click #user-profile-avatar': 'goToProfile'
   },
   
   initialize: function() {

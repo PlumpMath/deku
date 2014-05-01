@@ -1,11 +1,23 @@
 from app import db
 from datetime import datetime
-from flask import jsonify
+import base64
+import time
 
 ROLE_USER = 0
 ROLE_MOD = 1
 ROLE_ADMIN = 2
 MAX_CONTENT_LENGTH = 256
+
+
+marked = db.Table('marked',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
+)
+
+added = db.Table('added',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
+)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -15,10 +27,12 @@ class User(db.Model):
     email = db.Column(db.String(128), index = True, unique = True)
     password = db.Column(db.LargeBinary(60))
     university = db.Column(db.String(128))
-    created = db.Column(db.DateTime, default=datetime.utcnow)
     profile = db.relationship('Profile', uselist=False, backref='user')
-    cards = db.relationship('Card', backref = 'author', cascade='all,delete')
-    courses = db.relationship('Course', backref='user', cascade = 'all,delete')
+    cards = db.relationship('Card', backref = 'author', cascade='all,delete', lazy = 'dynamic')
+    courses = db.Column(db.String(MAX_CONTENT_LENGTH))
+    comments = db.relationship('Comment', backref='author')
+    markedCards = db.relationship('Card', secondary="marked", backref="marker")
+    addedCards = db.relationship('Card', secondary="added", backref="adder")
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)
@@ -27,29 +41,33 @@ class User(db.Model):
     def serialize(self):
         # Return User data in a serializable format
         return {
-            u"id": self.id,
-            u"firstName": self.firstName,
-            u"lastName": self.lastName,
-            u"email": self.email,
-            u"university": self.university,
-            u"bio": self.profile.bio,
-            u"classes": [course.course for course in self.profile.courses],
-            u"grad_year": self.profile.grad_year,
-            u"major": self.profile.major,
-            u"role": self.role,
-            u"cards": [card.id for card in self.cards]
+            "id": self.id,
+            "role": self.role,
+            "firstName": self.firstName,
+            "lastName": self.lastName,
+            "email": self.email,
+            "university": self.university,
+            "bio": self.profile.bio,
+            "classes": self.courses.split(","),
+            "grad_year": self.profile.grad_year,
+            "major": self.profile.major,
+            "avatar": base64.b64encode(self.profile.avatar)
         }
-        
+
+    @property
+    def get_avatar(self):
+        return base64.b64encode(self.profile.avatar)
+
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     grad_year = db.Column(db.String(5))
     major = db.Column(db.String(17))
-    bio = db.Column(db.String(77))
-    courses = db.relationship('Course', backref='profile')
+    bio = db.Column(db.String(MAX_CONTENT_LENGTH))
+    avatar = db.Column(db.LargeBinary())
     
     def __repr__(self):
-        return '<Profile %r>' %(str(self.user.id) + " " + str(self.major))
+        return '<Profile %r>' % (str(self.user.id) + " " + str(self.major))
 
     @property
     def serialize(self):
@@ -58,95 +76,73 @@ class Profile(db.Model):
             "user id": self.user_id,
             "grad_year": self.grad_year,
             "major": self.major,
-            "classes": [course.id for course in self.courses],
-            "biography": self.bio
-        }
-        
-class Course(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
-    course = db.Column(db.String(50))
-    
-    @property
-    def serialize(self):
-        return{
-            "class": self.course
+            "biography": self.bio,
         }
 
 class Card(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     content = db.Column(db.String(MAX_CONTENT_LENGTH))
     category = db.Column(db.String(MAX_CONTENT_LENGTH))
-    date = db.Column(db.String(MAX_CONTENT_LENGTH))
-    time = db.Column(db.String(MAX_CONTENT_LENGTH))
-    tags2 = db.Column(db.String())
-    tags = db.relationship('Tag', cascade="all,delete", backref="card")
+    tags = db.Column(db.String(MAX_CONTENT_LENGTH))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+    userFirst = db.Column(db.String(MAX_CONTENT_LENGTH))
+    userLast = db.Column(db.String(MAX_CONTENT_LENGTH))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    comments = db.relationship('Comment', backref = 'card', cascade='all,delete')
-    marks = db.relationship('Mark', backref = 'card', cascade='all,delete')
+    comments = db.relationship('Comment', backref='card', cascade='all,delete', lazy='dynamic')
+    popularity = db.Column(db.Integer)
+
     def __repr__(self):
         return '<Card %r>' % (self.content[:40] + "...")
 
     @property
     def serialize(self):
         # Return Card data in a serializable format
-        if isinstance(self.tags2,basestring):
-            tags=self.tags2.split(",")
-        else:
-            tags=[]
-        card= {
-            u"id": self.id,
-            u"content": self.content,
-            u"category": self.category,
-            u"author_id": self.user_id,
-            u"authorFirst": self.author.firstName,
-            u"authorLast": self.author.lastName,
-            u"date": self.date,
-            u"time": self.time,
-            u"tags": tags,
-            u"comments": [comment.comment for comment in self.comments]
-        }
-        return card
-
-class Tag(db.Model):
-    __tablename__ = 'tag'
-    id = db.Column(db.Integer, primary_key=True)
-    card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
-    tag = db.Column(db.String(37), nullable=False, index=True)
-
-    @property
-    def serialize(self):
         return {
-            u"tag": self.tag,
-            u"id": self.id,
-            u"card_id": self.card
+            "id": self.id,
+            "content": self.content,
+            "category": self.category,
+            "created_at": self.timestamp,
+            "authorFirst": self.userFirst,
+            "authorLast": self.userLast,
+            "author_id": self.user_id,
+            "tags": self.tags.split(",")
         }
-    
-class Comment(db.Model):
+
+
+class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    card_id = db.Column(db.Integer, db.ForeignKey('card.id'))
-    comment = db.Column(db.String, nullable=False)
+    from_id = db.Column(db.Integer)
+    to_id = db.Column(db.Integer)
+    message = db.Column(db.String)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
     
     @property
     def serialize(self):
-        return{
-            u"id": self.id,
-            u"user_id": self.user_id,
-            u"card_id": self.card_id,
-            u"comment": self.comment,
-            u"created_at": self.timestamp
+        fr = User.query.filter(User.id==self.from_id).first()
+        to = User.query.filter(User.id==self.to_id).first()
+        return {
+            "to_id": self.to_id,
+            "to": to.firstName + " " + to.lastName,
+            "from_id": self.from_id,
+            "from": fr.firstName + " " + fr.lastName,
+            "message": self.message,
+            "timestamp": self.timestamp
         }
 
-class Mark(db.Model):
-    user_id=db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True, nullable=False,autoincrement=False)
-    card_id=db.Column(db.Integer, db.ForeignKey('card.id'), primary_key=True, nullable=False,autoincrement=False)
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'))
+    content = db.Column(db.String(MAX_CONTENT_LENGTH))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+
     @property
     def serialize(self):
-        return{
-            u"user_id": self.user_id,
-            u"card_id": self.card_id
+        author = models.User.query.get(int(self.author_id))
+        return {
+            "author_id": self.author_id,
+            "author_first": author.firstName,
+            "author_last": author.lastName, 
+            "content": self.content,
+            "timestamp": self.timestamp
         }

@@ -10,7 +10,7 @@ app.Router = Backbone.Router.extend({
 
   toggleView: null,
 
-  profileView: null,
+  profile_view: null,
 
   // a list of all the existing routes
   routes: {
@@ -22,7 +22,7 @@ app.Router = Backbone.Router.extend({
     'hand': 'hand',
     'profile/:first/:last/:id': 'profileView',
     'update/:first/:last/:id': 'update',
-    'search/category/:query': 'search',
+    'search/:field/:query': 'search',
     '*notFound': 'notFound'
   },
 
@@ -48,6 +48,7 @@ app.Router = Backbone.Router.extend({
     }
     this.slideView = new app.SlidebarView();
     this.toggleView = new app.ToggleView();
+    $('#filter-by').html('No active search');
   },
 
 	// delete the children of the HandView
@@ -59,6 +60,8 @@ app.Router = Backbone.Router.extend({
     this.toggleView.stopListening();
     this.slideView = null;
     this.toggleView = null;
+    $('#container').css("width", "100%");
+    $('#container').css('marginLeft', 'auto');
   },
 
   // Route on main load. Checks log in state and decides what to do
@@ -104,7 +107,7 @@ app.Router = Backbone.Router.extend({
     if (localStorage.getItem('deku') === null) {
       $('#container').fadeOut(350, function() {that.changeView(new app.LoginView());});
     } else {
-      $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
+      $('#container').fadeOut(0, function() { that.navigate('hand', {trigger: true})});
     }
   },
 
@@ -139,13 +142,13 @@ app.Router = Backbone.Router.extend({
        * This is partly a protection against a user that logged out from using the back button
        * from being able to get back to the main site.
        */
-
-      $('#container').fadeOut(350, function() { that.changeView(new app.HandView());});
+      $('#container').fadeOut(0, function() { that.changeView(new app.HandView({"use": "hand"}));});
       //The handView's children must be visible. If the page refreshed they would disappear. This combats that
       if (this.slideView === null && this.toggleView === null) {
         // they do, so remove them and close the slidebar (only real permanent solution)
         this.setChildren();
       }
+      $('#filter-by').html('No active search');
       if (!$('#default').is(":visible")) {
         $('#default').show('medium');
       }
@@ -154,7 +157,7 @@ app.Router = Backbone.Router.extend({
     }
   },
 
-  search: function(query) {
+  search: function(field, query) {
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
@@ -162,9 +165,37 @@ app.Router = Backbone.Router.extend({
 			if (this.slideView === null && this.toggleView === null) {
 			// they do, so remove them and close the slidebar (only real permanent solution)
       	this.setChildren();
+      	$('#default').hide(); // don't ever show the create card option
     	}
       // hides the ability to create while not in hand route
     	$('#default').hide('medium');
+      // search should open by default
+      if (!$('#search-default').hasClass('expanded')) {
+        $('.collapsed').removeClass('expanded')
+        .children().hide('medium');
+        $('#search-default').toggleClass('expanded')
+		 		.children('ul').toggle('medium');
+      }
+
+      /* This logic will clear the existing masonry elements
+       * Every new search should clear the hand and show the new stuff
+       * Always load hand view for searching, this gives access to app.Deck and app.msnry
+       */
+      this.changeView(new app.HandView({'use': 'search'}));
+      msnry_items = app.msnry.getItemElements();
+      app.msnry.remove(msnry_items);
+      app.msnry.layout();
+      
+      // confirm values exist
+      if (field === '' || query === '') {
+        app.router.navigate('hand', {trigger: true});
+      } else {
+        if (field === 'author') {
+          query = query.replace('_', ',');
+        }
+        app.Deck.searchBy(field + '/' + query);
+        $('#filter-by').html('Searching for ' + query.replace(',', ' '));
+      }
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }
@@ -181,16 +212,50 @@ app.Router = Backbone.Router.extend({
         var profile = new app.User(data['user']);
         // this checks the name as well. Just ID was not secure
         if (first === profile.get('firstName') && last === profile.get('lastName')) {
-          $('#container').fadeOut(350, function() {that.changeView(new app.ProfileView({model: profile}))});
           if (that.slideView === null && that.toggleView === null) {
             // show the slidebars if they are not out yet
             that.setChildren();
           }
+          if (that.profile_view !== null) {
+            that.profile_view.undelegateEvents();
+            that.profile_view.stopListening();
+          } 
+          $('#filter-by').html('No active search');
           $('#default').hide('medium');
+          // reside on the hand view to have access to deck and msnry
+          $('#container').fadeOut(0, function() {that.changeView(new app.HandView({'use': 'profile'}))});
+          // clear previous masonry objects
+          msnry_items = app.msnry.getItemElements();
+          app.msnry.remove(msnry_items);
+          app.msnry.layout();
+          
+          var el = '#container';
+          that.profile_view = new app.ProfileView({
+            model: profile
+          });
+          
+          //this is the cards content
+          var elem = that.profile_view.render();
+          $(el).prepend(elem); //add to the container
+          var stampElem = $('#profile-wrapper');
+          app.msnry.stamp(stampElem);
+         
+          // if the user doesn't exist
+          if (id === -1) {
+            // go to hand if it's faulty
+            app.router.navigate('hand', {trigger: true});
+          } else {
+            // make the API GET call
+            app.Deck.fetchProfile(id);
+          }
         } else {
           // trigger a not found page load
           $('#container').fadeOut(350, function() { that.navigate('user_not_found', {trigger: true})});
         }
+      })
+      .fail(function() {
+        // trigger a not found page load
+        $('#container').fadeOut(350, function() { that.navigate('user_not_found', {trigger: true})});
       });
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
@@ -210,9 +275,9 @@ app.Router = Backbone.Router.extend({
           this.removeChildren();
           app.$slidebars.close();
         }
-        $('#container').fadeOut(350, function() { that.changeView(new app.UpdateAccountView()); });
+        $('#container').fadeOut(0, function() { that.changeView(new app.UpdateAccountView()); });
       } else {
-        $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
+        $('#container').fadeOut(0, function() { that.navigate('hand', {trigger: true})});
       }
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});

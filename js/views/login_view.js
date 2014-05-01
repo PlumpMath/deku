@@ -58,24 +58,18 @@ app.LoginView = Backbone.View.extend({
 			password: this.$passwordInput.val().trim()
 		};
     if (!this.formError(loginValues)) {
-    	var values={
-    	    user: loginValues.email,
-    	    pwd: loginValues.password
-    	}
-    	$.storedUSER = values.user;
-        $.storedPWD = values.pwd
-        $.post(url, values, function( data, textStatus, jqXHR ) {
-            // Store that user in localStorage for persistent user state.
-            localStorage.setItem('deku', JSON.stringify(data['user']));
-            app.user.set(data['user']);
-            app.router.navigate('hand', {trigger: true});
-        })
-        .fail(function() {
-            bootbox.alert("Your email or password did not match.");
-            that.$emailInput.val("");
-            that.$passwordInput.val("");
-            that.$emailInput.focus();
-        });
+      $.post(url, loginValues, function( data, textStatus, jqXHR ) {
+          // Store that user in localStorage for persistent user state.
+          localStorage.setItem('deku', JSON.stringify(data['user']));
+          app.user.set(data['user']);
+          app.router.navigate('hand', {trigger: true});
+      })
+      .fail(function() {
+          bootbox.alert("Your email or password did not match.");
+          that.$emailInput.val("");
+          that.$passwordInput.val("");
+          that.$emailInput.focus();
+      });
     }
 	},
 

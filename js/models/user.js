@@ -4,6 +4,7 @@ app.User = Backbone.Model.extend({
     defaults: function() {
       return {
         id: -1,
+        role: -1,
         firstName: "",
         lastName: "",
         email: "",
@@ -11,7 +12,8 @@ app.User = Backbone.Model.extend({
         bio: "",
         classes: new Array(),
         grad_year: "",
-        major: ""
+        major: "",
+        avatar: ""
       }
     }
 });
