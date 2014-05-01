@@ -124,3 +124,48 @@ def search_by_author(author):
         return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
     else:
         pass
+
+@app.route('/deku/api/cards/add/<int:card_id>', methods=['POST'])
+def addCardToDeck(card_id):
+    if request.method == 'POST':
+        # Verify card existence:
+        card = models.Card.query.get(int(card_id))
+        if (card):
+            user_id = request.form.get("user_id")
+            if (user_id):
+                user = models.User.query.get(int(user_id))
+                if (user):
+                    user.addedCards.append(card)
+                    db.session.commit()
+                    return cors_response(("User has added the card.", 200))
+                else:
+                    return cors_response(("User does not exist.", 404))
+            else:
+                return cors_response(("Bad request.", 400))
+        else:
+            return cors_response(("Card doesn't exist.", 404))
+    else:
+        pass
+
+@app.route('/deku/api/cards/mark/<int:card_id>', methods=['POST'])
+def markCard(card_id):
+    if request.method == 'POST':
+        # Verify card existence:
+        card = models.Card.query.get(int(card_id))
+        if (card):
+            user_id = request.form.get("user_id")
+            if (user_id):
+                user = models.User.query.get(int(user_id))
+                if (user):
+                    user.markedCards.append(card)
+                    db.session.commit()
+                    return cors_response(("User has marked the card.", 200))
+                else:
+                    return cors_response(("User does not exist.", 404))
+            else:
+                return cors_response(("Bad request.", 400))
+        else:
+            return cors_response(("Card doesn't exist.", 404))
+    else:
+        pass
+                  

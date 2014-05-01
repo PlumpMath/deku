@@ -51,7 +51,9 @@ class User(db.Model):
             "classes": self.courses.split(","),
             "grad_year": self.profile.grad_year,
             "major": self.profile.major,
-            "avatar": base64.b64encode(self.profile.avatar)
+            "avatar": base64.b64encode(self.profile.avatar),
+            "markedCards": [card.id for card in self.markedCards],
+            "addedCards": [card.id for card in self.addedCards]
         }
 
     @property
@@ -105,7 +107,9 @@ class Card(db.Model):
             "authorFirst": self.userFirst,
             "authorLast": self.userLast,
             "author_id": self.user_id,
-            "tags": self.tags.split(",")
+            "tags": self.tags.split(","),
+            "adders": [user.id for user in self.adder],
+            "markers": [user.id for user in self.marker]
         }
 
 
