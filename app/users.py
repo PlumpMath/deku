@@ -181,3 +181,27 @@ def get_user_avatar(user_id):
         return user.get_avatar
     else:
         pass
+
+@app.route('/deku/api/users/follow/<int:user_id>', methods=['POST'])
+def follow_user(user_id):
+    if request.method == 'POST':
+        # Verify user existence.
+        user = models.User.query.get(int(user_id))
+        if user:
+            # Get current user.
+            active_user_id = request.form.get("active_id")
+            if active_user_id:    
+                active_user = models.User.query.get(int(active_user_id))
+                if active_user:
+                    active_user.following.append(user)
+                    db.session.commit()
+                    return cors_response(("Active user is now following this user.", 200))
+                else:
+                    return cors_response(("User not found.", 404))
+            else:
+                return cors_response(("Bad request.", 400))
+        else:
+            return cors_response(("User not found.", 404))
+    else:
+        pass
+        

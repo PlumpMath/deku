@@ -19,6 +19,11 @@ added = db.Table('added',
     db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
 )
 
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followee_id', db.Integer, db.ForeignKey('user.id'))
+)
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     firstName = db.Column(db.String(64), index = True, unique = False)
@@ -31,8 +36,13 @@ class User(db.Model):
     cards = db.relationship('Card', backref = 'author', cascade='all,delete', lazy = 'dynamic')
     courses = db.Column(db.String(MAX_CONTENT_LENGTH))
     comments = db.relationship('Comment', backref='author')
-    markedCards = db.relationship('Card', secondary="marked", backref="marker")
-    addedCards = db.relationship('Card', secondary="added", backref="adder")
+    markedCards = db.relationship('Card', secondary="marked", backref="markers")
+    addedCards = db.relationship('Card', secondary="added", backref="adders")
+    following = db.relationship('User', 
+                                secondary="followers", 
+                                primaryjoin=followers.c.follower_id == id,
+                                secondaryjoin=followers.c.followee_id == id,
+                                backref="followedBy")
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)
@@ -53,7 +63,8 @@ class User(db.Model):
             "major": self.profile.major,
             "avatar": base64.b64encode(self.profile.avatar),
             "markedCards": [card.id for card in self.markedCards],
-            "addedCards": [card.id for card in self.addedCards]
+            "addedCards": [card.id for card in self.addedCards],
+            "following": [user.id for user in self.following]
         }
 
     @property
