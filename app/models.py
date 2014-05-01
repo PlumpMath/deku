@@ -119,8 +119,8 @@ class Card(db.Model):
             "authorLast": self.userLast,
             "author_id": self.user_id,
             "tags": self.tags.split(","),
-            "adders": [user.id for user in self.adder],
-            "markers": [user.id for user in self.marker]
+            "adders": [user.id for user in self.adders],
+            "markers": [user.id for user in self.markers]
         }
 
 
