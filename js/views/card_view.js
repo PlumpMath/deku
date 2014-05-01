@@ -11,7 +11,7 @@ app.CardView = Backbone.View.extend({
   events: {
     "click #car-auth": "goToProfile",
     "click #ins-auth": "goToProfile",
-    "click": "flipInspect",
+    "click":  "flipInspect",
     "click #flip-return": "flipCard",
     "click #post-comment": "postComment",
     "click #comment-btn": "goToComment",
@@ -37,21 +37,46 @@ app.CardView = Backbone.View.extend({
 
   markCard: function(event) {
     event.preventDefault();
-    var marks_list = this.model.get('marks');
-    var index = $.inArray(app.user.get('id'), marks_list)
+    var marks_list = this.model.get('marks'),
+        that = this;
     // if the user has NOT marked the card
-    if (index === -1) {
-      marks_list.push(app.user.get('id'));
-      this.model.save({"marks": marks_list});
-    } else {
-      //else remove their mark
-      marks_list.splice(index,1);
-      this.model.save({"marks": marks_list});
-    }
-    this.$el.empty();
-    var template = app.TemplateCache.get('#inspect-template');
+    $.ajax({
+      type: 'POST',
+      url: "http://localhost:4568/deku/api/cards/mark/" + this.model.get('id'),
+      data: { user_id: app.user.get('id') },
+      success: function(data, textStatus, jqXHR) {
+        that.model.set(data);
+        console.log("Card is now marked/unmarked.");
+      },
+      fail: function() {
+        console.log("Marking failed.");
+      }
+    });
+      
+    /**this.$el.empty();
+    var template = app.TemplateCache.get(this.template);
     var html = template(this.model.toJSON());
-    this.$el.append(html);
+    this.$el.append(html);*/
+    this.render();
+  },
+
+  addCard: function(event) {
+    event.preventDefault();
+    var adds_list = this.model.get('adds'),
+        that = this;
+    $.ajax({
+      type: 'POST',
+      url: "http://localhost:4568/deku/api/cards/add/" + this.model.get('id'),
+      data: { user_id: app.user.get('id') },
+      success: function(data, textStatus, jqXHR) {
+        that.model.set(data);
+        console.log("Card is now added/removed.");
+      },
+      fail: function() {
+        console.log("Adding failed.");
+      }
+    });
+    this.render();
   },
 
   goToComment: function(event) {
@@ -69,7 +94,7 @@ app.CardView = Backbone.View.extend({
     this.model.save({"comments": comment_list});
     //$('#inspect-comment-list').append(<div class="card-comment"><%=comments[comment].author%>: <%=comments[comment].comment%>);
     this.$el.empty();
-    var template = app.TemplateCache.get('#inspect-template');
+    var template = app.TemplateCache.get(this.template);
     var html = template(this.model.toJSON());
     this.$el.append(html);
   },
@@ -84,7 +109,8 @@ app.CardView = Backbone.View.extend({
       //use jQuery UI switchClass for smooth resize
       this.$el.switchClass('card', 'inspect', 1000);
       //switch the templates
-      var template = app.TemplateCache.get('#inspect-template');
+      this.template = "#inspect-template";
+      var template = app.TemplateCache.get(this.template);
       var elem = template(this.model.toJSON());
       var that = this;
       this.$el.flippy({

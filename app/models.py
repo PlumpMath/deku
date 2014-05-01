@@ -36,8 +36,8 @@ class User(db.Model):
     cards = db.relationship('Card', backref = 'author', cascade='all,delete', lazy = 'dynamic')
     courses = db.Column(db.String(MAX_CONTENT_LENGTH))
     comments = db.relationship('Comment', backref='author')
-    markedCards = db.relationship('Card', secondary="marked", backref="markers")
-    addedCards = db.relationship('Card', secondary="added", backref="adders")
+    markedCards = db.relationship('Card', secondary="marked", backref="marks")
+    addedCards = db.relationship('Card', secondary="added", backref="adds")
     following = db.relationship('User', 
                                 secondary="followers", 
                                 primaryjoin=followers.c.follower_id == id,
@@ -119,8 +119,8 @@ class Card(db.Model):
             "authorLast": self.userLast,
             "author_id": self.user_id,
             "tags": self.tags.split(","),
-            "adders": [user.id for user in self.adders],
-            "markers": [user.id for user in self.markers]
+            "adds": [user.id for user in self.adds],
+            "marks": [user.id for user in self.marks]
         }
 
 
