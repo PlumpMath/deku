@@ -32,6 +32,14 @@ app.CardView = Backbone.View.extend({
     var template = app.TemplateCache.get(this.template);
     var html = template(this.model.toJSON());
     this.$el.append(html);
+    // can't delete unless it is your card or if you are admin
+    if (this.model.get('author_id') !== app.user.get('id')) {
+      if (app.user.get('role') !== 2) {
+        if ($('#delete-card').is(':visible')) {
+          $('#delete-card').remove();
+        }
+      }
+    }
 		return this;
   },
 
@@ -46,18 +54,11 @@ app.CardView = Backbone.View.extend({
       data: { user_id: app.user.get('id') },
       success: function(data, textStatus, jqXHR) {
         that.model.set(data);
-        console.log("Card is now marked/unmarked.");
+        that.render();
       },
       fail: function() {
-        console.log("Marking failed.");
       }
     });
-      
-    /**this.$el.empty();
-    var template = app.TemplateCache.get(this.template);
-    var html = template(this.model.toJSON());
-    this.$el.append(html);*/
-    this.render();
   },
 
   addCard: function(event) {
@@ -70,13 +71,11 @@ app.CardView = Backbone.View.extend({
       data: { user_id: app.user.get('id') },
       success: function(data, textStatus, jqXHR) {
         that.model.set(data);
-        console.log("Card is now added/removed.");
+        that.render();
       },
       fail: function() {
-        console.log("Adding failed.");
       }
     });
-    this.render();
   },
 
   goToComment: function(event) {
