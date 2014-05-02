@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, json
 from app import app, db, models, bcrypt, generator
 from utils import cors_response, authenticate_by_email, authenticate_by_id
 from models import ROLE_USER, ROLE_MOD, ROLE_ADMIN
+from sqlalchemy import or_, func
 
 @app.route('/deku/api/users', methods=['GET','POST'])
 def users():
@@ -205,3 +206,15 @@ def follow_user(user_id):
     else:
         pass
         
+@app.route('/deku/api/users/search/name', methods=['GET'])
+def search_by_name():
+    names = request.args.get('names')
+    output = "wtf"
+    names = names.split(",")
+    ors = []
+    for name in names:
+       ors.append(func.lower(models.User.firstName)==func.lower(name))
+       ors.append(func.lower(models.User.lastName)==func.lower(name))
+    users = models.User.query.filter(or_(*ors)).all()
+    return cors_response((jsonify(users = [user.serialize for user in users]),200))
+
