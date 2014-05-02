@@ -194,9 +194,12 @@ def follow_user(user_id):
             if active_user_id:    
                 active_user = models.User.query.get(int(active_user_id))
                 if active_user:
-                    active_user.following.append(user)
+                    if user in active_user.following:
+                        active_user.following.remove(user)
+                    else:
+                        active_user.following.append(user)
                     db.session.commit()
-                    return cors_response(("Active user is now following this user.", 200))
+                    return cors_response((jsonify(active_user.serialize), 200))
                 else:
                     return cors_response(("User not found.", 404))
             else:

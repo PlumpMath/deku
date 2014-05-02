@@ -11,7 +11,8 @@ app.ProfileView = Backbone.View.extend({
   events: {
     'click #update-btn': 'update',
     'click #change-role': 'changeRole',
-    'click #delete-user': 'deleteUser'
+    'click #delete-user': 'deleteUser',
+    'click #follow-btn': 'followUser'
   },
 
   initialize: function() {
@@ -131,6 +132,21 @@ app.ProfileView = Backbone.View.extend({
     });
     // little bit of a cheeky hack to make the prompt input take a password field instead of straight text.
     $('.bootbox-input-text').attr('type', 'password');
+  },
 
+  followUser: function(event) {
+    event.preventDefault();
+    var url = "http://localhost:4568/deku/api/users/follow/" + this.model.get('id');
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: { active_id: app.user.get('id') },
+      success: function(data, textStatus, jqXHR) {
+        app.user.set(data);
+      },
+      fail: function() {
+        console.log("Following failed. Check the routes.");
+      }
+    });
   }
 });

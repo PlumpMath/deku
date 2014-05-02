@@ -64,7 +64,8 @@ class User(db.Model):
             "avatar": base64.b64encode(self.profile.avatar),
             "markedCards": [card.id for card in self.markedCards],
             "addedCards": [card.id for card in self.addedCards],
-            "following": [user.id for user in self.following]
+            "following": [user.id for user in self.following],
+            "followedBy": [user.id for user in self.followedBy]
         }
 
     @property

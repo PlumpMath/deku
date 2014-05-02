@@ -13,7 +13,9 @@ app.User = Backbone.Model.extend({
         classes: new Array(),
         grad_year: "",
         major: "",
-        avatar: ""
+        avatar: "",
+        following: [],
+        followedBy: []
       }
     }
 });
