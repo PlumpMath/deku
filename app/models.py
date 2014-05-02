@@ -170,7 +170,7 @@ class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     from_id = db.Column(db.Integer)
-    card_id = db.Column(db.Integer, db.ForeignKey('card.id'))
+    card_id = db.Column(db.Integer)
     content = db.Column(db.String(MAX_CONTENT_LENGTH))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
 
