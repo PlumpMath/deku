@@ -14,6 +14,7 @@ app.User = Backbone.Model.extend({
         grad_year: "",
         major: "",
         avatar: "",
+        notifications: [],
         following: [],
         followedBy: []
       }

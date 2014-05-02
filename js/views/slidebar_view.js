@@ -36,7 +36,7 @@ app.SlidebarView = Backbone.View.extend({
     new app.FollowersView();
     new app.FollowingView();
     new app.MessageView();
-    new app.NotificationView();
+    new app.NotificationView({model: app.user});
     new app.AccountView({model: app.user});
     new app.PreferencesView();
     

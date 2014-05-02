@@ -38,6 +38,7 @@ class User(db.Model):
     comments = db.relationship('Comment', backref='author')
     markedCards = db.relationship('Card', secondary="marked", backref="marks")
     addedCards = db.relationship('Card', secondary="added", backref="adds")
+    notifications = db.relationship('Notification', backref='user', cascade='all,delete', lazy='dynamic')
     following = db.relationship('User', 
                                 secondary="followers", 
                                 primaryjoin=followers.c.follower_id == id,
@@ -64,6 +65,7 @@ class User(db.Model):
             "avatar": base64.b64encode(self.profile.avatar),
             "markedCards": [card.id for card in self.markedCards],
             "addedCards": [card.id for card in self.addedCards],
+            "notifications": [notification.serialize for notification in self.notifications], #serialize all of the notifications
             "following": [user.id for user in self.following],
             "followedBy": [user.id for user in self.followedBy]
         }
@@ -160,6 +162,26 @@ class Comment(db.Model):
             "author_id": self.author_id,
             "author_first": author.firstName,
             "author_last": author.lastName, 
+            "content": self.content,
+            "timestamp": self.timestamp
+        }
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    from_id = db.Column(db.Integer)
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'))
+    content = db.Column(db.String(MAX_CONTENT_LENGTH))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+
+    @property
+    def serialize(self):
+        from_user = User.query.get(int(self.from_id))
+        return {
+            "from_id": self.from_id,
+            "from_first": from_user.firstName,
+            "from_last": from_user.lastName,
+            "card_id": self.card_id,
             "content": self.content,
             "timestamp": self.timestamp
         }

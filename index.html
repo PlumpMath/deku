@@ -81,12 +81,12 @@
           <ul class="col-list">
             <div id="messages"></div>
           </ul>
-        </li> <!--
+        </li> 
         <li class="list-item-collapse collapsed">Notifications
           <ul class="col-list">
             <div id="notifications"></div>
           </ul>
-        </li> -->
+        </li> 
         <li class="list-item-collapse collapsed">My Account
           <ul class="col-list">
             <div id="my-account"></div>
@@ -312,7 +312,8 @@
     <div id="inspect-comment">
       <div id="inspect-comment-list">
         <% for (var comment in comments) { %>
-          <div class="card-comment"><a id="user-profile-comment" name=<%=comments[comment].author_first%>/<%=comments[comment].author_last%>/<%=comments[comment].author_id%>><%=comments[comment].author_first%> <%=comments[comment].author_last%></a>: <%=comments[comment].content%>
+          <div class="card-comment">
+            <a id="user-profile-comment" name=<%=comments[comment].author_first%>/<%=comments[comment].author_last%>/<%=comments[comment].author_id%>><%=comments[comment].author_first%> <%=comments[comment].author_last%></a>: <%=comments[comment].content%>
           </div>
         <% } %>
       </div>
@@ -396,7 +397,13 @@
 
 	<!-- This is the view for notifications -->
 	<script type="text/template" id="notification-view">
-		<p>User will be able to see notifications here</p>
+    <div id="notifications-list">
+      <% for (var notification in notifications) { %>
+        <div class="user-notification">
+          <a id="user-profile-notification" name=<%=notifications[notification].from_first%>/<%=notifications[notification].from_last%>/<%=notifications[notification].from_id%>><%=notifications[notification].from_first%> <%=notifications[notification].from_last%></a> <%=notifications[notification].content%> on your <a id="card-notification" name=<%=notifications[notification].card_id%>>card</a>
+        <div>
+      <%}%>
+    </div>
 	</script>
 
 	<!-- This is the view for my account -->

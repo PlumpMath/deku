@@ -194,6 +194,11 @@ def commentCard(card_id):
                                      card_id = card_id,
                                      content = content)
             card.comments.append(comment)
+            user = models.User.query.get(int(card.user_id)) #this is the user who authored the card
+            notification = models.Notification(from_id = author_id,
+                                               card_id = card_id,
+                                               content = "commented on")
+            user.notifications.append(notification) # append notification to user's account
             db.session.commit()
             return cors_response((jsonify(card.serialize), 200))
         else:
