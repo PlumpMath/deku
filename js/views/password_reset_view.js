@@ -36,14 +36,12 @@ app.PassResetView = Backbone.View.extend({
 	reset: function(event) {
 		event.preventDefault();
 	
-    console.log('clicked');	
     var value = {
 			email: this.$('#remail').val().trim(),
 		};
     
     if (!this.formError(value)) {
       // THIS IS A PLACEHOLDER FOR FUTURE RESET FUNCTION
-      console.log('contact server, see if this email is found');
     }
 
 	}

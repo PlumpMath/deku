@@ -40,6 +40,15 @@ app.CardView = Backbone.View.extend({
         }
       }
     }
+    // buttons are different color if user has already added or marked
+    if ($.inArray(app.user.get('id'), this.model.get('marks')) !== -1) {
+      $('#marks-btn').removeClass('btn-success')
+      .addClass('btn-primary');
+    }
+    if ($.inArray(app.user.get('id'), this.model.get('adds')) !== -1) {
+      $('#adds-btn').removeClass('btn-success')
+      .addClass('btn-primary');
+    }
 		return this;
   },
 
@@ -125,6 +134,14 @@ app.CardView = Backbone.View.extend({
                 $('#delete-card').remove();
               }
             }
+          }
+          if ($.inArray(app.user.get('id'), that.model.get('marks')) !== -1) {
+            $('#marks-btn').removeClass('btn-success')
+            .addClass('btn-primary');
+          }
+          if ($.inArray(app.user.get('id'), that.model.get('adds')) !== -1) {
+            $('#adds-btn').removeClass('btn-success')
+            .addClass('btn-primary');
           }
           app.msnry.layout();
         }

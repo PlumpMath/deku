@@ -188,7 +188,6 @@ app.UpdateAccountView = Backbone.View.extend({
   // code to handle account deletion
   deleteAccount: function(event) {
     event.preventDefault();
-    console.log('delete prompt');
     bootbox.prompt("To delete your account, enter your password. Be sure you want to do this as all your account information will be gone.", function(result) {
       if (result !== null) {
         value = {

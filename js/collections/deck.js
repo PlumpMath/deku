@@ -57,7 +57,6 @@ app.CardList = Backbone.Collection.extend({
         data: model,
         success: function(data) {
           // if it saved to database fine, then add card to view using returned data
-          console.log('card posted');
           that.add(data['card']);
         },
         fail: function(data) {}
