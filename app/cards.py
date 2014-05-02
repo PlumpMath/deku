@@ -144,6 +144,12 @@ def addCardToDeck(card_id):
                         user.addedCards.remove(card)
                     else:
                         user.addedCards.append(card)
+                        # Only notify the author if a user adds it. Unadding is not important
+                        card_author = models.User.query.get(int(card.user_id)) #this is the user who authored the card
+                        notification = models.Notification(from_id = user_id,
+                                                           card_id = card_id,
+                                                           content = "added")
+                        card_author.notifications.append(notification) # append notification to user's account
                     db.session.commit()
                     return cors_response((jsonify(card.serialize), 200))
                 else:
@@ -170,6 +176,12 @@ def markCard(card_id):
                         user.markedCards.remove(card)
                     else:
                         user.markedCards.append(card)
+                        # Only notify the author if a user marks it. Unmarking is not important
+                        card_author = models.User.query.get(int(card.user_id)) #this is the user who authored the card
+                        notification = models.Notification(from_id = user_id,
+                                                           card_id = card_id,
+                                                           content = "marked")
+                        card_author.notifications.append(notification) # append notification to user's account
                     db.session.commit()
                     return cors_response((jsonify(card.serialize), 200))
                 else:
