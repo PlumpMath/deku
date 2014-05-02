@@ -11,7 +11,7 @@ app.CardView = Backbone.View.extend({
   events: {
     "click #car-auth": "goToProfile",
     "click #ins-auth": "goToProfile",
-    "click":  "flipInspect",
+    "click": "flipInspect",
     "click #flip-return": "flipCard",
     "click #post-comment": "postComment",
     "click #comment-btn": "goToComment",
@@ -97,14 +97,24 @@ app.CardView = Backbone.View.extend({
   postComment: function(event) {
     event.preventDefault();
     var text = $('#create-comment').val().trim();
-    var comment_list = this.model.get('comments');
-    comment_list.push({"author_id": app.user.get('id'), "author_first": app.user.get('firstName'), "author_last": app.user.get('lastName'), "comment": text});
-    this.model.save({"comments": comment_list});
-    //$('#inspect-comment-list').append(<div class="card-comment"><%=comments[comment].author%>: <%=comments[comment].comment%>);
-    this.$el.empty();
-    var template = app.TemplateCache.get(this.template);
-    var html = template(this.model.toJSON());
-    this.$el.append(html);
+    var that = this;
+
+    // comment data to pass back
+    comment = {
+      "author_id": app.user.get('id'),
+      "content": text
+    };
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:4568/deku/api/cards/comment/' + this.model.get('id'),
+      data: comment,
+      success: function(data, textStatus, jqXHR) {
+        that.model.set(data); // set the model data and render again
+        that.render();
+      },
+      fail: function() {
+      }
+    });
   },
 
   //this controls the flipping of the card to inspect

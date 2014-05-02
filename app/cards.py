@@ -20,7 +20,7 @@ def cards():
         author = models.User.query.get(author_id) #get the author id from db
         if (content):
             card = models.Card(user_id = author_id,
-                               content=content,
+                               content = content,
                                userFirst = author.firstName,
                                userLast = author.lastName)
             if (category):
@@ -29,7 +29,6 @@ def cards():
             if (tags):
                 tagList = json.loads(tags)
                 card.tags = ",".join(tagList)
-
             db.session.add(card)
             db.session.commit()
             return cors_response((jsonify(card = card.serialize), 201))
@@ -177,6 +176,26 @@ def markCard(card_id):
                     return cors_response(("User does not exist.", 404))
             else:
                 return cors_response(("Bad request.", 400))
+        else:
+            return cors_response(("Card doesn't exist.", 404))
+    else:
+        pass
+                  
+@app.route('/deku/api/cards/comment/<int:card_id>', methods=['POST'])
+def commentCard(card_id):
+    if request.method == 'POST':
+        # Verify card existence:
+        card = models.Card.query.get(int(card_id))
+        if (card):
+            # set up data fields for comment
+            author_id = request.form.get('author_id')
+            content = request.form.get('content')
+            comment = models.Comment(author_id = author_id,
+                                     card_id = card_id,
+                                     content = content)
+            card.comments.append(comment)
+            db.session.commit()
+            return cors_response((jsonify(card.serialize), 200))
         else:
             return cors_response(("Card doesn't exist.", 404))
     else:

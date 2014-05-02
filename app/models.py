@@ -121,7 +121,8 @@ class Card(db.Model):
             "author_id": self.user_id,
             "tags": self.tags.split(","),
             "adds": [user.id for user in self.adds],
-            "marks": [user.id for user in self.marks]
+            "marks": [user.id for user in self.marks],
+            "comments": [comment.serialize for comment in self.comments] #serialize all of the comments
         }
 
 
@@ -154,7 +155,7 @@ class Comment(db.Model):
 
     @property
     def serialize(self):
-        author = models.User.query.get(int(self.author_id))
+        author = User.query.get(int(self.author_id))
         return {
             "author_id": self.author_id,
             "author_first": author.firstName,

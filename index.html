@@ -312,7 +312,7 @@
     <div id="inspect-comment">
       <div id="inspect-comment-list">
         <% for (var comment in comments) { %>
-          <div class="card-comment"><a id="user-profile-comment" name=<%=comments[comment].author_first%>/<%=comments[comment].author_last%>/<%=comments[comment].author_id%>><%=comments[comment].author_first%> <%=comments[comment].author_last%></a>: <%=comments[comment].comment%>
+          <div class="card-comment"><a id="user-profile-comment" name=<%=comments[comment].author_first%>/<%=comments[comment].author_last%>/<%=comments[comment].author_id%>><%=comments[comment].author_first%> <%=comments[comment].author_last%></a>: <%=comments[comment].content%>
           </div>
         <% } %>
       </div>

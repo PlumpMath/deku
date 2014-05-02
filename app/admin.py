@@ -78,7 +78,6 @@ def deleteUser(user_id):
 @app.route('/deku/api/admin/cards/delete/<int:card_id>', methods=['POST'])
 def deleteCard(card_id):
     if request.method == 'POST':
-        print "admin delete card"
         card = models.Card.query.get(int(card_id))
         if (card):
             admin_id = request.form.get("admin_id")
