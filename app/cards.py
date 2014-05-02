@@ -87,7 +87,13 @@ def delete_card(card_id):
 @app.route('/deku/api/cards/profile/<int:user_id>', methods=['GET'])
 def get_users_cards(user_id):
     if request.method == 'GET':
-        hand = Card.query.filter_by(user_id=user_id).all()
+        hand = Card.query.filter(Card.user_id == user_id).all()
+        addedCards = models.User.query.get(int(user_id)).addedCards
+        for card in addedCards:
+            if card in hand:
+                pass
+            else:
+                hand.append(card)
         if len(hand) == 0:
             return cors_response(("No cards from user.", 204))
         return cors_response((jsonify(cards = [card.serialize for card in hand]), 200))
@@ -135,9 +141,12 @@ def addCardToDeck(card_id):
             if (user_id):
                 user = models.User.query.get(int(user_id))
                 if (user):
-                    user.addedCards.append(card)
+                    if card in user.addedCards:
+                        user.addedCards.remove(card)
+                    else:
+                        user.addedCards.append(card)
                     db.session.commit()
-                    return cors_response(("User has added the card.", 200))
+                    return cors_response((jsonify(card.serialize), 200))
                 else:
                     return cors_response(("User does not exist.", 404))
             else:
@@ -157,9 +166,13 @@ def markCard(card_id):
             if (user_id):
                 user = models.User.query.get(int(user_id))
                 if (user):
-                    user.markedCards.append(card)
+                    # If card is already marked, remove it.
+                    if card in user.markedCards:
+                        user.markedCards.remove(card)
+                    else:
+                        user.markedCards.append(card)
                     db.session.commit()
-                    return cors_response(("User has marked the card.", 200))
+                    return cors_response((jsonify(card.serialize), 200))
                 else:
                     return cors_response(("User does not exist.", 404))
             else:

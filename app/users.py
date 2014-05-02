@@ -171,7 +171,7 @@ def user_authentication():
     if user:
         return cors_response((jsonify(user = user.serialize),200))
     else:
-        return cors_response(("Unauthorized access",401))
+        return cors_response(("Unauthorized access", 401))
 
 @app.route('/deku/api/users/get_avatar/<int:user_id>', methods=['GET'])
 def get_user_avatar(user_id):

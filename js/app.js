@@ -11,7 +11,6 @@ Backbone.sync = function(method, model, options) {
         url: app.Deck.url,
         data: model.toJSON(),
         success: function(data) {
-          console.log('card posted');
           app.Deck.add(data['card']);
         },
         fail: function(data) {}
@@ -27,13 +26,11 @@ Backbone.sync = function(method, model, options) {
     }
   } else if (method === 'update') { // HTTP PUT
     if (model instanceof app.Card) {
-      console.log('update card');
       $.ajax({
         type: 'POST',
         url: app.Deck.url + '/update/' + model.get('id'),
         data: model.toJSON(),
         success: function(data) {
-          console.log('card updated');
         },
         fail: function(data) {}
       });

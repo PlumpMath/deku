@@ -85,8 +85,6 @@ app.CreateView = Backbone.View.extend({
 			lastName: $("#lastname").val().trim()
 		};
 
-    console.log('password: ', registerValues.password);
-    
     var that = this;
     	
 		if (!this.formError(registerValues)) {

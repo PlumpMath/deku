@@ -66,7 +66,17 @@
           <ul class="col-list">
             <div id="search"></div>
           </ul>
+        </li> <!--
+        <li class="list-item-collapse collapsed">Followers
+          <ul class="col-list">
+            <div id="followers"></div>
+          </ul>
         </li>
+        <li class="list-item-collapse collapsed">Following
+          <ul class="col-list">
+            <div id="following"></div>
+          </ul>
+        </li> -->
         <li class="list-item-collapse collapsed">Messages
           <ul class="col-list">
             <div id="messages"></div>
@@ -374,6 +384,16 @@
     <div id="msgs"></div>
 	</script>
 
+	<!-- This is the view for followers -->
+	<script type="text/template" id="followers-view">
+		<p>User will be able to see followers here</p>
+	</script>
+
+	<!-- This is the view for following -->
+	<script type="text/template" id="following-view">
+		<p>User will be able to see who they follow here</p>
+	</script>
+
 	<!-- This is the view for notifications -->
 	<script type="text/template" id="notification-view">
 		<p>User will be able to see notifications here</p>
@@ -511,6 +531,8 @@
   <script src="js/views/slidebar_view.js"></script>
   <script src="js/views/create_card_view.js"></script>
   <script src="js/views/search_view.js"></script>
+  <script src="js/views/followers_view.js"></script>
+  <script src="js/views/following_view.js"></script>
   <script src="js/views/message_view.js"></script>
   <script src="js/views/notification_view.js"></script>
   <script src="js/views/account_view.js"></script>

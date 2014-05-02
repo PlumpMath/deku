@@ -11,7 +11,7 @@ app.CardView = Backbone.View.extend({
   events: {
     "click #car-auth": "goToProfile",
     "click #ins-auth": "goToProfile",
-    "click": "flipInspect",
+    "click":  "flipInspect",
     "click #flip-return": "flipCard",
     "click #post-comment": "postComment",
     "click #comment-btn": "goToComment",
@@ -32,26 +32,59 @@ app.CardView = Backbone.View.extend({
     var template = app.TemplateCache.get(this.template);
     var html = template(this.model.toJSON());
     this.$el.append(html);
+    // can't delete unless it is your card or if you are admin
+    if (this.model.get('author_id') !== app.user.get('id')) {
+      if (app.user.get('role') !== 2) {
+        if ($('#delete-card').is(':visible')) {
+          $('#delete-card').remove();
+        }
+      }
+    }
+    // buttons are different color if user has already added or marked
+    if ($.inArray(app.user.get('id'), this.model.get('marks')) !== -1) {
+      $('#marks-btn').removeClass('btn-success')
+      .addClass('btn-primary');
+    }
+    if ($.inArray(app.user.get('id'), this.model.get('adds')) !== -1) {
+      $('#adds-btn').removeClass('btn-success')
+      .addClass('btn-primary');
+    }
 		return this;
   },
 
   markCard: function(event) {
     event.preventDefault();
-    var marks_list = this.model.get('marks');
-    var index = $.inArray(app.user.get('id'), marks_list)
+    var marks_list = this.model.get('marks'),
+        that = this;
     // if the user has NOT marked the card
-    if (index === -1) {
-      marks_list.push(app.user.get('id'));
-      this.model.save({"marks": marks_list});
-    } else {
-      //else remove their mark
-      marks_list.splice(index,1);
-      this.model.save({"marks": marks_list});
-    }
-    this.$el.empty();
-    var template = app.TemplateCache.get('#inspect-template');
-    var html = template(this.model.toJSON());
-    this.$el.append(html);
+    $.ajax({
+      type: 'POST',
+      url: "http://localhost:4568/deku/api/cards/mark/" + this.model.get('id'),
+      data: { user_id: app.user.get('id') },
+      success: function(data, textStatus, jqXHR) {
+        that.model.set(data);
+        that.render();
+      },
+      fail: function() {
+      }
+    });
+  },
+
+  addCard: function(event) {
+    event.preventDefault();
+    var adds_list = this.model.get('adds'),
+        that = this;
+    $.ajax({
+      type: 'POST',
+      url: "http://localhost:4568/deku/api/cards/add/" + this.model.get('id'),
+      data: { user_id: app.user.get('id') },
+      success: function(data, textStatus, jqXHR) {
+        that.model.set(data);
+        that.render();
+      },
+      fail: function() {
+      }
+    });
   },
 
   goToComment: function(event) {
@@ -69,7 +102,7 @@ app.CardView = Backbone.View.extend({
     this.model.save({"comments": comment_list});
     //$('#inspect-comment-list').append(<div class="card-comment"><%=comments[comment].author%>: <%=comments[comment].comment%>);
     this.$el.empty();
-    var template = app.TemplateCache.get('#inspect-template');
+    var template = app.TemplateCache.get(this.template);
     var html = template(this.model.toJSON());
     this.$el.append(html);
   },
@@ -84,7 +117,8 @@ app.CardView = Backbone.View.extend({
       //use jQuery UI switchClass for smooth resize
       this.$el.switchClass('card', 'inspect', 1000);
       //switch the templates
-      var template = app.TemplateCache.get('#inspect-template');
+      this.template = "#inspect-template";
+      var template = app.TemplateCache.get(this.template);
       var elem = template(this.model.toJSON());
       var that = this;
       this.$el.flippy({
@@ -100,6 +134,14 @@ app.CardView = Backbone.View.extend({
                 $('#delete-card').remove();
               }
             }
+          }
+          if ($.inArray(app.user.get('id'), that.model.get('marks')) !== -1) {
+            $('#marks-btn').removeClass('btn-success')
+            .addClass('btn-primary');
+          }
+          if ($.inArray(app.user.get('id'), that.model.get('adds')) !== -1) {
+            $('#adds-btn').removeClass('btn-success')
+            .addClass('btn-primary');
           }
           app.msnry.layout();
         }

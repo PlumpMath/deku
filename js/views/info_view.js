@@ -114,7 +114,6 @@ app.InfoView = Backbone.View.extend({
     	  app.router.navigate('login', {trigger: true});
       }).fail(function(error) {
         bootbox.alert(error);
-        console.log(error);
       });
 		}
   }

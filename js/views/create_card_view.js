@@ -29,6 +29,12 @@ app.CreateCardView = Backbone.View.extend({
     .attr('placeholder', 'Add tags');
 	},
 
+    stringToColor: function(string) {
+      for (var i = 0, hash = 0; i < string.length; hash = string.charCodeAt(i++) + ((hash << 5) - 5));
+      for (var i = 0, color = "#"; i < 3; color += ("00" + ((hash >> i++ * 8) & 0xFF).toString(16)).slice(-2));
+      return color;
+    },
+
   formError: function(values) {
     error = false;
     //get an array with all of the valid categories
@@ -72,6 +78,7 @@ app.CreateCardView = Backbone.View.extend({
       //This array will have all the tags the user provided. uses tagit, still lowercases
       var tag_array = $('#tags').tagit('assignedTags');
       tag_array = _.map(tag_array, function(tag) {return tag.toLowerCase()});
+      color_array = _.map(tag_array, this.stringToColor);
 	
       var date = new Date();
     	var card_time = date.toLocaleTimeString();
