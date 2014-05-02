@@ -146,10 +146,11 @@ def addCardToDeck(card_id):
                         user.addedCards.append(card)
                         # Only notify the author if a user adds it. Unadding is not important
                         card_author = models.User.query.get(int(card.user_id)) #this is the user who authored the card
-                        notification = models.Notification(from_id = user_id,
-                                                           card_id = card_id,
-                                                           content = "added")
-                        card_author.notifications.append(notification) # append notification to user's account
+                        if (int(user_id) != card_author.id):
+                            notification = models.Notification(from_id = user_id,
+                                                               card_id = card_id,
+                                                               content = "added")
+                            card_author.notifications.append(notification) # append notification to user's account
                     db.session.commit()
                     return cors_response((jsonify(card.serialize), 200))
                 else:
@@ -178,10 +179,11 @@ def markCard(card_id):
                         user.markedCards.append(card)
                         # Only notify the author if a user marks it. Unmarking is not important
                         card_author = models.User.query.get(int(card.user_id)) #this is the user who authored the card
-                        notification = models.Notification(from_id = user_id,
-                                                           card_id = card_id,
-                                                           content = "marked")
-                        card_author.notifications.append(notification) # append notification to user's account
+                        if (int(user_id) != card_author.id):
+                            notification = models.Notification(from_id = user_id,
+                                                               card_id = card_id,
+                                                               content = "marked")
+                            card_author.notifications.append(notification) # append notification to user's account
                     db.session.commit()
                     return cors_response((jsonify(card.serialize), 200))
                 else:
@@ -207,10 +209,12 @@ def commentCard(card_id):
                                      content = content)
             card.comments.append(comment)
             user = models.User.query.get(int(card.user_id)) #this is the user who authored the card
-            notification = models.Notification(from_id = author_id,
-                                               card_id = card_id,
-                                               content = "commented on")
-            user.notifications.append(notification) # append notification to user's account
+            # This is so a user doesn't get notification if they comment on their own card
+            if (int(author_id) is not user.id):
+                notification = models.Notification(from_id = author_id,
+                                                   card_id = card_id,
+                                                   content = "commented on")
+                user.notifications.append(notification) # append notification to user's account
             db.session.commit()
             return cors_response((jsonify(card.serialize), 200))
         else:
