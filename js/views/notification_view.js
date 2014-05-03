@@ -8,7 +8,8 @@ app.NotificationView = Backbone.View.extend({
 
   events: {
     "click #user-profile-notification": "goToProfile",
-    "click #card-notification": "goToCard"
+    "click #card-notification": "goToCard",
+    "click #delete-notification": "deleteNotification"
   },
 
 	initialize: function() {
@@ -31,6 +32,27 @@ app.NotificationView = Backbone.View.extend({
     event.preventDefault();
     // navigate to the route for the user's profile
     app.router.navigate('profile/' + $(event.target).attr('name'), {trigger: true});
+  },
+
+  deleteNotification: function(event) {
+    event.preventDefault();
+    value = {
+      "notification_id": $(event.target).attr('name')
+    }
+    var that = this;
+    $.ajax({
+      type: 'POST',
+      url: "http://localhost:4568/deku/api/users/notification/delete/" + app.user.get('id'),
+      data: value,
+      success: function(data, textStatus, jqXHR) {
+        localStorage.setItem('deku', JSON.stringify(data));
+        app.user.set(data, {silent: true});
+        that.$el.empty();
+        that.render();
+      },
+      fail: function() {
+      }
+    })
   }
 
 });

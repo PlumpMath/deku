@@ -360,6 +360,11 @@ hr {
     float: right;
 }
 
+#delete-notification {
+    float: right;
+    margin-right: 10px;
+}
+
 #flip-return {
     float: right;
 }

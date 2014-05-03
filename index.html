@@ -400,7 +400,7 @@
     <div id="notifications-list">
       <% for (var notification = notifications.length-1; notification >= 0; notification--) { %>
         <div class="user-notification">
-          <a id="user-profile-notification" name=<%=notifications[notification].from_first%>/<%=notifications[notification].from_last%>/<%=notifications[notification].from_id%>><%=notifications[notification].from_first%> <%=notifications[notification].from_last%></a> <%=notifications[notification].content%> your <a id="card-notification" name=<%=notifications[notification].card_id%>>card</a>
+          <a id="user-profile-notification" name=<%=notifications[notification].from_first%>/<%=notifications[notification].from_last%>/<%=notifications[notification].from_id%>><%=notifications[notification].from_first%> <%=notifications[notification].from_last%></a> <%=notifications[notification].content%> your <a id="card-notification" name=<%=notifications[notification].card_id%>>card</a> <a id="delete-notification" name=<%=notifications[notification].id%>>x</a>
         <div>
       <%}%>
     </div>
