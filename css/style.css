@@ -356,12 +356,20 @@ hr {
     margin-right: 15px;
 }
 
+#delete-comment {
+    float: right;
+}
+
 #flip-return {
     float: right;
 }
 
 .user-notification {
     color: #fff;
+	border-top: 2px solid;
+	border-color: #333;
+    margin-top: 10px;
+    padding-top: 10px;
 }
 
 .card.small { 

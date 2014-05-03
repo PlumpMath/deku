@@ -229,3 +229,21 @@ def commentCard(card_id):
     else:
         pass
                   
+@app.route('/deku/api/cards/comment/delete/<int:card_id>', methods=['POST'])
+def deleteComment(card_id):
+    if request.method == 'POST':
+        # Verify card existence:
+        card = models.Card.query.get(int(card_id))
+        if (card):
+            # set up data fields for comment
+            comment_id = request.form.get('comment_id')
+            comment = models.Comment.query.get(comment_id)
+            card.comments.remove(comment)
+            card.popularity-=1 # commenting is +1 popularity
+            db.session.commit()
+            return cors_response((jsonify(card.serialize), 200))
+        else:
+            return cors_response(("Card doesn't exist.", 404))
+    else:
+        pass
+                  

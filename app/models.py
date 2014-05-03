@@ -160,6 +160,7 @@ class Comment(db.Model):
     def serialize(self):
         author = User.query.get(int(self.author_id))
         return {
+            "id": self.id,
             "author_id": self.author_id,
             "author_first": author.firstName,
             "author_last": author.lastName, 
@@ -179,6 +180,7 @@ class Notification(db.Model):
     def serialize(self):
         from_user = User.query.get(int(self.from_id))
         return {
+            "id": self.id,
             "from_id": self.from_id,
             "from_first": from_user.firstName,
             "from_last": from_user.lastName,
