@@ -238,10 +238,13 @@ def deleteComment(card_id):
             # set up data fields for comment
             comment_id = request.form.get('comment_id')
             comment = models.Comment.query.get(comment_id)
-            card.comments.remove(comment)
-            card.popularity-=1 # commenting is +1 popularity
-            db.session.commit()
-            return cors_response((jsonify(card.serialize), 200))
+            if (comment):
+                card.comments.remove(comment)
+                card.popularity-=1 # removing comment reduces popularity
+                db.session.commit()
+                return cors_response((jsonify(card.serialize), 200))
+            else:
+                return cors_response(("Comment doesn't exist", 404))
         else:
             return cors_response(("Card doesn't exist.", 404))
     else:
