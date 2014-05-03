@@ -66,4 +66,10 @@ app.TemplateCache = {
 $(function() {
   new app.AppView();
   Backbone.history.start();
+  setInterval( function() {
+    if (localStorage.getItem('deku') !== null) {
+      //console.log('interval, user');
+      app.user.update();
+    }
+  }, 10000);
 });

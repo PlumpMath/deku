@@ -20,8 +20,13 @@ app.HandView = Backbone.View.extend({
     app.Deck = app.Deck || new app.CardList();
     this.listenTo(app.Deck, 'add', this.renderCard);
     this.listenTo(app.Deck, 'reset', this.render);
+    var that = this;
     if (use.use === 'hand') {
       app.Deck.fetch();
+      setInterval( function() {
+        app.Deck.updateHand();
+        //console.log('interval');
+      }, 1000);
     }
   },
 

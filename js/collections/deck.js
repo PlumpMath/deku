@@ -18,7 +18,17 @@ app.CardList = Backbone.Collection.extend({
         that.reset(data['cards']);
       }
     });
+  },
 
+  updateHand: function() {
+    var that = this;
+    $.ajax({
+      type: 'GET',
+      url: this.url,
+      success: function(data) {
+        that.set(data['cards']);
+      }
+    });
   },
 
   // fetch by a specific search filter

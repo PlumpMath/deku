@@ -62,7 +62,7 @@ app.CardView = Backbone.View.extend({
       url: "http://localhost:4568/deku/api/cards/mark/" + this.model.get('id'),
       data: { user_id: app.user.get('id') },
       success: function(data, textStatus, jqXHR) {
-        that.model.set(data);
+        that.model.set(data, {silent: true});
         that.render();
       },
       fail: function() {
@@ -79,7 +79,7 @@ app.CardView = Backbone.View.extend({
       url: "http://localhost:4568/deku/api/cards/add/" + this.model.get('id'),
       data: { user_id: app.user.get('id') },
       success: function(data, textStatus, jqXHR) {
-        that.model.set(data);
+        that.model.set(data, {silent: true});
         that.render();
       },
       fail: function() {
@@ -109,7 +109,7 @@ app.CardView = Backbone.View.extend({
       url: 'http://localhost:4568/deku/api/cards/comment/' + this.model.get('id'),
       data: comment,
       success: function(data, textStatus, jqXHR) {
-        that.model.set(data); // set the model data and render again
+        that.model.set(data, {silent: true}); // set the model data and render again
         that.render();
       },
       fail: function() {
