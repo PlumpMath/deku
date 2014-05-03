@@ -32,6 +32,9 @@ app.ProfileView = Backbone.View.extend({
     } else {
       $('#follow-btn').show();
       $('#update-btn').remove();
+      if ($.inArray(this.model.get('id'), app.user.get('following')) !== -1) {
+        $('#follow-btn').html('Unfollow ' + this.model.get('firstName'));
+      }
     }
     $('#delete-user').hide();
     // hide the make mod button by default
@@ -137,12 +140,21 @@ app.ProfileView = Backbone.View.extend({
   followUser: function(event) {
     event.preventDefault();
     var url = "http://localhost:4568/deku/api/users/follow/" + this.model.get('id');
+    var that = this;
     $.ajax({
       type: 'POST',
       url: url,
       data: { active_id: app.user.get('id') },
       success: function(data, textStatus, jqXHR) {
+        // update local storage as well as this app.user
+        localStorage.setItem('deku', JSON.stringify(data));
         app.user.set(data);
+        // change button to have appropriate message
+        if ($.inArray(that.model.get('id'), app.user.get('following')) !== -1) {
+          $('#follow-btn').html('Unfollow ' + that.model.get('firstName'));
+        } else {
+          $('#follow-btn').html('Follow ' + that.model.get('firstName'));
+        }
       },
       fail: function() {
         console.log("Following failed. Check the routes.");

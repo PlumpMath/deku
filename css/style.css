@@ -12,6 +12,12 @@ body {
     background: #666;
 }
 
+.following {
+    border-style: solid;
+    border-width: 2px;
+    border-color: #66CD00;
+}
+
 .create-card {
     width: 90%;
     font-size: 12pt;

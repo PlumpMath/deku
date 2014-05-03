@@ -58,6 +58,13 @@ app.CardView = Backbone.View.extend({
       this.$el.addClass('large');
     } else if (this.model.get('popularity') > 5) {
       this.$el.addClass('medium');
+    } else {
+      this.$el.addClass('small');
+    }
+    if ($.inArray(this.model.get('author_id'), app.user.get('following')) !== -1) {
+      this.$el.addClass('following');
+    } else {
+      this.$el.removeClass('following');
     }
 		return this;
   },
@@ -108,23 +115,27 @@ app.CardView = Backbone.View.extend({
     event.preventDefault();
     var text = $('#create-comment').val().trim();
     var that = this;
-
-    // comment data to pass back
-    comment = {
-      "author_id": app.user.get('id'),
-      "content": text
-    };
-    $.ajax({
-      type: 'POST',
-      url: 'http://localhost:4568/deku/api/cards/comment/' + this.model.get('id'),
-      data: comment,
-      success: function(data, textStatus, jqXHR) {
-        that.model.set(data, {silent: true}); // set the model data and render again
-        that.render();
-      },
-      fail: function() {
-      }
-    });
+    // make sure the comment isn't empty
+    if (text !== '') {
+      // comment data to pass back
+      comment = {
+        "author_id": app.user.get('id'),
+        "content": text
+      };
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:4568/deku/api/cards/comment/' + this.model.get('id'),
+        data: comment,
+        success: function(data, textStatus, jqXHR) {
+          that.model.set(data, {silent: true}); // set the model data and render again
+          that.render();
+        },
+        fail: function() {
+        }
+      });
+    } else {
+      $('#create-comment').attr('placeholder', "You didn't enter a comment");
+    }
   },
 
   //this controls the flipping of the card to inspect
