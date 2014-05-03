@@ -49,6 +49,16 @@ app.CardView = Backbone.View.extend({
       $('#adds-btn').removeClass('btn-success')
       .addClass('btn-primary');
     }
+
+    /* Really simple scaling check for the cards. For the final demo this should be more realistic,
+     * but it is small numbers for testing.
+     * Right now it has three tiers
+     */
+    if (this.model.get('popularity') > 10) {
+      this.$el.addClass('large');
+    } else if (this.model.get('popularity') > 5) {
+      this.$el.addClass('medium');
+    }
 		return this;
   },
 

@@ -22,7 +22,8 @@ def cards():
             card = models.Card(user_id = author_id,
                                content = content,
                                userFirst = author.firstName,
-                               userLast = author.lastName)
+                               userLast = author.lastName,
+                               popularity = 0)
             if (category):
                 card.category = category
 
@@ -142,8 +143,10 @@ def addCardToDeck(card_id):
                 if (user):
                     if card in user.addedCards:
                         user.addedCards.remove(card)
+                        card.popularity-=2
                     else:
                         user.addedCards.append(card)
+                        card.popularity+=2
                         # Only notify the author if a user adds it. Unadding is not important
                         card_author = models.User.query.get(int(card.user_id)) #this is the user who authored the card
                         if (int(user_id) != card_author.id):
@@ -175,8 +178,11 @@ def markCard(card_id):
                     # If card is already marked, remove it.
                     if card in user.markedCards:
                         user.markedCards.remove(card)
+                        card.popularity-=1; # less popular
                     else:
                         user.markedCards.append(card)
+                        print "pop: ", card.popularity
+                        card.popularity+=1 # more popular
                         # Only notify the author if a user marks it. Unmarking is not important
                         card_author = models.User.query.get(int(card.user_id)) #this is the user who authored the card
                         if (int(user_id) != card_author.id):
@@ -208,6 +214,7 @@ def commentCard(card_id):
                                      card_id = card_id,
                                      content = content)
             card.comments.append(comment)
+            card.popularity+=1 # commenting is +1 popularity
             user = models.User.query.get(int(card.user_id)) #this is the user who authored the card
             # This is so a user doesn't get notification if they comment on their own card
             if (int(author_id) is not user.id):

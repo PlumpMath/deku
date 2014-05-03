@@ -124,6 +124,7 @@ class Card(db.Model):
             "tags": self.tags.split(","),
             "adds": [user.id for user in self.adds],
             "marks": [user.id for user in self.marks],
+            "popularity": self.popularity,
             "comments": [comment.serialize for comment in self.comments] #serialize all of the comments
         }
 
