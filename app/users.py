@@ -3,6 +3,7 @@
 import os
 from flask import Flask, request, jsonify, json
 from app import app, db, models, bcrypt, generator
+from app.mail import registerEmail, resetPasswordEmail
 from utils import cors_response, authenticate_by_email, authenticate_by_id
 from models import ROLE_USER, ROLE_MOD, ROLE_ADMIN
 from sqlalchemy import or_, func
@@ -59,6 +60,8 @@ def users():
             user.profile = profile
             db.session.add(user)
             db.session.commit()
+            # Send email to new user.
+            registerEmail(email, firstName)
             return cors_response((jsonify(user = user.serialize), 201))
         
         else:
@@ -220,4 +223,22 @@ def search_by_name():
        ors.append(func.lower(models.User.lastName)==func.lower(name))
     users = models.User.query.filter(or_(*ors)).all()
     return cors_response((jsonify(users = [user.serialize for user in users]),200))
+
+@app.route('/deku/api/users/password', methods=['POST'])
+def resetPassword():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if email:
+            # Find user by email address.
+            user = models.User.query.filter(models.User.email==email).first()
+            if user:
+                # Send reset email
+                resetPasswordEmail(email, user.firstName)
+                return cors_response(("Email sent.", 200))                
+            else:
+                return cors_response(("User not found.", 404))
+        else:
+            return cors_response(("Bad Request.", 400))
+    else:
+        pass
 

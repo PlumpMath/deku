@@ -10,6 +10,8 @@ app.PassResetView = Backbone.View.extend({
 
 	template: "#password-reset-form",
 
+    resetURL: "http://localhost:4568/deku/api/users/password",
+
 	initialize: function() {
 		this.render();
 	},
@@ -34,15 +36,24 @@ app.PassResetView = Backbone.View.extend({
 
 	//This function should handle the event a user resets their password
 	reset: function(event) {
-		event.preventDefault();
+	  event.preventDefault();
 	
-    var value = {
-			email: this.$('#remail').val().trim(),
-		};
+      var value = {
+		email: this.$('#remail').val().trim(),
+	  };
     
-    if (!this.formError(value)) {
-      // THIS IS A PLACEHOLDER FOR FUTURE RESET FUNCTION
+      if (!this.formError(value)) {
+        $.ajax({
+          type: 'POST',
+          url: this.resetURL,
+          data: value,
+          success: function(data, textStatus, jqXHR) {
+            bootbox.alert("Please check your email for details on resetting your password.");
+          },
+          fail: function() {
+            console.log("Something failed...");
+          }
+        });
+	  }
     }
-
-	}
 });
