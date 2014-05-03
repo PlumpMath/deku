@@ -38,9 +38,7 @@ app.PassResetView = Backbone.View.extend({
 	reset: function(event) {
 	  event.preventDefault();
 	
-      var value = {
-		email: this.$('#remail').val().trim(),
-	  };
+      var value = { email: this.$('#remail').val().trim() };
     
       if (!this.formError(value)) {
         $.ajax({
@@ -48,7 +46,10 @@ app.PassResetView = Backbone.View.extend({
           url: this.resetURL,
           data: value,
           success: function(data, textStatus, jqXHR) {
-            bootbox.alert("Please check your email for details on resetting your password.");
+            bootbox.alert("Please check your email for details on resetting your password.",
+                          function() {
+                             app.router.navigate('', {trigger: true});
+                          });
           },
           fail: function() {
             console.log("Something failed...");

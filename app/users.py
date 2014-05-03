@@ -1,6 +1,6 @@
 #!.venv/bin/python
 
-import os
+import os, string, random
 from flask import Flask, request, jsonify, json
 from app import app, db, models, bcrypt, generator
 from app.mail import registerEmail, resetPasswordEmail
@@ -233,7 +233,10 @@ def resetPassword():
             user = models.User.query.filter(models.User.email==email).first()
             if user:
                 # Send reset email
-                resetPasswordEmail(email, user.firstName)
+                tempPassword = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+                user.password = bcrypt.generate_password_hash(tempPassword)
+                db.session.commit()
+                resetPasswordEmail(email, user.firstName, tempPassword)
                 return cors_response(("Email sent.", 200))                
             else:
                 return cors_response(("User not found.", 404))

@@ -21,8 +21,9 @@ def registerEmail(address, firstName):
     server.sendmail(sender, [address], msg.as_string())
     server.quit()
 
-def resetPasswordEmail(address, firstName):
+def resetPasswordEmail(address, firstName, tempPassword):
     message = "Hey, " + firstName + "! We're sending you this because you forgot your password.\n"
+    message += "Please use " + tempPassword + " to log in and add a new password immediately."
     msg = MIMEText(message)
     msg['Subject'] = "Forgot your password?"
     msg['From'] = sender
