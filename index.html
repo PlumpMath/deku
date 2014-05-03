@@ -66,17 +66,17 @@
           <ul class="col-list">
             <div id="search"></div>
           </ul>
-        </li> <!--
+        </li> 
+        <li class="list-item-collapse collapsed">Following
+          <ul class="col-list">
+            <div id="following"></div>
+          </ul>
+        </li> 
         <li class="list-item-collapse collapsed">Followers
           <ul class="col-list">
             <div id="followers"></div>
           </ul>
         </li>
-        <li class="list-item-collapse collapsed">Following
-          <ul class="col-list">
-            <div id="following"></div>
-          </ul>
-        </li> -->
         <li class="list-item-collapse collapsed">Messages
           <ul class="col-list">
             <div id="messages"></div>
@@ -313,7 +313,7 @@
       <div id="inspect-comment-list">
         <% for (var comment in comments) { %>
           <div class="card-comment">
-            <a id="user-profile-comment" name=<%=comments[comment].author_first%>/<%=comments[comment].author_last%>/<%=comments[comment].author_id%>><%=comments[comment].author_first%> <%=comments[comment].author_last%></a>: <%=comments[comment].content%>
+            <a id="user-profile-comment" name=<%=comments[comment].author_first%>/<%=comments[comment].author_last%>/<%=comments[comment].author_id%>><%=comments[comment].author_first%> <%=comments[comment].author_last%></a>: <%=comments[comment].content%> <a id="delete-comment" name=<%=comments[comment].id%>>x</a>
           </div>
         <% } %>
       </div>
@@ -398,9 +398,9 @@
 	<!-- This is the view for notifications -->
 	<script type="text/template" id="notification-view">
     <div id="notifications-list">
-      <% for (var notification in notifications) { %>
+      <% for (var notification = notifications.length-1; notification >= 0; notification--) { %>
         <div class="user-notification">
-          <a id="user-profile-notification" name=<%=notifications[notification].from_first%>/<%=notifications[notification].from_last%>/<%=notifications[notification].from_id%>><%=notifications[notification].from_first%> <%=notifications[notification].from_last%></a> <%=notifications[notification].content%> your <a id="card-notification" name=<%=notifications[notification].card_id%>>card</a>
+          <a id="user-profile-notification" name=<%=notifications[notification].from_first%>/<%=notifications[notification].from_last%>/<%=notifications[notification].from_id%>><%=notifications[notification].from_first%> <%=notifications[notification].from_last%></a> <%=notifications[notification].content%> your <a id="card-notification" name=<%=notifications[notification].card_id%>>card</a> <a id="delete-notification" name=<%=notifications[notification].id%>>x</a>
         <div>
       <%}%>
     </div>

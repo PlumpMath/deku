@@ -18,7 +18,8 @@ app.CardView = Backbone.View.extend({
     "click #marks-btn": "markCard",
     "click #adds-btn": "addCard",
     "click #delete-card": "deleteCard",
-    "click #user-profile-comment": "goToCommenterProfile"
+    "click #user-profile-comment": "goToCommenterProfile",
+    "click #delete-comment": "deleteComment"
   },
 
 	initialize: function() {
@@ -256,5 +257,24 @@ app.CardView = Backbone.View.extend({
       }
     });
     $('.bootbox-input-text').attr('type', 'password');
+  },
+
+  deleteComment: function(event) {
+    event.preventDefault();
+    value = {
+      "comment_id": $(event.target).attr('name')
+    }
+    var that = this;
+    $.ajax({
+      type: 'POST',
+      url: "http://localhost:4568/deku/api/cards/comment/delete/" + that.model.get('id'),
+      data: value,
+      success: function(data, textStatus, jqXHR) {
+        that.model.set(data, {silent: true});
+        that.render();
+      },
+      fail: function() {
+      }
+    })
   }
 });

@@ -241,4 +241,23 @@ def resetPassword():
             return cors_response(("Bad Request.", 400))
     else:
         pass
-
+                  
+@app.route('/deku/api/users/notification/delete/<int:user_id>', methods=['POST'])
+def deleteNotification(user_id):
+    if request.method == 'POST':
+        # Verify card existence:
+        user = models.User.query.get(int(user_id))
+        if (user):
+            # set up data fields for notification
+            notification_id = request.form.get('notification_id')
+            notification = models.Notification.query.get(notification_id)
+            if (notification):
+                user.notifications.remove(notification)
+                db.session.commit()
+                return cors_response((jsonify(user.serialize), 200))
+            else:
+                return cors_response(("Notification doesn't exist", 404))
+        else:
+            return cors_response(("User doesn't exist.", 404))
+    else:
+        pass
