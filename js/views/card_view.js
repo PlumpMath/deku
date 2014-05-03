@@ -17,6 +17,7 @@ app.CardView = Backbone.View.extend({
     "click #comment-btn": "goToComment",
     "click #marks-btn": "markCard",
     "click #adds-btn": "addCard",
+    "click #report-joker": "reportJoker", 
     "click #delete-card": "deleteCard",
     "click #user-profile-comment": "goToCommenterProfile",
     "click #delete-comment": "deleteComment"
@@ -49,6 +50,11 @@ app.CardView = Backbone.View.extend({
     if ($.inArray(app.user.get('id'), this.model.get('adds')) !== -1) {
       $('#adds-btn').removeClass('btn-success')
       .addClass('btn-primary');
+    }
+
+    if ($.inArray(app.user.get('id'), this.model.get('reporters')) !== -1) {
+      $('#report-joker').removeClass('btn-success')
+      .addClass('btn-danger');
     }
 
     /* Really simple scaling check for the cards. For the final demo this should be more realistic,
@@ -175,6 +181,10 @@ app.CardView = Backbone.View.extend({
             $('#adds-btn').removeClass('btn-success')
             .addClass('btn-primary');
           }
+          if ($.inArray(app.user.get('id'), that.model.get('reporters')) !== -1) {
+            $('#report-joker').removeClass('btn-success')
+            .addClass('btn-danger');
+          }
           app.msnry.layout();
         }
       });
@@ -263,7 +273,7 @@ app.CardView = Backbone.View.extend({
     event.preventDefault();
     value = {
       "comment_id": $(event.target).attr('name')
-    }
+    };
     var that = this;
     $.ajax({
       type: 'POST',
@@ -275,6 +285,26 @@ app.CardView = Backbone.View.extend({
       },
       fail: function() {
       }
-    })
+    });
+  },
+
+  reportJoker: function(event) {
+    event.preventDefault();
+    value = { "reporter_id": app.user.get('id') };
+    var that = this;
+    bootbox.confirm("Are you sure you want to report this card as a joker?", function(result) {
+      if (result === true) {
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost:4568/deku/api/cards/joker/' + that.model.get('id'),
+          data: value,
+          success: function(data, textStatus, jqXHR) { 
+            that.model.set(data);
+            that.render();
+          },
+          fail: function() { console.log("This failed. Fix it, devs."); }
+        });
+      }
+    });
   }
 });

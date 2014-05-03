@@ -24,6 +24,11 @@ followers = db.Table('followers',
     db.Column('followee_id', db.Integer, db.ForeignKey('user.id'))
 )
 
+reported = db.Table('reported',
+    db.Column('reporter_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('joker_id', db.Integer, db.ForeignKey('card.id'))
+)
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     firstName = db.Column(db.String(64), index = True, unique = False)
@@ -44,6 +49,7 @@ class User(db.Model):
                                 primaryjoin=followers.c.follower_id == id,
                                 secondaryjoin=followers.c.followee_id == id,
                                 backref="followedBy")
+    jokers = db.relationship('Card', backref="reporters", secondary="reported")
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)
@@ -125,7 +131,8 @@ class Card(db.Model):
             "adds": [user.id for user in self.adds],
             "marks": [user.id for user in self.marks],
             "popularity": self.popularity,
-            "comments": [comment.serialize for comment in self.comments] #serialize all of the comments
+            "comments": [comment.serialize for comment in self.comments], #serialize all of the comments
+            "reporters": [user.id for user in self.reporters]
         }
 
 

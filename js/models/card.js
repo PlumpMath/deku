@@ -15,7 +15,8 @@ app.Card = Backbone.Model.extend({
       marks: new Array(),
       adds: new Array(),
       comments: new Array(),
-      popularity: 0
+      popularity: 0,
+      reporters: new Array()
     }
   },
 });

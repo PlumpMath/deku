@@ -2,7 +2,7 @@
 
 import os
 from flask import Flask, request, jsonify, abort, make_response, json
-from app import app, db, session
+from app import app, db
 from app import models
 from app.models import Card
 from utils import cors_response, authenticate_by_email, authenticate_by_id
@@ -249,4 +249,44 @@ def deleteComment(card_id):
             return cors_response(("Card doesn't exist.", 404))
     else:
         pass
-                  
+                
+@app.route('/deku/api/cards/joker/<int:card_id>', methods=['POST'])
+def setJoker(card_id):
+    if request.method == 'POST':
+        # Verify card existence:
+        card = models.Card.query.get(int(card_id))
+        if card:
+            # Get user that reported the card.
+            user_id = request.form.get('reporter_id')
+            if (user_id):
+                user = models.User.query.get(int(user_id))
+                if (user):
+                    if card in user.jokers:
+                        return cors_response(("User cannot report card again.", 403))
+                    user.jokers.append(card)
+
+                    # Decrease popularity and alert admins, mods
+                    if card.popularity >= 5:
+                        card.popularity -= 5
+                    else:
+                        card.popularity = 0
+                    
+                    admins = models.User.query.filter_by(role=2).all()
+                    # Append mods to admin list.
+                    admins += models.User.query.filter_by(role=1).all()
+
+                    for person in admins:
+                        notification = models.Notification(from_id = user_id,
+                                                           card_id = card_id,
+                                                           content = "spotted a Joker on")
+                        person.notifications.append(notification)
+                    db.session.commit()
+                    return cors_response((jsonify(card.serialize), 200))
+                else:
+                    return cors_response(("User not found.", 404))
+            else:
+                return cors_response(("Bad Request.", 400))
+        else:
+            return cors_response(("Card not found.", 404))
+    else:
+        pass  
