@@ -13,9 +13,9 @@ body {
 }
 
 .following {
-    border-style: solid;
-    border-width: 2px;
+    outline: none;
     border-color: #66CD00;
+    box-shadow: 0 0 20px #66CD00;
 }
 
 .create-card {

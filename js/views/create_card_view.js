@@ -17,8 +17,10 @@ app.CreateCardView = Backbone.View.extend({
 	render: function() {
     var template = app.TemplateCache.get(this.template);
 		this.$el.html(template);
+    tags = ['pies', 'breezeway', 'fire', 'commons', 'parking', 'aciv','science', 'quad', 'erickson', 'squirrels', 'rac', 'deku', 'umbc'];
+
     $('#tags').tagit({
-      availableTags: ['pies', 'breezeway', 'fire', 'commons', 'parking', 'aciv','science', 'quad', 'erickson', 'squirrels', 'rac', 'deku', 'umbc'],
+      availableTags: tags,
       removeConfirmation: true,
       tagLimit: 4,
       onTagLimitExceeded: function(event, ui) {
@@ -29,11 +31,11 @@ app.CreateCardView = Backbone.View.extend({
     .attr('placeholder', 'Add tags');
 	},
 
-    stringToColor: function(string) {
-      for (var i = 0, hash = 0; i < string.length; hash = string.charCodeAt(i++) + ((hash << 5) - 5));
-      for (var i = 0, color = "#"; i < 3; color += ("00" + ((hash >> i++ * 8) & 0xFF).toString(16)).slice(-2));
-      return color;
-    },
+  stringToColor: function(string) {
+    for (var i = 0, hash = 0; i < string.length; hash = string.charCodeAt(i++) + ((hash << 5) - 5));
+    for (var i = 0, color = "#"; i < 3; color += ("00" + ((hash >> i++ * 8) & 0xFF).toString(16)).slice(-2));
+    return color;
+  },
 
   formError: function(values) {
     error = false;
