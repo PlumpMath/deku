@@ -309,10 +309,12 @@ app.CardView = Backbone.View.extend({
     });
   },
 
+  // This will hide the card
   hideCard: function(event) {
     event.preventDefault();
-    value = {"user_id": app.user.get('id') };
+    value = {"user_id": app.user.get('id') }; //user id
     var that = this;
+    // confirm the action
     bootbox.confirm("Are you sure you want to hide this card from your hand? You can unhide it any time from your preferences panel.", function(result) {
       if (result === true) {
         $.ajax({
@@ -320,8 +322,10 @@ app.CardView = Backbone.View.extend({
           url: 'http://localhost:4568/deku/api/cards/hidden/' + that.model.get('id'),
           data: value,
           success: function(data, textStatus, jqXHR) {
-            that.model.set(data);
-            that.render();
+            localStorage.setItem('deku', JSON.stringify(data)); // update user model
+            app.user.set(data); 
+            that.remove(); // remove the card
+            app.msnry.layout(); // layout masonry to fill gap
           },
           fail: function() {
             console.log("Hiding card failed");
