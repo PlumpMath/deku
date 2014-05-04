@@ -43,9 +43,9 @@ def card_by_id(card_id):
     if request.method == 'GET':
         card = Card.query.get(int(card_id))
         if (card):
-            return jsonify(card = card.serialize)
+            return cors_response((jsonify(card = card.serialize), 200))
         else:
-            return abort(404)
+            return cors_response(("Card not found.", 404))
     else:
         pass
 
@@ -58,9 +58,9 @@ def update_card(card_id):
             if (content):
                 card.content = content
             db.session.commit()
-            return cors_response(("Card modified.", 200, None))
+            return cors_response(("Card modified.", 200))
         else:
-            return abort(404)
+            return cors_response(("Card not found.", 404))
     else:
         pass
 
@@ -76,11 +76,11 @@ def delete_card(card_id):
             if (card):
                 db.session.delete(card)
                 db.session.commit()
-                return cors_response(("Card deleted.", 200, None))
+                return cors_response(("Card deleted.", 200))
             elif (card is None):
-                return cors_response(("No card found.", 204, None))
+                return cors_response(("No card found.", 204))
         else:
-            return cors_response(("Unauthorized access", 401))
+            return cors_response(("Unauthorized access", 403))
     else:
         pass
 
@@ -102,15 +102,57 @@ def get_users_cards(user_id):
 
 @app.route('/deku/api/cards/profile/<int:user_id>/search/category/<category>', methods=['GET'])
 def search_profile_by_category(user_id, category):
-    pass
+    if request.method == 'GET':
+        hand = models.Card.query.filter(models.Card.user_id == user_id).all()
+        addedCards = models.User.query.get(int(user_id)).addedCards
+        for card in addedCards:
+            if card in hand:
+                pass
+            else:
+                hand.append(card) 
+        if len(cards) == 0:
+            return cors_response(("No cards from user.", 204))
+        else:
+            matches = [card in hand if card.category == category]
+            return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
+    else:
+        pass    
 
 @app.route('/deku/api/cards/profile/<int:user_id>/search/tag/<tag>', methods=['GET'])
 def search_profile_by_tag(user_id, tag):
-    pass
+    if request.method == 'GET':
+        hand = models.Card.query.filter(models.Card.user_id == user_id).all()
+        addedCards = models.User.query.get(int(user_id)).addedCards
+        for card in addedCards:
+            if card in hand:
+                pass
+            else:
+                hand.append(card) 
+        if len(cards) == 0:
+            return cors_response(("No cards from user.", 204))
+        else:
+            matches = [card in hand if tag in card.tags.split(",")]
+            return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
+    else:
+        pass
 
 @app.route('/deku/api/cards/profile/<int:user_id>/search/author/<author>', methods=['GET'])
 def search_profile_by_author(user_id, author):
-    pass
+    if request.method == 'GET':
+        firstName, lastName = author.split(",")
+        hand = models.Card.query.filter(models.Card.user_id == user_id).all()
+        addedCards = models.User.query..get(int(user_id)).addedCards
+        for card in addedCards:
+            if card in hand:
+                pass
+            else:
+                hand.append(card)
+        matches = [card in hand if card.userFirst == firstName and card.userLast == lastName]
+        if len(matches) == 0:
+            return cors_response(("No cards from user.", 204))
+        return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
+    else:
+        pass
 
 @app.route('/deku/api/cards/search/category/<category>', methods=['GET'])
 def search_by_category(category):
