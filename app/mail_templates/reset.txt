@@ -1,0 +1,12 @@
+Hey {firstName}!
+
+We're sending you this email because you said you forgot your password.
+
+We're super sorry for any inconvenience this is causing you. Just take the temporary password
+below and use that to log in. Don't forget to set a new password (and maybe write it down somewhere).
+
+Temporary password: {tempPassword}
+
+Glad to have you here,
+
+Deku Developer Team.

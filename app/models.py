@@ -77,6 +77,14 @@ class User(db.Model):
         }
 
     @property
+    def serialize_light(self):
+        return {
+            "id": self.id,
+            "firstName": self.firstName,
+            "lastName": self.lastName
+        }
+
+    @property
     def get_avatar(self):
         return base64.b64encode(self.profile.avatar)
 

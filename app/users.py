@@ -96,6 +96,18 @@ def user_by_id(user_id):
     else:
         pass
 
+@app.route('/deku/api/users/<int:user_id>/basic', methods=['GET'])
+def user_by_id_basic(user_id):
+    if request.method == 'GET':
+        user = models.User.query.get(int(user_id))
+        
+        if user:
+            return cors_response((jsonify(user = user.serialize_light), 200))
+        else:
+            return cors_response(("User not found.", 200))
+    else:
+        pass
+
 @app.route('/deku/api/users/delete/<int:user_id>', methods=['POST'])
 def delete_user(user_id):
     if request.method == 'POST':

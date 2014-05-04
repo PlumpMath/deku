@@ -1,0 +1,9 @@
+Hey {firstName}!
+
+Welcome to Deku. We're glad to have you here. If you have any questions,
+concerns or suggestions for improvements, please email us. We love to hear
+from our users.
+
+Sincerely,
+
+Deku Developers Team.
