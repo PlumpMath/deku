@@ -7,6 +7,7 @@ app.Card = Backbone.Model.extend({
       id: -1,
       category: "",
       tags: new Array(),
+      colors: new Array(),
       content: "",
       authorFirst: "first",
       authorLast: "last",

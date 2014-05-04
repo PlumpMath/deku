@@ -16,6 +16,7 @@ def cards():
         content = request.form.get('content')
         category = request.form.get('category')
         tags = request.form.get('tags')
+        colors = request.form.get('colors')
         author_id = request.form.get('author_id')
         author = models.User.query.get(author_id) #get the author id from db
         if (content):
@@ -30,6 +31,9 @@ def cards():
             if (tags):
                 tagList = json.loads(tags)
                 card.tags = ",".join(tagList)
+            if (colors):
+                colorList = json.loads(colors)
+                card.colors = ",".join(colorList)
             db.session.add(card)
             db.session.commit()
             return cors_response((jsonify(card = card.serialize), 201))

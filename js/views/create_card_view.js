@@ -82,17 +82,18 @@ app.CreateCardView = Backbone.View.extend({
       tag_array = _.map(tag_array, function(tag) {return tag.toLowerCase()});
       color_array = _.map(tag_array, this.stringToColor);
 	
-      var date = new Date();
+        var date = new Date();
     	var card_time = date.toLocaleTimeString();
     	var card_day = date.toDateString();
     	//this is the data in a JSON packet
 			var formData = {
 				category: $('#category').val().trim(),
 				tags: JSON.stringify(tag_array),
-        authorFirst: app.user.get('firstName'),
-        authorLast: app.user.get('lastName'),
-        author_id: app.user.get('id'),
+                authorFirst: app.user.get('firstName'),
+                authorLast: app.user.get('lastName'),
+                author_id: app.user.get('id'),
 				content: $('#content').val().trim(),
+                colors: JSON.stringify(color_array)
 			};
     	//this checks the input for validation
     	if (!this.formError(formData)) {

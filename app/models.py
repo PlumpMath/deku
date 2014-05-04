@@ -116,6 +116,7 @@ class Card(db.Model):
     content = db.Column(db.String(MAX_CONTENT_LENGTH))
     category = db.Column(db.String(MAX_CONTENT_LENGTH))
     tags = db.Column(db.String(MAX_CONTENT_LENGTH))
+    colors = db.Column(db.String(MAX_CONTENT_LENGTH))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
     userFirst = db.Column(db.String(MAX_CONTENT_LENGTH))
     userLast = db.Column(db.String(MAX_CONTENT_LENGTH))
@@ -133,6 +134,7 @@ class Card(db.Model):
             "id": self.id,
             "content": self.content,
             "category": self.category,
+            "colors": self.colors.split(","),
             "created_at": self.timestamp,
             "authorFirst": self.userFirst,
             "authorLast": self.userLast,
