@@ -74,7 +74,11 @@ app.CardView = Backbone.View.extend({
     } else {
       this.$el.addClass('small');
     }
-    if ($.inArray(this.model.get('author_id'), app.user.get('following')) !== -1) {
+    following = [];
+    for (f = 0; f < app.user.get('following').length; f++) {
+      following.push(app.user.get('following')[f].id);
+    }
+    if ($.inArray(this.model.get('author_id'), following) !== -1) {
       this.$el.addClass('following');
     } else {
       this.$el.removeClass('following');

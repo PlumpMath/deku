@@ -406,12 +406,24 @@
 
 	<!-- This is the view for followers -->
 	<script type="text/template" id="followers-view">
-		<p>User will be able to see followers here</p>
+    <div id="followers-list">
+      <% for (var f = 0; f < followedBy.length; f++) {%>
+        <div class="user-follower">
+          <a id="user-profile-follower" name=<%=followedBy[f].firstName%>/<%=followedBy[f].lastName%>/<%=followedBy[f].id%>><%=followedBy[f].firstName%> <%=followedBy[f].lastName%></a>
+        </div>
+      <%}%>
+    </div>
 	</script>
 
 	<!-- This is the view for following -->
 	<script type="text/template" id="following-view">
-		<p>User will be able to see their followers</p>
+    <div id="following-list">
+      <% for (var f = 0; f < following.length; f++) {%>
+        <div class="user-following">
+          <a id="user-profile-following" name=<%=following[f].firstName%>/<%=following[f].lastName%>/<%=following[f].id%>><%=following[f].firstName%> <%=following[f].lastName%></a>
+        </div>
+      <%}%>
+    </div>
 	</script>
 
 	<!-- This is the view for notifications -->
