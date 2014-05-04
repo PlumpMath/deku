@@ -17,7 +17,8 @@ app.CardView = Backbone.View.extend({
     "click #comment-btn": "goToComment",
     "click #marks-btn": "markCard",
     "click #adds-btn": "addCard",
-    "click #report-joker": "reportJoker", 
+    "click #report-joker": "reportJoker",
+    "click #hide-card": "hideCard",
     "click #delete-card": "deleteCard",
     "click #user-profile-comment": "goToCommenterProfile",
     "click #delete-comment": "deleteComment"
@@ -303,6 +304,28 @@ app.CardView = Backbone.View.extend({
             that.render();
           },
           fail: function() { console.log("This failed. Fix it, devs."); }
+        });
+      }
+    });
+  },
+
+  hideCard: function(event) {
+    event.preventDefault();
+    value = {"user_id": app.user.get('id') };
+    var that = this;
+    bootbox.confirm("Are you sure you want to hide this card from your hand? You can unhide it any time from your preferences panel.", function(result) {
+      if (result === true) {
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost:4568/deku/api/cards/hidden/' + that.model.get('id'),
+          data: value,
+          success: function(data, textStatus, jqXHR) {
+            that.model.set(data);
+            that.render();
+          },
+          fail: function() {
+            console.log("Hiding card failed");
+          }
         });
       }
     });

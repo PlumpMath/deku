@@ -62,7 +62,12 @@ app.LoginView = Backbone.View.extend({
           // Store that user in localStorage for persistent user state.
           localStorage.setItem('deku', JSON.stringify(data['user']));
           app.user.set(data['user']);
-          app.router.navigate('hand', {trigger: true});
+          if (Backbone.history.fragment === "login_reset") {
+            // if a password is being reset, go to the view to update password
+            app.router.navigate('new_password', {trigger: true});
+          } else {
+            app.router.navigate('hand', {trigger: true});
+          }
       })
       .fail(function() {
           bootbox.alert("Your email or password did not match.");

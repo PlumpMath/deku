@@ -18,7 +18,9 @@ app.Router = Backbone.Router.extend({
     'register': 'register',
     'profile': 'profile',
     'login': 'login',
-    'reset_password': 'reset_password',
+    'login_reset': 'loginReset',
+    'reset_password': 'resetPassword',
+    'new_password': 'newPassword',
     'hand': 'hand',
     'profile/:first/:last/:id': 'profileView',
     'update/:first/:last/:id': 'update',
@@ -111,8 +113,19 @@ app.Router = Backbone.Router.extend({
     }
   },
 
+  // navigation to get to a login which should flag the user to update password
+  loginReset: function() {
+    var that = this;
+    // if no user is logged in, we can go here
+    if (localStorage.getItem('deku') === null) {
+      $('#container').fadeOut(350, function() {that.changeView(new app.LoginView());});
+    } else {
+      $('#container').fadeOut(0, function() { that.navigate('hand', {trigger: true})});
+    }
+  },
+
   // Handles navigation to the password reset view
-  reset_password: function() {
+  resetPassword: function() {
     var that = this;
     // if no user is logged in, we can go here
     if (localStorage.getItem('deku') === null) {
@@ -120,6 +133,13 @@ app.Router = Backbone.Router.extend({
     } else {
       $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
     }
+  },
+
+  // Handles navigation to the update password view, done after a reset
+  newPassword: function() {
+    var that = this;
+    // if no user is logged in, we can go here
+    $('#container').fadeOut(350, function() {that.changeView(new app.NewPasswordView());});
   },
 
   // navigation to get to InfoView

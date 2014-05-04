@@ -40,6 +40,9 @@ app.IconView = Backbone.View.extend({
        */
       if (Backbone.history.fragment === 'hand') {
         Backbone.history.loadUrl(Backbone.history.fragment);
+      } else if (Backbone.history.fragment === 'new_password') {
+        // don't let the user move on if they need to update their account
+        bootbox.alert("You can't move on until you reset your password");
       } else {
         app.router.navigate('hand', {trigger: true});
       }
