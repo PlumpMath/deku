@@ -113,7 +113,7 @@ def search_profile_by_category(user_id, category):
         if len(cards) == 0:
             return cors_response(("No cards from user.", 204))
         else:
-            matches = [card in hand if card.category == category]
+            matches = [card for card in hand if card.category == category]
             return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
     else:
         pass    
@@ -131,7 +131,7 @@ def search_profile_by_tag(user_id, tag):
         if len(cards) == 0:
             return cors_response(("No cards from user.", 204))
         else:
-            matches = [card in hand if tag in card.tags.split(",")]
+            matches = [card for card in hand if tag in card.tags.split(",")]
             return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
     else:
         pass
@@ -141,13 +141,13 @@ def search_profile_by_author(user_id, author):
     if request.method == 'GET':
         firstName, lastName = author.split(",")
         hand = models.Card.query.filter(models.Card.user_id == user_id).all()
-        addedCards = models.User.query..get(int(user_id)).addedCards
+        addedCards = models.User.query.get(int(user_id)).addedCards
         for card in addedCards:
             if card in hand:
                 pass
             else:
                 hand.append(card)
-        matches = [card in hand if card.userFirst == firstName and card.userLast == lastName]
+        matches = [card for card in hand if card.userFirst == firstName and card.userLast == lastName]
         if len(matches) == 0:
             return cors_response(("No cards from user.", 204))
         return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))

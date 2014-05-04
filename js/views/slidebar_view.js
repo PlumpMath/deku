@@ -38,7 +38,7 @@ app.SlidebarView = Backbone.View.extend({
     new app.MessageView();
     new app.NotificationView({model: app.user});
     new app.AccountView({model: app.user});
-    new app.PreferencesView();
+    new app.PreferencesView({model: app.user});
     
     //initially, check out window size
     this.slidebarsResize();

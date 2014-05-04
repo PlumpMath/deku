@@ -20,6 +20,17 @@ app.CardList = Backbone.Collection.extend({
     });
   },
 
+  fetchById: function(id) {
+    var that = this;
+    $.ajax({
+      type: 'GET',
+      url: this.url + "/" + id,
+      success: function(data) {
+        that.reset(data['card'])
+      }
+    });
+  },
+
   updateHand: function() {
     var that = this;
     $.ajax({

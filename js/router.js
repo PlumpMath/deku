@@ -25,6 +25,7 @@ app.Router = Backbone.Router.extend({
     'profile/:first/:last/:id': 'profileView',
     'update/:first/:last/:id': 'update',
     'search/:field/:query': 'search',
+    'card/:id': 'cardById',
     '*notFound': 'notFound'
   },
 
@@ -216,6 +217,35 @@ app.Router = Backbone.Router.extend({
         app.Deck.searchBy(field + '/' + query);
         $('#filter-by').html('Searching for ' + query.replace(',', ' '));
       }
+    } else {
+      $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
+    }
+  },
+
+  // for notifications and viewing cards, this will show just the one card
+  cardById: function(id) {
+    var that = this;
+    // is there a logged in user
+    if (localStorage.getItem('deku') !== null) {
+      //The handView's children must be visible. If the page refreshed they would disappear. This combats that
+			if (this.slideView === null && this.toggleView === null) {
+			// they do, so remove them and close the slidebar (only real permanent solution)
+      	this.setChildren();
+      	$('#default').hide(); // don't ever show the create card option
+    	}
+      // hides the ability to create while not in hand route
+    	$('#default').hide('medium');
+
+      /* This logic will clear the existing masonry elements
+       * Every new search should clear the hand and show the new stuff
+       * Always load hand view for searching, this gives access to app.Deck and app.msnry
+       */
+      this.changeView(new app.HandView({'use': 'cardById'}));
+      msnry_items = app.msnry.getItemElements();
+      app.msnry.remove(msnry_items);
+      app.msnry.layout();
+      
+      app.Deck.fetchById(id);
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }

@@ -4,6 +4,10 @@ app.PreferencesView = Backbone.View.extend({
 
 	el: "#my-preferences",
 
+  events: {
+    "click #go-to-card": 'goToCard'
+  },
+
   template: "#preferences-view",
 
 	initialize: function() {
@@ -12,7 +16,11 @@ app.PreferencesView = Backbone.View.extend({
 
 	render: function() {
     var template = app.TemplateCache.get(this.template);
-		this.$el.html(template);
-	}
+    html = template(app.user.toJSON());
+		this.$el.append(html);
+	},
 
+  goToCard: function(event) {
+
+  }
 });

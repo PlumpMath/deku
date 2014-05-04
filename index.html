@@ -91,12 +91,12 @@
           <ul class="col-list">
             <div id="my-account"></div>
           </ul>
-        </li> <!--
+        </li> 
         <li class="list-item-collapse collapsed">My Preferences
           <ul class="col-list">
             <div id="my-preferences"></div>
           </ul>
-        </li> -->
+        </li> 
       </ul>
     </div>
   </script>
@@ -443,6 +443,15 @@
 
 	<!-- This is the view for preferences -->
 	<script type="text/template" id="preferences-view">
+    <div id="hidden-cards-list">
+      <h4>You hid these cards:</h4>
+      <% for (var card in cardsHidden) { %>
+        <div class="hidden-card">
+          <a id="go-to-card" name=<%=cardsHidden[card]%>>See this card</a> |
+          <a id="unhide-card" name=<%=cardsHidden[card]%>>Unhide this card</a>
+        </div>
+      <%}%>
+    </div>
 		<p>User will be able to see their preferences</p>
 	</script>
 

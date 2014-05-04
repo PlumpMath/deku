@@ -34,6 +34,12 @@ app.NotificationView = Backbone.View.extend({
     app.router.navigate('profile/' + $(event.target).attr('name'), {trigger: true});
   },
 
+  // go to see one card only
+  goToCard: function(event) {
+    event.preventDefault();
+    app.router.navigate('card/' + $(event.target).attr('name'), {trigger: true});
+  },
+
   deleteNotification: function(event) {
     event.preventDefault();
     value = {

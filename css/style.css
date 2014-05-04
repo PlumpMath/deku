@@ -109,6 +109,10 @@ hr {
     height: 2px;
 }
 
+#hidden-cards-list {
+	color:#999;
+}
+
 .user-account {
     color:#999;
 }
