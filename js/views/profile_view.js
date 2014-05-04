@@ -12,7 +12,8 @@ app.ProfileView = Backbone.View.extend({
     'click #update-btn': 'update',
     'click #change-role': 'changeRole',
     'click #delete-user': 'deleteUser',
-    'click #follow-btn': 'followUser'
+    'click #follow-btn': 'followUser',
+    'click #hide-user': 'hideUser'
   },
 
   initialize: function() {
@@ -144,7 +145,7 @@ app.ProfileView = Backbone.View.extend({
     $.ajax({
       type: 'POST',
       url: url,
-      data: { active_id: app.user.get('id') },
+      data: { "active_id": app.user.get('id') },
       success: function(data, textStatus, jqXHR) {
         // update local storage as well as this app.user
         localStorage.setItem('deku', JSON.stringify(data));
@@ -158,6 +159,28 @@ app.ProfileView = Backbone.View.extend({
       },
       fail: function() {
         console.log("Following failed. Check the routes.");
+      }
+    });
+  },
+
+  hideUser: function(event) {
+    event.preventDefault();
+    var url = "http://localhost:4568/deku/api/users/hidden/" + this.model.get('id');
+    var that = this;
+    bootbox.confirm("If you hide this user, you will not be able to see anything that they share with your university. You can unhide them at any time from you preferences panel", function(result) {
+      if (result === true) {
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: { "active_id": app.user.get('id') },
+          success: function(data, textStatus, jqXHR) {
+            localStorage.setItem('deku', JSON.stringify(data));
+            app.user.set(data);
+          },
+          fail: function() {
+            console.log('Hiding user failed');
+          }
+        });
       }
     });
   }
