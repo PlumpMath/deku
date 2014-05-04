@@ -3,7 +3,7 @@
 import os, string, random
 from flask import Flask, request, jsonify, json
 from app import app, db, models, bcrypt, generator
-from app.mail import registerEmail, resetPasswordEmail
+from app.mail import generateEmail, sendEmail
 from utils import cors_response, authenticate_by_email, authenticate_by_id
 from models import ROLE_USER, ROLE_MOD, ROLE_ADMIN
 from sqlalchemy import or_, func
@@ -61,7 +61,8 @@ def users():
             db.session.add(user)
             db.session.commit()
             # Send email to new user.
-            registerEmail(email, firstName)
+            regEmail = generateEmail("registration", firstName = firstName)
+            sendEmail(email, "Welcome to Deku!", regEmail[0], regEmail[1])
             return cors_response((jsonify(user = user.serialize), 201))
         
         else:
@@ -236,7 +237,8 @@ def generateTemporaryPassword():
                 tempPassword = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
                 user.password = bcrypt.generate_password_hash(tempPassword)
                 db.session.commit()
-                resetPasswordEmail(email, user.firstName, tempPassword)
+                resetEmail = generateEmail("reset", firstName = user.firstName, tempPassword = tempPassword)
+                sendEmail(email, "Forgot your password?", resetEmail[0], resetEmail[1])
                 return cors_response(("Email sent.", 200))                
             else:
                 return cors_response(("User not found.", 404))
