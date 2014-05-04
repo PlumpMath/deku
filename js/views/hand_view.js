@@ -1,5 +1,8 @@
 var app = app || {};
 
+// global variable to track the refresh interval
+var refreshInterval = {};
+
 app.HandView = Backbone.View.extend({
 
   el: "#container",
@@ -17,16 +20,19 @@ app.HandView = Backbone.View.extend({
       itemSelector: ".post",
       gutter: 10
     });
-    app.Deck = app.Deck || new app.CardList();
+    app.Deck = new app.CardList();
     this.listenTo(app.Deck, 'add', this.renderCard);
     this.listenTo(app.Deck, 'reset', this.render);
     var that = this;
-    if (use.use === 'hand') {
+    if (use.use === 'hand' && Backbone.history.fragment === 'hand') {
       app.Deck.fetch();
-      setInterval( function() {
+      // set refresh interval to 10 seconds
+      refreshInterval = setInterval( function() {
         app.Deck.updateHand();
-        //console.log('interval');
-      }, 1000);
+      }, 10000);
+    } else {
+      // clear the refresh interval
+      clearInterval(refreshInterval);
     }
   },
 

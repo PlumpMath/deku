@@ -20,12 +20,14 @@ app.CardList = Backbone.Collection.extend({
     });
   },
 
+  // fetch only one card
   fetchById: function(id) {
     var that = this;
     $.ajax({
       type: 'GET',
       url: this.url + "/" + id,
       success: function(data) {
+        console.log("got: ", data);
         that.reset(data['card'])
       }
     });
