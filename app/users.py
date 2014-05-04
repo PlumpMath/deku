@@ -264,3 +264,27 @@ def deleteNotification(user_id):
             return cors_response(("User doesn't exist.", 404))
     else:
         pass
+
+@app.route('/deku/api/users/hidden/<int:user_id>', methods=['POST'])
+def hideUser(user_id)
+    if request.method == 'POST':
+        user = models.User.query.get(int(user_id))
+        if user:
+            active_user_id = request.form.get("active_id")
+            if active_user_id:
+                active_user = models.User.query.get(int(active_user_id))
+                if active_user:
+                    if user in active_user.hiddenUsers:
+                        active_user.hiddenUsers.remove(user)
+                    else:
+                        active_user.hiddenUsers.append(user)
+                    db.session.commit()
+                    return cors_response((jsonify(user.serialize), 200))
+                else:
+                    return cors_response(("User not found.", 404))
+            else:
+                return cors_response(("Bad Request.", 400))
+        else:
+            return cors_response(("User not found.", 404))
+    else:
+        pass
