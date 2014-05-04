@@ -16,7 +16,9 @@ app.User = Backbone.Model.extend({
       avatar: "",
       notifications: [],
       following: [],
-      followedBy: []
+      followedBy: [],
+      cardsHidden: [],
+      usersHidden: []
     }
   },
 

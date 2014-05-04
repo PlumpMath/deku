@@ -301,10 +301,10 @@ def hideCard(card_id):
             if user_id:
                 user = models.User.query.get(int(user_id))
                 if user:
-                    if card in users.hiddenCards:
-                        users.hiddenCards.remove(card)
+                    if card in user.cardsHidden:
+                        user.cardsHidden.remove(card)
                     else:
-                        users.hiddenCards.append(card)
+                        user.cardsHidden.append(card)
                     db.session.commit()
                     return cors_response((jsonify(user.serialize), 200))
                 else:
