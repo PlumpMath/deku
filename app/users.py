@@ -225,7 +225,7 @@ def search_by_name():
     return cors_response((jsonify(users = [user.serialize for user in users]),200))
 
 @app.route('/deku/api/users/password', methods=['POST'])
-def resetPassword():
+def generateTemporaryPassword():
     if request.method == 'POST':
         email = request.form.get('email')
         if email:
@@ -242,6 +242,24 @@ def resetPassword():
                 return cors_response(("User not found.", 404))
         else:
             return cors_response(("Bad Request.", 400))
+    else:
+        pass
+
+@app.route('/deku/api/users/password/<int:user_id>', methods=['POST'])
+def resetPassword(user_id):
+    if request.method == 'POST':
+        user = models.User.query.get(int(user_id))
+        if user:
+            password = request.form.get("password")
+            if password:
+                password_hash = bcrypt.generate_password_hash(password)
+                user.password = password_hash
+                db.session.commit()
+                return cors_response((jsonify(user.serialize), 200))
+            else:
+                return cors_response(("Bad Request.", 400))
+        else:
+            return cors_response(("User not found.", 404))
     else:
         pass
                   
