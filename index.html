@@ -128,6 +128,7 @@
           <button id="follow-btn" class="btn">Follow <%= firstName %></button>
           <button id="update-btn" class='btn'>Update Account</button>
           <button id="change-role" class='btn'>Make Moderator</button>
+          <button id="hide-user" class='btn'>Hide user</button>
           <button id="delete-user" class="btn">Delete User</button>
         </h4>
         <hr />
@@ -445,10 +446,19 @@
 	<script type="text/template" id="preferences-view">
     <div id="hidden-cards-list">
       <h4>You hid these cards:</h4>
-      <% for (var card in cardsHidden) { %>
+      <% for (var card = 0; card < cardsHidden.length; card++) { %>
         <div class="hidden-card">
           <a id="go-to-card" name=<%=cardsHidden[card]%>>See this card</a> |
           <a id="unhide-card" name=<%=cardsHidden[card]%>>Unhide this card</a>
+        </div>
+      <%}%>
+    </div>
+    <div id="hidden-users-list">
+      <h4>You hid content from these people:</h4>
+      <% for (var user = 0; user < usersHidden.length; user++) { %>
+        <div class="hidden-user">
+          <a id="go-to-user" name=<%=usersHidden[user]%>>See this user's profile</a> |
+          <a id="unhide-user" name=<%=usersHidden[user]%>>Unhide this user</a>
         </div>
       <%}%>
     </div>

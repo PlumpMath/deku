@@ -294,10 +294,10 @@ def hideUser(user_id):
             if active_user_id:
                 active_user = models.User.query.get(int(active_user_id))
                 if active_user:
-                    if user in active_user.hiddenUsers:
-                        active_user.hiddenUsers.remove(user)
+                    if user in active_user.usersHidden:
+                        active_user.usersHidden.remove(user)
                     else:
-                        active_user.hiddenUsers.append(user)
+                        active_user.usersHidden.append(user)
                     db.session.commit()
                     return cors_response((jsonify(user.serialize), 200))
                 else:
