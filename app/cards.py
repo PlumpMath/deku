@@ -290,3 +290,10 @@ def setJoker(card_id):
             return cors_response(("Card not found.", 404))
     else:
         pass  
+
+@app.route('/deku/api/cards/hidden/<int:card_id>', methods=['POST'])
+def hideCard(card_id):
+    if request.method == 'POST':
+        pass
+    else:
+        pass
