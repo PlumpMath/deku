@@ -299,7 +299,7 @@ def hideUser(user_id):
                     else:
                         active_user.usersHidden.append(user)
                     db.session.commit()
-                    return cors_response((jsonify(user.serialize), 200))
+                    return cors_response((jsonify(active_user.serialize), 200))
                 else:
                     return cors_response(("User not found.", 404))
             else:

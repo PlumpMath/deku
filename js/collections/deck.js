@@ -27,7 +27,6 @@ app.CardList = Backbone.Collection.extend({
       type: 'GET',
       url: this.url + "/" + id,
       success: function(data) {
-        console.log("got: ", data);
         that.reset(data['card'])
       }
     });

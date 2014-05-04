@@ -37,6 +37,18 @@ app.ProfileView = Backbone.View.extend({
         $('#follow-btn').html('Unfollow ' + this.model.get('firstName'));
       }
     }
+    if (this.model.get('id') !== app.user.get('id')) {
+      hidden = [];
+      for (var user = 0; user < app.user.get('usersHidden').length; user++) {
+        hidden.push(app.user.get('usersHidden')[user].id);
+      }
+      if ($.inArray(this.model.get('id'), hidden) !== -1) {
+        $('#hide-user').html('Unhide ' + this.model.get('firstName'));
+      }
+    } else {
+      // user can't hide their own card
+      $('#hide-user').remove();
+    }
     $('#delete-user').hide();
     // hide the make mod button by default
     $('#change-role').hide();
@@ -167,7 +179,13 @@ app.ProfileView = Backbone.View.extend({
     event.preventDefault();
     var url = "http://localhost:4568/deku/api/users/hidden/" + this.model.get('id');
     var that = this;
-    bootbox.confirm("If you hide this user, you will not be able to see anything that they share with your university. You can unhide them at any time from you preferences panel", function(result) {
+    var message = '';
+    if ($('#hide-user').html().substring(0,4) === "Hide") {
+      message = "If you hide this user, you will not be able to see anything that they share with your university. You can unhide them at any time from you preferences panel";
+    } else {
+      message = "Unhiding this user will expose all of their cards to you.";
+    }
+    bootbox.confirm(message, function(result) {
       if (result === true) {
         $.ajax({
           type: "POST",
@@ -176,6 +194,7 @@ app.ProfileView = Backbone.View.extend({
           success: function(data, textStatus, jqXHR) {
             localStorage.setItem('deku', JSON.stringify(data));
             app.user.set(data);
+            Backbone.history.loadUrl(Backbone.history.fragment);
           },
           fail: function() {
             console.log('Hiding user failed');

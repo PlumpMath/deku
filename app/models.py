@@ -83,7 +83,15 @@ class User(db.Model):
             "following": [user.id for user in self.following],
             "followedBY": [user.id for user in self.followedBy],
             "cardsHidden": [card.id for card in self.cardsHidden],
-            "usersHidden": [user.id for user in self.usersHidden],
+            "usersHidden": [user.serialize_light for user in self.usersHidden],
+        }
+
+    @property
+    def serialize_light(self):
+        return {
+            "id": self.id,
+            "firstName": self.firstName,
+            "lastName": self.lastName
         }
 
     @property

@@ -26,6 +26,7 @@ app.Router = Backbone.Router.extend({
     'update/:first/:last/:id': 'update',
     'search/:field/:query': 'search',
     'card/:id': 'cardById',
+    'hidden/card/:id': 'cardById',
     '*notFound': 'notFound'
   },
 

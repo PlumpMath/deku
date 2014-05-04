@@ -42,6 +42,11 @@ app.CardView = Backbone.View.extend({
           $('#delete-card').remove();
         }
       }
+      if ($.inArray(this.model.get('id'), app.user.get('cardsHidden')) !== -1) {
+        $('#hide-card').html("Unhide");
+      }
+    } else {
+      $('#hide-card').remove();
     }
     // buttons are different color if user has already added or marked
     if ($.inArray(app.user.get('id'), this.model.get('marks')) !== -1) {
@@ -173,6 +178,12 @@ app.CardView = Backbone.View.extend({
                 $('#delete-card').remove();
               }
             }
+            if ($.inArray(that.model.get('id'), app.user.get('cardsHidden')) !== -1) {
+              $('#hide-card').html("Unhide");
+            }
+          } else {
+            // user can't hide their own card
+            $('#hide-card').remove();
           }
           if ($.inArray(app.user.get('id'), that.model.get('marks')) !== -1) {
             $('#marks-btn').removeClass('btn-success')
@@ -314,8 +325,14 @@ app.CardView = Backbone.View.extend({
     event.preventDefault();
     value = {"user_id": app.user.get('id') }; //user id
     var that = this;
+    var message = '';
+    if (Backbone.history.fragment.substring(0,6) === 'hidden') {
+      message = "Are you sure you want to see this card in your hand again?";
+    } else {
+      message = "Are you sure you want to hide this card from your hand? You can unhide it any time from your preferences panel.";
+    }
     // confirm the action
-    bootbox.confirm("Are you sure you want to hide this card from your hand? You can unhide it any time from your preferences panel.", function(result) {
+    bootbox.confirm(message, function(result) {
       if (result === true) {
         $.ajax({
           type: 'POST',
@@ -323,9 +340,13 @@ app.CardView = Backbone.View.extend({
           data: value,
           success: function(data, textStatus, jqXHR) {
             localStorage.setItem('deku', JSON.stringify(data)); // update user model
-            app.user.set(data); 
-            that.remove(); // remove the card
-            app.msnry.layout(); // layout masonry to fill gap
+            app.user.set(data);
+            if (Backbone.history.fragment.substring(0, 6) === 'hidden') {
+              app.router.navigate('hand', {trigger: true});
+            } else {
+              that.remove(); // remove the card
+              app.msnry.layout(); // layout masonry to fill gap
+            }
           },
           fail: function() {
             console.log("Hiding card failed");

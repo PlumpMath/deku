@@ -445,20 +445,19 @@
 	<!-- This is the view for preferences -->
 	<script type="text/template" id="preferences-view">
     <div id="hidden-cards-list">
-      <h4>You hid these cards:</h4>
+      <h4>You hid these cards. Click to view the card:</h4>
       <% for (var card = 0; card < cardsHidden.length; card++) { %>
         <div class="hidden-card">
-          <a id="go-to-card" name=<%=cardsHidden[card]%>>See this card</a> |
-          <a id="unhide-card" name=<%=cardsHidden[card]%>>Unhide this card</a>
+          <a id="go-to-card" name=<%=cardsHidden[card]%>>See this card</a>
         </div>
       <%}%>
     </div>
+    <hr />
     <div id="hidden-users-list">
-      <h4>You hid content from these people:</h4>
+      <h4>You hid content from these people. Click to view their profile:</h4>
       <% for (var user = 0; user < usersHidden.length; user++) { %>
         <div class="hidden-user">
-          <a id="go-to-user" name=<%=usersHidden[user]%>>See this user's profile</a> |
-          <a id="unhide-user" name=<%=usersHidden[user]%>>Unhide this user</a>
+          <a id="go-to-user" name=<%=usersHidden[user].firstName%>/<%=usersHidden[user].lastName%>/<%=usersHidden[user].id%>><%=usersHidden[user].firstName%> <%=usersHidden[user].lastName%></a>
         </div>
       <%}%>
     </div>

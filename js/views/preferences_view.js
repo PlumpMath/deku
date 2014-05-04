@@ -6,7 +6,9 @@ app.PreferencesView = Backbone.View.extend({
 
   events: {
     "click #go-to-card": 'goToCard',
-    "click #unhide-card": 'unhideCard'
+    "click #unhide-card": 'unhideCard',
+    "click #go-to-user": 'goToUser',
+    "click #unhide-user": 'unhideUser'
   },
 
   template: "#preferences-view",
@@ -24,7 +26,7 @@ app.PreferencesView = Backbone.View.extend({
   // go to see one card only
   goToCard: function(event) {
     event.preventDefault();
-    app.router.navigate('card/' + $(event.target).attr('name'), {trigger: true});
+    app.router.navigate('hidden/card/' + $(event.target).attr('name'), {trigger: true});
   },
 
   // handles showing a card
@@ -46,5 +48,12 @@ app.PreferencesView = Backbone.View.extend({
          console.log("Unhiding card failed");
        }
      });
+  },
+
+  goToUser: function(event) {
+    event.preventDefault();
+    // navigate to the route for the user's profile
+    profile = $(event.target).attr('name');
+    app.router.navigate('profile/' + profile, {trigger: true});
   }
 });
