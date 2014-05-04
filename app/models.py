@@ -24,6 +24,16 @@ reported = db.Table('reported',
     db.Column('joker_id', db.Integer, db.ForeignKey('card.id'))
 )
 
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followee_id', db.Integer, db.ForeignKey('user.id'))
+)
+
+hiddenUsers = db.Table('hiddenUsers',
+    db.Column('hiddenFrom_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('hidden_id', db.Integer, db.ForeignKey('user.id'))
+)
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     firstName = db.Column(db.String(64), index = True, unique = False)
@@ -39,10 +49,10 @@ class User(db.Model):
     markedCards = db.relationship('Card', secondary="marked", backref="marks")
     addedCards = db.relationship('Card', secondary="added", backref="adds")
     notifications = db.relationship('Notification', backref='user', cascade='all,delete', lazy='dynamic')
-    following = db.relationship('User', lazy='dynamic', backref="followedBy")
+    following = db.relationship('User', secondary="followers", lazy='dynamic', backref="followedBy", primaryjoin = followers.c.follower_id == id, secondaryjoin = followers.c.followee_id == id)
     jokers = db.relationship('Card', backref="reporters", secondary="reported")
     cardsHidden = db.relationship('Card', lazy='dynamic')
-    usersHidden = db.relationship('User', lazy='dynamic')
+    usersHidden = db.relationship('User', lazy='dynamic', secondary='hiddenUsers', primaryjoin = hiddenUsers.c.hiddenFrom_id == id, secondaryjoin = hiddenUsers.c.hidden_id == id)
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)

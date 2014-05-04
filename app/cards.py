@@ -96,6 +96,7 @@ def get_users_cards(user_id):
                 hand.append(card)
         if len(hand) == 0:
             return cors_response(("No cards from user.", 204))
+        hand = sort(hand, key=models.Card.id)
         return cors_response((jsonify(cards = [card.serialize for card in hand]), 200))
     else:
         pass

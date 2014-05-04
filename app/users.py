@@ -284,7 +284,7 @@ def deleteNotification(user_id):
         pass
 
 @app.route('/deku/api/users/hidden/<int:user_id>', methods=['POST'])
-def hideUser(user_id)
+def hideUser(user_id):
     if request.method == 'POST':
         user = models.User.query.get(int(user_id))
         if user:
