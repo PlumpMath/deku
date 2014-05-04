@@ -96,18 +96,6 @@ def user_by_id(user_id):
     else:
         pass
 
-@app.route('/deku/api/users/<int:user_id>/basic', methods=['GET'])
-def user_by_id_basic(user_id):
-    if request.method == 'GET':
-        user = models.User.query.get(int(user_id))
-        
-        if user:
-            return cors_response((jsonify(user = user.serialize_light), 200))
-        else:
-            return cors_response(("User not found.", 200))
-    else:
-        pass
-
 @app.route('/deku/api/users/delete/<int:user_id>', methods=['POST'])
 def delete_user(user_id):
     if request.method == 'POST':
@@ -237,7 +225,7 @@ def search_by_name():
     return cors_response((jsonify(users = [user.serialize for user in users]),200))
 
 @app.route('/deku/api/users/password', methods=['POST'])
-def resetPassword():
+def generateTemporaryPassword():
     if request.method == 'POST':
         email = request.form.get('email')
         if email:
@@ -254,6 +242,24 @@ def resetPassword():
                 return cors_response(("User not found.", 404))
         else:
             return cors_response(("Bad Request.", 400))
+    else:
+        pass
+
+@app.route('/deku/api/users/password/<int:user_id>', methods=['POST'])
+def resetPassword(user_id):
+    if request.method == 'POST':
+        user = models.User.query.get(int(user_id))
+        if user:
+            password = request.form.get("password")
+            if password:
+                password_hash = bcrypt.generate_password_hash(password)
+                user.password = password_hash
+                db.session.commit()
+                return cors_response((jsonify(user.serialize), 200))
+            else:
+                return cors_response(("Bad Request.", 400))
+        else:
+            return cors_response(("User not found.", 404))
     else:
         pass
                   
@@ -274,5 +280,29 @@ def deleteNotification(user_id):
                 return cors_response(("Notification doesn't exist", 404))
         else:
             return cors_response(("User doesn't exist.", 404))
+    else:
+        pass
+
+@app.route('/deku/api/users/hidden/<int:user_id>', methods=['POST'])
+def hideUser(user_id):
+    if request.method == 'POST':
+        user = models.User.query.get(int(user_id))
+        if user:
+            active_user_id = request.form.get("active_id")
+            if active_user_id:
+                active_user = models.User.query.get(int(active_user_id))
+                if active_user:
+                    if user in active_user.hiddenUsers:
+                        active_user.hiddenUsers.remove(user)
+                    else:
+                        active_user.hiddenUsers.append(user)
+                    db.session.commit()
+                    return cors_response((jsonify(user.serialize), 200))
+                else:
+                    return cors_response(("User not found.", 404))
+            else:
+                return cors_response(("Bad Request.", 400))
+        else:
+            return cors_response(("User not found.", 404))
     else:
         pass

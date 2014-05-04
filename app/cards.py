@@ -96,6 +96,7 @@ def get_users_cards(user_id):
                 hand.append(card)
         if len(hand) == 0:
             return cors_response(("No cards from user.", 204))
+        hand = sort(hand, key=models.Card.id)
         return cors_response((jsonify(cards = [card.serialize for card in hand]), 200))
     else:
         pass
@@ -290,3 +291,27 @@ def setJoker(card_id):
             return cors_response(("Card not found.", 404))
     else:
         pass  
+
+@app.route('/deku/api/cards/hidden/<int:card_id>', methods=['POST'])
+def hideCard(card_id):
+    if request.method == 'POST':
+        card = models.Card.query.get(int(card_id))
+        if card:
+            user_id = request.form.get('user_id')
+            if user_id:
+                user = models.User.query.get(int(user_id))
+                if user:
+                    if card in users.hiddenCards:
+                        users.hiddenCards.remove(card)
+                    else:
+                        users.hiddenCards.append(card)
+                    db.session.commit()
+                    return cors_response((jsonify(user.serialize), 200))
+                else:
+                    return cors_response(("User not found.", 404))
+            else:
+                return cors_response(("Bad Request.", 400))
+        else:
+            return cors_response(("Card not found.", 404))
+    else:
+        pass

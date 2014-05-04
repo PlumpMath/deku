@@ -19,14 +19,19 @@ added = db.Table('added',
     db.Column('card_id', db.Integer, db.ForeignKey('card.id'))
 )
 
+reported = db.Table('reported',
+    db.Column('reporter_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('joker_id', db.Integer, db.ForeignKey('card.id'))
+)
+
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('followee_id', db.Integer, db.ForeignKey('user.id'))
 )
 
-reported = db.Table('reported',
-    db.Column('reporter_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('joker_id', db.Integer, db.ForeignKey('card.id'))
+hiddenUsers = db.Table('hiddenUsers',
+    db.Column('hiddenFrom_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('hidden_id', db.Integer, db.ForeignKey('user.id'))
 )
 
 class User(db.Model):
@@ -44,12 +49,10 @@ class User(db.Model):
     markedCards = db.relationship('Card', secondary="marked", backref="marks")
     addedCards = db.relationship('Card', secondary="added", backref="adds")
     notifications = db.relationship('Notification', backref='user', cascade='all,delete', lazy='dynamic')
-    following = db.relationship('User', 
-                                secondary="followers", 
-                                primaryjoin=followers.c.follower_id == id,
-                                secondaryjoin=followers.c.followee_id == id,
-                                backref="followedBy")
+    following = db.relationship('User', secondary="followers", lazy='dynamic', backref="followedBy", primaryjoin = followers.c.follower_id == id, secondaryjoin = followers.c.followee_id == id)
     jokers = db.relationship('Card', backref="reporters", secondary="reported")
+    cardsHidden = db.relationship('Card', lazy='dynamic')
+    usersHidden = db.relationship('User', lazy='dynamic', secondary='hiddenUsers', primaryjoin = hiddenUsers.c.hiddenFrom_id == id, secondaryjoin = hiddenUsers.c.hidden_id == id)
 
     def __repr__(self):
         return '<User %r>' % (self.firstName + " " + self.lastName)
@@ -73,15 +76,9 @@ class User(db.Model):
             "addedCards": [card.id for card in self.addedCards],
             "notifications": [notification.serialize for notification in self.notifications], #serialize all of the notifications
             "following": [user.id for user in self.following],
-            "followedBy": [user.id for user in self.followedBy]
-        }
-
-    @property
-    def serialize_light(self):
-        return {
-            "id": self.id,
-            "firstName": self.firstName,
-            "lastName": self.lastName
+            "followedBY": [user.id for user in self.followedBy],
+            "cardsHidden": [card.id for card in self.cardsHidden],
+            "usersHidden": [user.id for user in self.usersHidden],
         }
 
     @property
