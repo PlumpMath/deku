@@ -47,9 +47,10 @@ app.PassResetView = Backbone.View.extend({
           data: value,
           success: function(data, textStatus, jqXHR) {
             bootbox.alert("Please check your email for details on resetting your password.",
-                          function() {
-                             app.router.navigate('', {trigger: true});
-                          });
+              function() {
+                // send to the route for resetting a user's password
+                app.router.navigate('login_reset', {trigger: true});
+              });
           },
           fail: function() {
             console.log("Something failed...");

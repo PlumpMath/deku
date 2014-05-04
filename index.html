@@ -245,6 +245,24 @@
     </div>
 	</script>
 
+  <!-- This will force the user to update password after a reset -->
+	<script type="text/template" id="update-password-form">
+    <div class="container-wrapper container-wrapper-width">
+  		<h1 class="container-wrapper-width">Please update your password.</h1>
+  		<form role="form" action="login" method="post" id="new_password" class="container-wrapper-width">
+  			<div class="form-group">
+  				<label for="password">Enter a new password</label>
+  				<input type="password" name='password' id="password" class="form-control">
+  			</div>
+  			<div class="form-group">
+  				<label for="confirm-password">Confirm your password</label>
+  				<input type="password" name='confirm-password' id="confirm-password" class="form-control">
+  			</div>
+  			<button type="submit" class="btn btn-success" id="update-password-button">Change my password</button>
+  		</form>
+    </div>
+	</script>
+
 	<!-- this view handles password reseting -->
 	<script type="text/template" id="password-reset-form">
     <div class="container-wrapper container-wrapper-width">
@@ -392,7 +410,7 @@
 
 	<!-- This is the view for following -->
 	<script type="text/template" id="following-view">
-		<p>User will be able to see who they follow here</p>
+		<p>User will be able to see their followers</p>
 	</script>
 
 	<!-- This is the view for notifications -->
@@ -534,6 +552,7 @@
   <script src="js/views/info_view.js"></script>
   <script src="js/views/login_view.js"></script>
   <script src="js/views/password_reset_view.js"></script>
+  <script src="js/views/new_password_view.js"></script>
   <script src="js/views/hand_view.js"></script>
   <script src="js/views/slidebar_view.js"></script>
   <script src="js/views/create_card_view.js"></script>

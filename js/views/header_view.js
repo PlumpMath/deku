@@ -53,19 +53,27 @@ app.HeaderView = Backbone.View.extend({
 
   logout: function(event) {
     event.preventDefault();
-    //logging out removes the user for local storage and will clear app.user to defaults
-    localStorage.removeItem('deku');
-    app.user.set(app.user.defaults());
-
-    // navigate back to the register route
-    app.router.navigate('register', {trigger: true});
+    
+    if (Backbone.history.fragment === "new_password") {
+      bootbox.alert("You can't move on until you reset your password");
+    } else {
+      // navigate back to the register route
+      //logging out removes the user for local storage and will clear app.user to defaults
+      localStorage.removeItem('deku');
+      app.user.set(app.user.defaults());
+      app.router.navigate('register', {trigger: true});
+    }
   },
 
   // get the user's profile page
   goToProfile: function(event) {
     event.preventDefault();
-    // navigate to the route for the user's profile
-    profile = app.user.get('firstName') + "/" + app.user.get('lastName') + '/' + app.user.get('id');
+    if (Backbone.history.fragment === "new_password") {
+      bootbox.alert("You can't move on until you reset your password");
+    } else {
+      // navigate to the route for the user's profile
+      profile = app.user.get('firstName') + "/" + app.user.get('lastName') + '/' + app.user.get('id');
+    }
     app.router.navigate('profile/' + profile, {trigger: true});
   }
 });
