@@ -9,14 +9,18 @@ app.CreateView = Backbone.View.extend({
 
   template: "#create-form",
 
+  blurb: "#blurb",
+
   initialize: function() {
     //listens to the changing of app.user to destroy this view
     this.render();
   },
 
   render: function() {
-    var template = app.TemplateCache.get(this.template);
-    this.$el.html(template).fadeIn(350);
+    var template = app.TemplateCache.get(this.template),
+        blurb = app.TemplateCache.get(this.blurb);
+    this.$el.html(blurb).show();
+    this.$el.append(template).fadeIn(350);
   },
 
 	formError: function(values) {

@@ -18,6 +18,13 @@ body {
     box-shadow: 0 0 20px #66CD00;
 }
 
+.blurb {
+    text-align: center;
+    width: 800px;
+    margin: 0 auto;
+    margin-bottom: 2em;
+}
+
 .create-card {
     width: 90%;
     font-size: 12pt;
