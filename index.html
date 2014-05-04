@@ -282,8 +282,8 @@
   <script type="text/template" id="card-template">
     <!-- due to floating point numbers being weird, set the background of container to last tag -->
 		<div id="card-tags" class="<%=tags[tags.length-1]%>">
-      <% for (var tag in tags) { %>
-        <div class="card-tag <%=tags[tag]%>" style="width: <%=100.0/tags.length%>%" title="<%=tags[tag]%>"></div>
+      <% for (var i = 0; i < tags.length; i++) { %>
+        <div class="card-tag <%=tags[i]%>" style="width: <%=100.0/tags.length%>%; background: <%=colors[i]%>" title="<%=tags[i]%>"></div>
       <% } %>
     </div>
     <!-- <span class="avatar"><a id="card-author-avatar"><img src="data:image/png;base64,<%= avatar %>" id="avatar-card"></a></span> -->
@@ -298,8 +298,8 @@
     <!-- due to floating point numbers being weird, set the background of container to last tag -->
 		<div id="card-tags" class="<%=tags[0]%>">
       <!-- Purely for appearance, the tags are in reverse order on a card flip -->
-      <% for (var tag = tags.length-1; tag >= 0; tag--) { %>
-        <div class="card-tag <%=tags[tag]%>" style="width: <%=100.0/tags.length%>%" title="<%=tags[tag]%>"></div>
+      <% for (var i = tags.length - 1; i >= 0; i--) { %>
+        <div class="card-tag <%=tags[i]%>" style="width: <%=100.0/tags.length%>%; background: <%=colors[i]%>" title="<%=tags[i]%>"></div>
       <% } %>
     </div>
     <div id="inspect-header">
