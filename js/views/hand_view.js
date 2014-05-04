@@ -32,8 +32,11 @@ app.HandView = Backbone.View.extend({
 
   render: function() {
     app.Deck.each(function(item) {
-      this.renderCard(item);
-      }, this);
+      // if a card is under a users hidden field, don't show it
+      if ($.inArray(item.id, app.user.get('cardsHidden')) === -1) {
+        this.renderCard(item);
+      }
+    }, this);
   },
 
   renderCard: function(item) {
