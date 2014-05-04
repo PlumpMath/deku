@@ -73,7 +73,7 @@ app.HeaderView = Backbone.View.extend({
     } else {
       // navigate to the route for the user's profile
       profile = app.user.get('firstName') + "/" + app.user.get('lastName') + '/' + app.user.get('id');
+      app.router.navigate('profile/' + profile, {trigger: true});
     }
-    app.router.navigate('profile/' + profile, {trigger: true});
   }
 });
