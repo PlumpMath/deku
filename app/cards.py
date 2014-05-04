@@ -95,11 +95,22 @@ def get_users_cards(user_id):
             else:
                 hand.append(card)
         if len(hand) == 0:
-            return cors_response(("No cards from user.", 204))
-        hand = sort(hand, key=models.Card.id)
+            return cors_response(("No cards from user.", 204)) 
         return cors_response((jsonify(cards = [card.serialize for card in hand]), 200))
     else:
         pass
+
+@app.route('/deku/api/cards/profile/<int:user_id>/search/category/<category>', methods=['GET'])
+def search_profile_by_category(user_id, category):
+    pass
+
+@app.route('/deku/api/cards/profile/<int:user_id>/search/tag/<tag>', methods=['GET'])
+def search_profile_by_tag(user_id, tag):
+    pass
+
+@app.route('/deku/api/cards/profile/<int:user_id>/search/author/<author>', methods=['GET'])
+def search_profile_by_author(user_id, author):
+    pass
 
 @app.route('/deku/api/cards/search/category/<category>', methods=['GET'])
 def search_by_category(category):
@@ -301,10 +312,10 @@ def hideCard(card_id):
             if user_id:
                 user = models.User.query.get(int(user_id))
                 if user:
-                    if card in users.hiddenCards:
-                        users.hiddenCards.remove(card)
+                    if card in users.cardsHidden:
+                        users.cardsHidden.remove(card)
                     else:
-                        users.hiddenCards.append(card)
+                        users.cardsHidden.append(card)
                     db.session.commit()
                     return cors_response((jsonify(user.serialize), 200))
                 else:
