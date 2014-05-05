@@ -12,7 +12,9 @@ def messages(user_id):
     if request.method == 'GET':
         user = models.User.query.get(int(user_id))
         if user:
-            return cors_response((jsonify(messages=[message.serialize for message in models.Message.query.filter(models.Message.to_id==user_id).all()]),200))
+            # Get messages
+            messages = models.Message.query.filter(models.Message.to_id == user_id).all()
+            return cors_response((jsonify(messages=[message.serialize for message in messages]), 200))
         else:
             return cors_response(("User not found.", 400))
 
