@@ -251,6 +251,9 @@ app.Router = Backbone.Router.extend({
       app.msnry.layout();
       
       app.Deck.fetchById(id);
+      if (app.Deck.length === 0) {
+        $('#container').fadeOut(350, function() { that.navigate('user_not_found', {trigger: true})});
+      }
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }
