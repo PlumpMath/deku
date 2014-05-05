@@ -33,8 +33,8 @@ app.SlidebarView = Backbone.View.extend({
     //create all the views of the submenus within the slidebar
     new app.CreateCardView();
     new app.SearchView();
-    new app.FollowersView();
-    new app.FollowingView();
+    new app.FollowersView({model: app.user});
+    new app.FollowingView({model: app.user});
     new app.MessageView();
     new app.NotificationView({model: app.user});
     new app.AccountView({model: app.user});

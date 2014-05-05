@@ -80,8 +80,8 @@ class User(db.Model):
             "markedCards": [card.id for card in self.markedCards],
             "addedCards": [card.id for card in self.addedCards],
             "notifications": [notification.serialize for notification in self.notifications], #serialize all of the notifications
-            "following": [user.id for user in self.following],
-            "followedBY": [user.id for user in self.followedBy],
+            "following": [user.serialize_light for user in self.following],
+            "followedBy": [user.serialize_light for user in self.followedBy],
             "cardsHidden": [card.id for card in self.cardsHidden],
             "usersHidden": [user.serialize_light for user in self.usersHidden],
         }

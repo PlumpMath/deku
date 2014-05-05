@@ -33,7 +33,11 @@ app.ProfileView = Backbone.View.extend({
     } else {
       $('#follow-btn').show();
       $('#update-btn').remove();
-      if ($.inArray(this.model.get('id'), app.user.get('following')) !== -1) {
+      following = [];
+      for (var f = 0; f < app.user.get('following').length; f++) {
+        following.push(app.user.get('following')[f].id);
+      }
+      if ($.inArray(this.model.get('id'), following) !== -1) {
         $('#follow-btn').html('Unfollow ' + this.model.get('firstName'));
       }
     }
@@ -163,7 +167,7 @@ app.ProfileView = Backbone.View.extend({
         localStorage.setItem('deku', JSON.stringify(data));
         app.user.set(data);
         // change button to have appropriate message
-        if ($.inArray(that.model.get('id'), app.user.get('following')) !== -1) {
+        if ($('#follow-btn').html().substring(0,6) === 'Follow') {
           $('#follow-btn').html('Unfollow ' + that.model.get('firstName'));
         } else {
           $('#follow-btn').html('Follow ' + that.model.get('firstName'));

@@ -202,6 +202,11 @@ def follow_user(user_id):
                         active_user.following.remove(user)
                     else:
                         active_user.following.append(user)
+                        print "active: ", active_user_id
+                        notification = models.Notification(from_id = active_user_id,
+                                                           card_id = -1,
+                                                           content = "is now following you")
+                        user.notifications.append(notification)
                     db.session.commit()
                     return cors_response((jsonify(active_user.serialize), 200))
                 else:
