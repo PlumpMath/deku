@@ -149,7 +149,7 @@ app.Router = Backbone.Router.extend({
     var that = this;
     // if no user is logged in, we can go here
     if (localStorage.getItem('deku') === null) {
-      $('#container').fadeOut(350, function() {that.changeView(new app.InfoView());});
+      $('#container').fadeOut(350, function() {that.changeView(new app.InfoView({model: app.user}));});
     } else {
       $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
     }

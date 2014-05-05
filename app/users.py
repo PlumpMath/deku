@@ -6,6 +6,7 @@ from app import app, db, models, bcrypt, generator
 from app.mail import generateEmail, sendEmail
 from utils import cors_response, authenticate_by_email, authenticate_by_id
 from models import ROLE_USER, ROLE_MOD, ROLE_ADMIN
+import base64
 from sqlalchemy import or_, func
 
 @app.route('/deku/api/users', methods=['GET','POST'])
@@ -65,6 +66,27 @@ def users():
             sendEmail(email, "Welcome to Deku!", regEmail[0], regEmail[1])
             return cors_response((jsonify(user = user.serialize), 201))
         
+        else:
+            return cors_response(("Bad Request.", 400))
+    else:
+        pass
+
+#This just checks to make sure there is no duplicate email.
+@app.route('/deku/api/users/check_email', methods=['POST'])
+def check_duplicate_email():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = models.User.query.filter(models.User.email==email).first()
+
+        if user:
+            return cors_response(("That email is already registered", 400))
+
+        firstName = request.form.get('firstName')
+        lastName = request.form.get('lastName')
+
+        if (firstName and lastName):
+            avatar = generator.generate(firstName + lastName, 240, 240, output_format="png")
+            return cors_response(base64.b64encode(avatar))
         else:
             return cors_response(("Bad Request.", 400))
     else:

@@ -52,6 +52,16 @@ header {
     margin-right: 10px;
 }
 
+#avatar-text {
+    float: left;
+    margin-right: 10%;
+}
+
+#avatar_example {
+    height: 100px;
+    width: 100px;
+}
+
 #avatar_profile {
     height: 70px;
     width: 70px;
@@ -185,7 +195,7 @@ hr {
 
 #card-tags {
 	width: 100%;
-	height: 20px;
+	height: 12px;
 	top: 0;
 	position: absolute;
 	left: 0;

@@ -15,7 +15,8 @@ app.InfoView = Backbone.View.extend({
 
   render: function() {
     var template = app.TemplateCache.get(this.template);
-    this.$el.html(template).fadeIn(350);
+    var html = template(app.user.toJSON());
+    this.$el.html(html).fadeIn(350);
 
     class_list = ["CMSC 304", "CMSC 345", "CMSC 313", "CMSC 331", "CMSC 341", "STAT 355", "CMSC 201", "CMSC 202"];
 
