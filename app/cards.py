@@ -213,6 +213,7 @@ def addCardToDeck(card_id):
                                                                card_id = card_id,
                                                                content = "added")
                             card_author.notifications.append(notification) # append notification to user's account
+                            card_author.reputationPositive+=1
                     db.session.commit()
                     return cors_response((jsonify(card.serialize), 200))
                 else:
@@ -248,6 +249,7 @@ def markCard(card_id):
                                                                card_id = card_id,
                                                                content = "marked")
                             card_author.notifications.append(notification) # append notification to user's account
+                            card_author.reputationPositive+=1
                     db.session.commit()
                     return cors_response((jsonify(card.serialize), 200))
                 else:

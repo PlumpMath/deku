@@ -13,12 +13,12 @@ app.NotificationView = Backbone.View.extend({
   },
 
 	initialize: function() {
-    this.listenTo(app.user, 'change', this.render());
-		//this.render();
+    this.listenTo(app.user, 'change', this.render);
+		this.render();
 	},
 
 	render: function() {
-    //console.log('notifications');
+    this.$el.empty();
     var template = app.TemplateCache.get(this.template);
     var html = template(app.user.toJSON())
 		this.$el.append(html);

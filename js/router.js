@@ -23,8 +23,9 @@ app.Router = Backbone.Router.extend({
     'new_password': 'newPassword',
     'hand': 'hand',
     'profile/:first/:last/:id': 'profileView',
-    'update/:first/:last/:id': 'update',
     'profile/:first/:last/:id/search/:field/:query': 'profileView',
+    'search/:field/:query': 'search',
+    'update/:first/:last/:id': 'update',
     'card/:id': 'cardById',
     'hidden/card/:id': 'cardById',
     '*notFound': 'notFound'

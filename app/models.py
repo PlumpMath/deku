@@ -58,7 +58,7 @@ class User(db.Model):
     jokers = db.relationship('Card', backref="reporters", secondary="reported")
     cardsHidden = db.relationship('Card', lazy='dynamic', secondary='hiddenCards')
     usersHidden = db.relationship('User', lazy='dynamic', secondary='hiddenUsers', primaryjoin = hiddenUsers.c.hiddenFrom_id == id, secondaryjoin = hiddenUsers.c.hidden_id == id)
-    reputationPositive = db.Column(db.Integer, default=0)
+    reputationPositive = db.Column(db.Integer, default=1)
     reputationNegative = db.Column(db.Integer, default=0)
 
     def __repr__(self):
