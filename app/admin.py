@@ -17,6 +17,10 @@ def makeModerator(user_id):
                 admin = authenticate_by_id(admin_id, admin_password)
                 if (admin):
                     user.role = ROLE_MOD
+                    notification = models.Notification(from_id = admin_id,
+                                                       card_id = -1,
+                                                       content = "made you a moderator")
+                    user.notifications.append(notification)
                     db.session.commit()
                     return cors_response(("User is now a moderator.", 200))
                 else:

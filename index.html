@@ -82,7 +82,7 @@
             <div id="messages"></div>
           </ul>
         </li> 
-        <li class="list-item-collapse collapsed">Notifications
+        <li id="notifications-menu" class="list-item-collapse collapsed">Notifications
           <ul class="col-list">
             <div id="notifications"></div>
           </ul>
@@ -125,10 +125,10 @@
         <!-- PROFILE PICTURE WILL GO HERE SOMEWHERE -->
         <span class="avatar"><img src="data:image/png;base64,<%= avatar %>" id="avatar_profile"></span>
         <h2><%= firstName %> <%= lastName %> <span id="user-role"><%= role %></span>
-          <button id="follow-btn" class="btn">Follow <%= firstName %></button>
           <button id="update-btn" class='btn'>Update Account</button>
-          <button id="change-role" class='btn'>Make Moderator</button>
+          <button id="follow-btn" class="btn">Follow <%= firstName %></button>
           <button id="hide-user" class='btn'>Hide <%= firstName %> </button>
+          <button id="change-role" class='btn'>Make Moderator</button>
           <button id="delete-user" class="btn">Delete Account</button>
         </h4>
         <hr />
@@ -339,7 +339,10 @@
       <div id="inspect-comment-list">
         <% for (var comment in comments) { %>
           <div class="card-comment">
-            <a id="user-profile-comment" name=<%=comments[comment].author_first%>/<%=comments[comment].author_last%>/<%=comments[comment].author_id%>><%=comments[comment].author_first%> <%=comments[comment].author_last%></a>: <%=comments[comment].content%> <a id="delete-comment" name=<%=comments[comment].id%>>x</a>
+            <a id="user-profile-comment" name=<%=comments[comment].author_first%>/<%=comments[comment].author_last%>/<%=comments[comment].author_id%>><%=comments[comment].author_first%> <%=comments[comment].author_last%></a>: <%=comments[comment].content%> 
+            <% if (app.user.get('id') === author_id || app.user.get('role') === 2 || app.user.get('id') === comments[comment].author_id) {%>
+              <a id=delete-comment<%=comments[comment].id%> class="delete-comment" name=<%=comments[comment].id%>>x</a>
+            <%}%>
           </div>
         <% } %>
       </div>
@@ -438,7 +441,11 @@
     <div id="notifications-list">
       <% for (var notification = notifications.length-1; notification >= 0; notification--) { %>
         <div class="user-notification">
-          <a id="user-profile-notification" name=<%=notifications[notification].from_first%>/<%=notifications[notification].from_last%>/<%=notifications[notification].from_id%>><%=notifications[notification].from_first%> <%=notifications[notification].from_last%></a> <%=notifications[notification].content%> your <a id="card-notification" name=<%=notifications[notification].card_id%>>card</a> <a id="delete-notification" name=<%=notifications[notification].id%>>x</a>
+          <a id="user-profile-notification" name=<%=notifications[notification].from_first%>/<%=notifications[notification].from_last%>/<%=notifications[notification].from_id%>><%=notifications[notification].from_first%> <%=notifications[notification].from_last%></a> <%=notifications[notification].content%>
+          <%if (notifications[notification].card_id !== -1) {%>
+            your <a id="card-notification" name=<%=notifications[notification].card_id%>>card</a>          
+          <%}%>
+          <a id="delete-notification" name=<%=notifications[notification].id%>>x</a>
         <div>
       <%}%>
     </div>

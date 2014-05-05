@@ -381,7 +381,7 @@ hr {
     margin-right: 15px;
 }
 
-#delete-comment {
+.delete-comment {
     float: right;
 }
 
