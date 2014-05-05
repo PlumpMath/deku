@@ -29,7 +29,7 @@ app.HandView = Backbone.View.extend({
       // set refresh interval to 10 seconds
       refreshInterval = setInterval( function() {
         app.Deck.updateHand();
-      }, 10000);
+      }, 5000);
     } else {
       // clear the refresh interval
       clearInterval(refreshInterval);

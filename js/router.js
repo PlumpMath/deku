@@ -149,6 +149,7 @@ app.Router = Backbone.Router.extend({
     var that = this;
     // if no user is logged in, we can go here
     if (localStorage.getItem('deku') === null) {
+      clearInterval(refreshInterval);
       $('#container').fadeOut(350, function() {that.changeView(new app.InfoView({model: app.user}));});
     } else {
       $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
@@ -204,6 +205,7 @@ app.Router = Backbone.Router.extend({
        * Always load hand view for searching, this gives access to app.Deck and app.msnry
        */
       this.changeView(new app.HandView({'use': 'search'}));
+      clearInterval(refreshInterval);
       msnry_items = app.msnry.getItemElements();
       app.msnry.remove(msnry_items);
       app.msnry.layout();
@@ -242,6 +244,7 @@ app.Router = Backbone.Router.extend({
        * Always load hand view for searching, this gives access to app.Deck and app.msnry
        */
       this.changeView(new app.HandView({'use': 'cardById'}));
+      clearInterval(refreshInterval);
       msnry_items = app.msnry.getItemElements();
       app.msnry.remove(msnry_items);
       app.msnry.layout();
@@ -259,6 +262,7 @@ app.Router = Backbone.Router.extend({
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
+      clearInterval(refreshInterval);
       $.get("http://localhost:4568/deku/api/users/" + id, function(data) {
         var profile = new app.User(data['user']);
         // this checks the name as well. Just ID was not secure
@@ -327,6 +331,7 @@ app.Router = Backbone.Router.extend({
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
+      clearInterval(refreshInterval);
       // prevents someone from accessing the update view of another user
       if (parseInt(id) === app.user.get('id')) {
         // slidebar should not appear when the user is updating their account
@@ -349,6 +354,7 @@ app.Router = Backbone.Router.extend({
     var that = this;
     // do the slidebar and toggle button exist
     if (this.slideView !== null && this.toggleView !== null) {
+      clearInterval(refreshInterval);
       // they do, so remove them and close the slidebar (only real permanent solution)
       this.removeChildren();
       app.$slidebars.close();
