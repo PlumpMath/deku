@@ -34,7 +34,12 @@ app.SearchView = Backbone.View.extend({
     category_list = $('#categories').children().map(function() { return this.value;}).get(); //possible categories
     if (search !== '' && $.inArray(search, category_list) !== -1) {
       // Change the URL to match search
-      app.router.navigate('search/category/' + search, {trigger: true});
+      if (Backbone.history.fragment.substring(0,7) === "profile") {
+        route = Backbone.history.fragment.split('/');
+        app.router.navigate("profile/" + route[1] + '/' + route[2] + '/' + route[3] + "/search/category/" + search, {trigger: true});
+      } else {
+        app.router.navigate('search/category/' + search, {trigger: true});
+      }
       $('#s-category').val('');
     } else
     {
@@ -53,7 +58,12 @@ app.SearchView = Backbone.View.extend({
     search = $('#s-tag').val().trim(); //our filter for category
     if (search !== '') {
       // Change the URL to match search
-      app.router.navigate('search/tag/' + search, {trigger: true});
+      if (Backbone.history.fragment.substring(0,7) === "profile") {
+        route = Backbone.history.fragment.split('/');
+        app.router.navigate("profile/" + route[1] + '/' + route[2] + '/' + route[3] + "/search/tag/" + search, {trigger: true});
+      } else {
+        app.router.navigate('search/tag/' + search, {trigger: true}); 
+      }
       $('#s-tag').val('');
     } else
     {
@@ -74,7 +84,13 @@ app.SearchView = Backbone.View.extend({
       $('#s-author').val('');
       // Change the URL to match search
       search = search.replace(" ", "_");
-      app.router.navigate('search/author/' + search, {trigger: true});
+      if (Backbone.history.fragment.substring(0,7) === "profile") {
+        route = Backbone.history.fragment.split('/');
+        app.router.navigate("profile/" + route[1] + '/' + route[2] + '/' + route[3] + "/search/author/" + search, {trigger: true});
+      } else {
+        app.router.navigate('search/author/' + search, {trigger: true});
+      }
+      $('#s-author').val('')
     } else
     {
       $('#s-author').val('')

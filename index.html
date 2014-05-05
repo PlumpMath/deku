@@ -443,7 +443,7 @@
         <div class="user-notification">
           <a id="user-profile-notification" name=<%=notifications[notification].from_first%>/<%=notifications[notification].from_last%>/<%=notifications[notification].from_id%>><%=notifications[notification].from_first%> <%=notifications[notification].from_last%></a> <%=notifications[notification].content%>
           <%if (notifications[notification].card_id !== -1) {%>
-            your <a id="card-notification" name=<%=notifications[notification].card_id%>>card</a>          
+            this <a id="card-notification" name=<%=notifications[notification].card_id%>>card</a>          
           <%}%>
           <a id="delete-notification" name=<%=notifications[notification].id%>>x</a>
         <div>

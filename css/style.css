@@ -477,6 +477,7 @@ hr {
 
 .container-wrapper {
     margin: auto;
+    margin-bottom: 50px;
     padding: 20px 40px;
     color: #999;
     background-color: #222;

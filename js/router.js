@@ -24,7 +24,7 @@ app.Router = Backbone.Router.extend({
     'hand': 'hand',
     'profile/:first/:last/:id': 'profileView',
     'update/:first/:last/:id': 'update',
-    'search/:field/:query': 'search',
+    'profile/:first/:last/:id/search/:field/:query': 'profileView',
     'card/:id': 'cardById',
     'hidden/card/:id': 'cardById',
     '*notFound': 'notFound'
@@ -255,7 +255,7 @@ app.Router = Backbone.Router.extend({
   /* Shows the profile page of the specified user. Uses the id for the API call
    * For security, it also checks against the given name from what is received by the API call
    */
-  profileView: function(first, last, id) {
+  profileView: function(first, last, id, field, query){
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
@@ -297,7 +297,16 @@ app.Router = Backbone.Router.extend({
             app.router.navigate('hand', {trigger: true});
           } else {
             // make the API GET call
-            app.Deck.fetchProfile(id);
+            if (field !== null && query !== null) {
+              console.log('search on profile: ', field);
+              if (field === 'author') {
+                query = query.replace('_', ',');
+              }
+              route = id + '/search/' + field + '/' + query;
+              app.Deck.fetchProfile(route);
+            } else {
+              app.Deck.fetchProfile(id);
+            }
           }
         } else {
           // trigger a not found page load
