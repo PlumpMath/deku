@@ -125,23 +125,17 @@ def search_profile_by_category(user_id, category):
 @app.route('/deku/api/cards/profile/<int:user_id>/search/tag/<tag>', methods=['GET'])
 def search_profile_by_tag(user_id, tag):
     if request.method == 'GET':
-        print "get tag of user: ", user_id
         hand = Card.query.filter(Card.user_id == user_id).all()
         addedCards = models.User.query.get(int(user_id)).addedCards
-        print 'got cards'
         for card in addedCards:
             if card in hand:
                 pass
             else:
-                print 'appending cards'
                 hand.append(card) 
         if len(hand) == 0:
             return cors_response(("No cards from user.", 204))
-        else:
-            print "before matches: ", matches
-            matches = [card for card in hand if tag in card.tags.split(",")]
-            print "matches: ", matches
-            return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
+        matches = [card for card in hand if tag in card.tags.split(",")]
+        return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
     else:
         pass
 
@@ -246,7 +240,6 @@ def markCard(card_id):
                         card.popularity-=1; # less popular
                     else:
                         user.markedCards.append(card)
-                        print "pop: ", card.popularity
                         card.popularity+=1 # more popular
                         # Only notify the author if a user marks it. Unmarking is not important
                         card_author = models.User.query.get(int(card.user_id)) #this is the user who authored the card

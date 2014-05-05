@@ -298,12 +298,12 @@ app.Router = Backbone.Router.extend({
           } else {
             // make the API GET call
             if (field !== null && query !== null) {
-              console.log('search on profile: ', field);
               if (field === 'author') {
                 query = query.replace('_', ',');
               }
               route = id + '/search/' + field + '/' + query;
               app.Deck.fetchProfile(route);
+              $('#filter-by').html('Searching for ' + query.replace(',', ' '));
             } else {
               app.Deck.fetchProfile(id);
             }
