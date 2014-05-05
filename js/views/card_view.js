@@ -21,7 +21,7 @@ app.CardView = Backbone.View.extend({
     "click #hide-card": "hideCard",
     "click #delete-card": "deleteCard",
     "click #user-profile-comment": "goToCommenterProfile",
-    "click #delete-comment": "deleteComment"
+    "click .delete-comment": "deleteComment"
   },
 
 	initialize: function() {
@@ -213,12 +213,20 @@ app.CardView = Backbone.View.extend({
     this.$el.switchClass('inspect', 'card', 1000);
     this.template = _.template($('#card-template').html());
     var elem = this.template(this.model.toJSON());
+    var that = this;
     this.$el.flippy({
       duration: "1000",
       light: "0",
       depth: "0",
       verso: elem,
       onAnimation: function() {
+        if (that.model.get('popularity') > 10) {
+          that.$el.addClass('large');
+        } else if (that.model.get('popularity') > 5) {
+          that.$el.addClass('medium');
+        } else {
+          that.$el.addClass('small');
+        }
         app.msnry.layout();
       }
     });

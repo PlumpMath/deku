@@ -14,10 +14,12 @@ app.PreferencesView = Backbone.View.extend({
   template: "#preferences-view",
 
 	initialize: function() {
+    this.listenTo(app.user, 'change', this.render);
 		this.render();
 	},
 
 	render: function() {
+    this.$el.empty();
     var template = app.TemplateCache.get(this.template);
     html = template(app.user.toJSON());
 		this.$el.append(html);

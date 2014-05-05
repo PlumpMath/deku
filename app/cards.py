@@ -107,14 +107,14 @@ def get_users_cards(user_id):
 @app.route('/deku/api/cards/profile/<int:user_id>/search/category/<category>', methods=['GET'])
 def search_profile_by_category(user_id, category):
     if request.method == 'GET':
-        hand = models.Card.query.filter(models.Card.user_id == user_id).all()
+        hand = Card.query.filter(Card.user_id == user_id).all()
         addedCards = models.User.query.get(int(user_id)).addedCards
         for card in addedCards:
             if card in hand:
                 pass
             else:
                 hand.append(card) 
-        if len(cards) == 0:
+        if len(hand) == 0:
             return cors_response(("No cards from user.", 204))
         else:
             matches = [card for card in hand if card.category == category]
@@ -125,18 +125,17 @@ def search_profile_by_category(user_id, category):
 @app.route('/deku/api/cards/profile/<int:user_id>/search/tag/<tag>', methods=['GET'])
 def search_profile_by_tag(user_id, tag):
     if request.method == 'GET':
-        hand = models.Card.query.filter(models.Card.user_id == user_id).all()
+        hand = Card.query.filter(Card.user_id == user_id).all()
         addedCards = models.User.query.get(int(user_id)).addedCards
         for card in addedCards:
             if card in hand:
                 pass
             else:
                 hand.append(card) 
-        if len(cards) == 0:
+        if len(hand) == 0:
             return cors_response(("No cards from user.", 204))
-        else:
-            matches = [card for card in hand if tag in card.tags.split(",")]
-            return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
+        matches = [card for card in hand if tag in card.tags.split(",")]
+        return cors_response((jsonify(cards = [card.serialize for card in matches]), 200))
     else:
         pass
 
@@ -144,13 +143,15 @@ def search_profile_by_tag(user_id, tag):
 def search_profile_by_author(user_id, author):
     if request.method == 'GET':
         firstName, lastName = author.split(",")
-        hand = models.Card.query.filter(models.Card.user_id == user_id).all()
+        hand = Card.query.filter(Card.user_id == user_id).all()
         addedCards = models.User.query.get(int(user_id)).addedCards
         for card in addedCards:
             if card in hand:
                 pass
             else:
                 hand.append(card)
+        if len(hand) == 0:
+            return cors_response(("No cards from user.", 204))
         matches = [card for card in hand if card.userFirst == firstName and card.userLast == lastName]
         if len(matches) == 0:
             return cors_response(("No cards from user.", 204))
@@ -212,6 +213,7 @@ def addCardToDeck(card_id):
                                                                card_id = card_id,
                                                                content = "added")
                             card_author.notifications.append(notification) # append notification to user's account
+                            card_author.reputationPositive+=1
                     db.session.commit()
                     return cors_response((jsonify(card.serialize), 200))
                 else:
@@ -239,7 +241,6 @@ def markCard(card_id):
                         card.popularity-=1; # less popular
                     else:
                         user.markedCards.append(card)
-                        print "pop: ", card.popularity
                         card.popularity+=1 # more popular
                         # Only notify the author if a user marks it. Unmarking is not important
                         card_author = models.User.query.get(int(card.user_id)) #this is the user who authored the card
@@ -248,6 +249,7 @@ def markCard(card_id):
                                                                card_id = card_id,
                                                                content = "marked")
                             card_author.notifications.append(notification) # append notification to user's account
+                            card_author.reputationPositive+=1
                     db.session.commit()
                     return cors_response((jsonify(card.serialize), 200))
                 else:

@@ -224,11 +224,14 @@ def follow_user(user_id):
                         active_user.following.remove(user)
                     else:
                         active_user.following.append(user)
-                        print "active: ", active_user_id
                         notification = models.Notification(from_id = active_user_id,
                                                            card_id = -1,
                                                            content = "is now following you")
                         user.notifications.append(notification)
+                        print "Pre rep"
+                        print user.reputationPositive
+                        user.reputationPositive+=2
+                        print "Post rep, " , user.reputationPositive
                     db.session.commit()
                     return cors_response((jsonify(active_user.serialize), 200))
                 else:
@@ -325,6 +328,7 @@ def hideUser(user_id):
                         active_user.usersHidden.remove(user)
                     else:
                         active_user.usersHidden.append(user)
+                        user.reputationNegative+=1
                     db.session.commit()
                     return cors_response((jsonify(active_user.serialize), 200))
                 else:

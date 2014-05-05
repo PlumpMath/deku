@@ -23,8 +23,9 @@ app.Router = Backbone.Router.extend({
     'new_password': 'newPassword',
     'hand': 'hand',
     'profile/:first/:last/:id': 'profileView',
-    'update/:first/:last/:id': 'update',
+    'profile/:first/:last/:id/search/:field/:query': 'profileView',
     'search/:field/:query': 'search',
+    'update/:first/:last/:id': 'update',
     'card/:id': 'cardById',
     'hidden/card/:id': 'cardById',
     '*notFound': 'notFound'
@@ -149,6 +150,7 @@ app.Router = Backbone.Router.extend({
     var that = this;
     // if no user is logged in, we can go here
     if (localStorage.getItem('deku') === null) {
+      clearInterval(refreshInterval);
       $('#container').fadeOut(350, function() {that.changeView(new app.InfoView({model: app.user}));});
     } else {
       $('#container').fadeOut(350, function() { that.navigate('hand', {trigger: true})});
@@ -204,6 +206,7 @@ app.Router = Backbone.Router.extend({
        * Always load hand view for searching, this gives access to app.Deck and app.msnry
        */
       this.changeView(new app.HandView({'use': 'search'}));
+      clearInterval(refreshInterval);
       msnry_items = app.msnry.getItemElements();
       app.msnry.remove(msnry_items);
       app.msnry.layout();
@@ -242,11 +245,15 @@ app.Router = Backbone.Router.extend({
        * Always load hand view for searching, this gives access to app.Deck and app.msnry
        */
       this.changeView(new app.HandView({'use': 'cardById'}));
+      clearInterval(refreshInterval);
       msnry_items = app.msnry.getItemElements();
       app.msnry.remove(msnry_items);
       app.msnry.layout();
       
       app.Deck.fetchById(id);
+      if (app.Deck.length === 0) {
+        $('#container').fadeOut(350, function() { that.navigate('user_not_found', {trigger: true})});
+      }
     } else {
       $('#container').fadeOut(350, function() { that.navigate('login', {trigger: true})});
     }
@@ -255,10 +262,11 @@ app.Router = Backbone.Router.extend({
   /* Shows the profile page of the specified user. Uses the id for the API call
    * For security, it also checks against the given name from what is received by the API call
    */
-  profileView: function(first, last, id) {
+  profileView: function(first, last, id, field, query){
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
+      clearInterval(refreshInterval);
       $.get("http://localhost:4568/deku/api/users/" + id, function(data) {
         var profile = new app.User(data['user']);
         // this checks the name as well. Just ID was not secure
@@ -297,7 +305,16 @@ app.Router = Backbone.Router.extend({
             app.router.navigate('hand', {trigger: true});
           } else {
             // make the API GET call
-            app.Deck.fetchProfile(id);
+            if (field !== null && query !== null) {
+              if (field === 'author') {
+                query = query.replace('_', ',');
+              }
+              route = id + '/search/' + field + '/' + query;
+              app.Deck.fetchProfile(route);
+              $('#filter-by').html('Searching for ' + query.replace(',', ' '));
+            } else {
+              app.Deck.fetchProfile(id);
+            }
           }
         } else {
           // trigger a not found page load
@@ -318,6 +335,7 @@ app.Router = Backbone.Router.extend({
     var that = this;
     // is there a logged in user
     if (localStorage.getItem('deku') !== null) {
+      clearInterval(refreshInterval);
       // prevents someone from accessing the update view of another user
       if (parseInt(id) === app.user.get('id')) {
         // slidebar should not appear when the user is updating their account
@@ -340,6 +358,7 @@ app.Router = Backbone.Router.extend({
     var that = this;
     // do the slidebar and toggle button exist
     if (this.slideView !== null && this.toggleView !== null) {
+      clearInterval(refreshInterval);
       // they do, so remove them and close the slidebar (only real permanent solution)
       this.removeChildren();
       app.$slidebars.close();
