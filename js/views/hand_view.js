@@ -27,9 +27,10 @@ app.HandView = Backbone.View.extend({
     if (use.use === 'hand' && Backbone.history.fragment === 'hand') {
       app.Deck.fetch();
       // set refresh interval to 10 seconds
-      refreshInterval = setInterval( function() {
+      /* REMOVED FOR NOW. IT DOESN'T CLEAR PROPERLY, AND THE CUSTOMER DID SAY HE WANTED A BUTTON TO DO REFRESH */
+      /*refreshInterval = setInterval( function() {
         app.Deck.updateHand();
-      }, 5000);
+      }, 10000); */
     } else {
       // clear the refresh interval
       clearInterval(refreshInterval);
