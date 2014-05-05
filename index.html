@@ -128,8 +128,8 @@
           <button id="follow-btn" class="btn">Follow <%= firstName %></button>
           <button id="update-btn" class='btn'>Update Account</button>
           <button id="change-role" class='btn'>Make Moderator</button>
-          <button id="hide-user" class='btn'>Hide user</button>
-          <button id="delete-user" class="btn">Delete User</button>
+          <button id="hide-user" class='btn'>Hide <%= firstName %> </button>
+          <button id="delete-user" class="btn">Delete Account</button>
         </h4>
         <hr />
         <h4>Studies <%= major %> at <%= university %> | Year of <%= grad_year %></h4>
@@ -178,7 +178,7 @@
           <label for="passwordConfirm">Confirm Password</label>
           <input type="password" id="passwordConfirm" class="form-control">
         </div>
-        <button type="submit" class="btn btn-success">Sign up for Dek&#363</button>
+        <button type="submit" class="btn btn-success">Sign up for dek&#363</button>
       </form>
     </div>
   </script>
@@ -186,6 +186,13 @@
 	<!-- This next view gets more specific user account information -->
   <script type="text/template" id="info-form">
     <div class="container-wrapper container-wrapper-width">
+      <div id="avatar-info"> 
+        <span class="avatar container-wrapper-width"><img src="data:image/png;base64,<%= avatar %>" id="avatar_example"></span>
+        <h3 id="avatar-text">Your dek&#363; avatar</h3>
+      </div>
+	    
+      <hr />
+  
       <h1 class="container-wrapper-width">Complete your Profile</h1>
       <form role="form" action="" id="info" class="container-wrapper-width">
       <div class="form-group">
@@ -218,8 +225,8 @@
         <label for="bio">Biography</label>
         <textarea id="bio" class="form-control"></textarea>
       </div>
-	  
-	  	<!-- At this point the user's profile would be sent to the server and saved -->
+ 	
+      <!-- At this point the user's profile would be sent to the server and saved -->
       <button id="submit" class="btn btn-success">Done</button>
     </div>
   </script>

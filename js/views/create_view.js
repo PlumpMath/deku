@@ -75,10 +75,8 @@ app.CreateView = Backbone.View.extend({
 
   getInfo: function(event) {
     event.preventDefault();
-		//This will contain some event that sends the data to the server
-		//for authentication
-		//this is the app.py route info
-		var url = "http://localhost:4568/deku/api/users";
+		//This will make sure the email is unique, and will return the avatar
+		var url = "http://localhost:4568/deku/api/users/check_email";
 
 		//this is the data that is sent
 		var registerValues = {
@@ -90,15 +88,29 @@ app.CreateView = Backbone.View.extend({
 		};
 
     var that = this;
-    	
+
 		if (!this.formError(registerValues)) {
       /* The user account should not be set up until the end.
        * So for now we are just using app.user to pass the information on
        * to the next view. localStorage is used to validate a logged in user
        * so this will not cause confusion.
        */
-      app.user.set(registerValues);
-      app.router.navigate('profile', {trigger: true});
+
+      var checkValues = {
+        firstName: registerValues.firstName,
+        lastName: registerValues.lastName,
+        email: registerValues.email
+      }
+      $.post(url, checkValues, function(data, textStatus, jqXHR) {
+        app.user.set(registerValues);
+        app.user.set({"avatar": data});
+        app.router.navigate('profile', {trigger: true});
+      }).fail(function(error) {
+        bootbox.alert("That email already exists!");
+	  		$('#email').val('')
+		  	.attr('placeholder', 'Enter a valid .edu email address')
+        .focus();
+      });
 		}
   }
 });

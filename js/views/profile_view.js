@@ -53,13 +53,13 @@ app.ProfileView = Backbone.View.extend({
       // user can't hide their own card
       $('#hide-user').remove();
     }
-    $('#delete-user').hide();
     // hide the make mod button by default
     $('#change-role').hide();
+
+    $('#delete-user').hide();
     // only mods and admins can see someone's role
     if (app.user.get('role') === 0) {
       $('#user-role').remove();
-      $("#change-role").remove();
     } else {
       // go through possible roles of the user being viewed
       switch(this.model.get('role')) {
