@@ -7,6 +7,7 @@ from app.models import Card
 from utils import cors_response
 from datetime import datetime
 
+#this api function has no authentication associated with it
 @app.route('/deku/api/messages/<user_id>', methods=['GET', 'POST'])
 def messages(user_id):
     if request.method == 'GET':
